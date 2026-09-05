@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tending the Winter | Very Small Fires</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('tending.png');
+            background-position: left bottom;
+            background-repeat: no-repeat;
+            background-size: contain;
+            mix-blend-mode: luminosity;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .background-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(70, 70, 70, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(50, 50, 50, 0.1) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+            z-index: 1;
+            animation: atmosphericShift 20s ease-in-out infinite alternate;
+        }
+        @keyframes atmosphericShift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-10px, -5px) scale(1.02); }
+        }
+        header {
+            text-align: center;
+            padding: 60px 0;
+            position: relative;
+        }
+        .story-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffffff, #cccccc, #999999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+        .story-subtitle {
+            font-size: 1.1rem;
+            color: #aaaaaa;
+            font-style: italic;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+        .story-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 0.9rem;
+            color: #888888;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+        .story-content {
+            background: rgba(40, 40, 40, 0.6);
+            padding: 60px 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.2s forwards;
+        }
+        .story-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: left;
+        }
+        .story-text p {
+            margin-bottom: 1.5em;
+            text-indent: 0;
+        }
+        .story-text p:first-child {
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-indent: 0;
+            margin-bottom: 2em;
+            padding-left: 20px;
+            border-left: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        .story-text p:last-child {
+            margin-bottom: 0;
+            font-style: italic;
+            font-size: 1.05rem;
+            text-align: center;
+            text-indent: 0;
+            margin-top: 2em;
+            padding-top: 2em;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .navigation {
+            text-align: center;
+            padding: 30px 0 60px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.5s forwards;
+        }
+        .nav-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            .story-content {
+                padding: 40px 25px;
+                margin-bottom: 40px;
+            }
+            .story-meta {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .story-text {
+                font-size: 1.05rem;
+            }
+            .story-text p {
+                margin-bottom: 1.3em;
+            }
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .story-content {
+                animation: fadeInUp 1s ease-out 1.2s forwards, breathe 8s ease-in-out infinite;
+            }
+            @keyframes breathe {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-2px); }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-texture"></div>
+    <div class="container">
+        <header>
+            <h1 class="story-title">Tending the Winter</h1>
+            <p class="story-subtitle">A story of isolation and endurance</p>
+            <div class="story-meta">
+                <span>Literary Fiction</span>
+                <span>•</span>
+                <span>Rural Canada</span>
+                <span>•</span>
+                <span>1,257 words</span>
+            </div>
+        </header>
+        <main class="story-content">
+            <div class="story-text">
+                <p>The house stood alone against the red earth. It had weathered shingles and one window that faced the sea. A rose bush grew against the eastern wall.</p>
+
+                <p>Marie did not look at her husband when she brought his coffee. The cup made a soft sound on the table. Jean-Paul's hands shook when he reached for it. They always shook now. He would not eat until he had been to the barn for the whiskey.</p>
+
+                <p>The wind came hard off the water. It rattled the loose board by the door he had promised to fix three summers ago. She touched the board going out to feed the chickens. Her fingers were thin and white against the gray wood.</p>
+
+                <p>The chickens pecked at her skirts while she scattered the feed. Behind the coop she had planted the first rose. She had been sick then and her hands had bled from the thorns. She planted it at night, while he slept off the whiskey.</p>
+
+                <p>The horse in the barn was old and mean. It had been mean since she came to the farm as a bride. It would not let her touch it. It worked for Jean-Paul when he was sober, which was not often now.</p>
+
+                <p>His mother had cursed them both in rapid French until her last breath. That night Jean-Paul drank three bottles and beat her until she could not stand, and she lay in the barn until morning and listened to the horse kick its stall.</p>
+
+                <p>The town was two days' hard ride. In winter it might as well have been on the moon. The priest came at Easter and Christmas if the weather allowed. She had not seen another woman in eight months.</p>
+
+                <p>She heard his boots in the house. The chickens scattered. They knew his footsteps too.</p>
+
+                <p>"The fence needs mending," he said in French. He spoke French when he was angry. "The sheep will get out."</p>
+
+                <p>She nodded. She did not speak French. He knew this. She could not write well either. She had learned only her letters, at the orphanage, before they sent her out to work.</p>
+
+                <p>Last spring she had lost another. This one had lived long enough for her to feel it move. He had been sober that month, talking about a son. When the pains came, so did the rage. She planted a rose after, in the spring rain.</p>
+
+                <p>The sheep were thin and dirty like everything on the farm. He had sold the good rams for whiskey. The ewes gave weak lambs that died in the cold.</p>
+
+                <p>The sky was gray and heavy. He went to the barn with his unsteady walk and the bottle clinked in his coat. She had counted the empty ones once. Seventeen. Then she stopped counting.</p>
+
+                <p>Through the snow she could see the three roses against the eastern wall, their branches black against the white. She knew what lay beneath each one. She had planted them herself, in the dark, while the house slept.</p>
+
+                <p>The crash came suddenly. Metal and his scream cut through the wind. She stood at the window. For a long moment she did not move. Then she put on her shawl and went out.</p>
+
+                <p>The steamer had rolled and pinned his leg. Blood darkened the snow. He was not unconscious. That would have been easier.</p>
+
+                <p>"Putain," he said. "Get me out."</p>
+
+                <p>She stood looking down at him. She could walk away. The cold would take him before morning and no one would come.</p>
+
+                <p>His eyes found hers. Even in pain they held that thing she feared. He smiled.</p>
+
+                <p>"You won't let me die out here," he said. "You're too weak."</p>
+
+                <p>Her hands moved anyway. She tested the weight of the metal. It was like moving a dead horse. He screamed when she shifted it. The leg was crushed below the knee. The horse came to the barn door and watched.</p>
+
+                <p>She half-dragged him to the house. He cursed her in French and English and gripped her arm hard enough to bruise. Bruises were familiar.</p>
+
+                <p>Inside, she cut his trousers away with the kitchen scissors. The bone showed white through the flesh. He drank from the bottle while she heated water. His eyes did not leave her.</p>
+
+                <p>"You'll need a doctor," she said. It was the first thing she had said all day.</p>
+
+                <p>He laughed. "Two days to town in this. You'll do it."</p>
+
+                <p>She had seen him doctor the sheep when they broke their legs. She put the knife in the fire until it glowed.</p>
+
+                <p>"You'd like to use that on my throat," he said.</p>
+
+                <p>She said nothing. Her hands were steady. The blood came fast when she cut the dead flesh away. He screamed and the house was small around the sound. She thought of the roses while she worked. She bound the wound with the last of the clean linen. He passed out. She slept in the chair with the knife on the table.</p>
+
+                <p>In the morning the snow was three feet deep. The leg had swollen and the dark lines had begun to spread under the skin. She knew blood poisoning. She had seen it in the sheep.</p>
+
+                <p>She went out to the barn. The horse swung its head and laid its ears back when she came near. Two days to town, if it let her ride, if the snow did not kill her, if he did not die while she was gone.</p>
+
+                <p>If he died she could put a fourth rose against the wall.</p>
+
+                <p>The fever took him deep that night. He called for his mother. He sang the old song about the girl who drowned, his voice high and strange.</p>
+
+                <p>"Marie." Clear again. His hand caught her wrist. "You think I don't know about the roses."</p>
+
+                <p>He was looking past her at nothing.</p>
+
+                <p>"Maman told me. She says you're waiting for me to die."</p>
+
+                <p>She did not answer.</p>
+
+                <p>He laughed. "Like the babies. Resting under your pretty roses."</p>
+
+                <p>The knife was three steps away. She did not move. His hand loosened. The fever took him back under.</p>
+
+                <p>In the morning the horse had broken out of the stall. It stood in the barn doorway with blood on its hoof and watched her with white-rimmed eyes.</p>
+
+                <p>He called from the house, rough with fever. She went back through the snow and changed the dressing and gave him water and listened while he talked.</p>
+
+                <p>Later she went out again for wood.</p>
+
+                <p>The horse blocked the path to the stack. It did not move. She picked up the heavy length she had used to splint the steamer the day before. It was familiar in her hands.</p>
+
+                <p>The horse laid its ears flat. Its teeth showed.</p>
+
+                <p>She swung.</p>
+
+                <p>The sound was dull and heavy. The horse went down and its legs kicked twice and were still. She stood over it and breathed white into the cold. The snow had already begun to dust the dark shape. She gathered the wood she needed and carried it in.</p>
+
+                <p>He was awake. He watched her build up the fire. He watched her hands.</p>
+
+                <p>She made the tea. She poured a cup for him and a cup for herself, and they drank it in the quiet while the snow came down and covered the barn door and the shape in front of it.</p>
+
+                <p>The board rattled. She sat in the chair by the stove with the knife on the table and listened to him breathe.</p>
+
+                <p>Outside the three roses stood black against the snow. She did not count them. She knew the number.</p>
+            </div>
+        </main>
+        <div class="navigation">
+            <a href="index.html" class="nav-link">← Back to Stories</a>
+        </div>
+    </div>
+</body>
+</html>

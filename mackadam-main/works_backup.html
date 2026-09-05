@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Works - Brian MacAdam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="works.css">
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "./assets/three.js-master/build/three.module.min.js"
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Background layers -->
+    <video id="video-background" autoplay loop muted playsinline>
+        <source src="./232408_medium.mp4" type="video/mp4">
+    </video>
+    <img id="image-overlay" src="./Untitled-2.png" alt="Overlay">
+    <div id="three-container"></div>
+
+    <!-- Loading -->
+    <div class="loading" id="loading"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="nav-glass">← Home</a>
+    </nav>
+
+    <!-- Content Select Dropdown (Centered) -->
+    <div class="content-select-container">
+        <div class="dropdown" id="dropdown">
+            <button class="dropdown-button" id="dropdownButton">
+                <span>Content Select</span>
+                <span class="dropdown-arrow">▼</span>
+            </button>
+            <div class="dropdown-content">
+                <div class="dropdown-section">
+                    <div class="dropdown-section-title">Writing</div>
+                    <button class="dropdown-item" data-index="0">Short Fiction Website</button>
+                </div>
+                <div class="dropdown-section">
+                    <div class="dropdown-section-title">Video</div>
+                    <button class="dropdown-item" data-index="1">JRPG Graphics Test</button>
+                    <button class="dropdown-item" data-index="2">3D Crokinole Game</button>
+                    <button class="dropdown-item" data-index="3">Branding Showcase</button>
+                    <button class="dropdown-item" data-index="4">Game Design Concept</button>
+                    <button class="dropdown-item" data-index="5">Audio Essay: John Donne</button>
+                </div>
+                <div class="dropdown-section">
+                    <div class="dropdown-section-title">Print Design</div>
+                    <button class="dropdown-item" data-index="6">Official Qube Menu</button>
+                    <button class="dropdown-item" data-index="7">Masquerade Brochure</button>
+                    <button class="dropdown-item" data-index="8">Professional Brochure</button>
+                    <button class="dropdown-item" data-index="9">Professional Resume</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Other Works</h1>
+        <p class="page-subtitle">A collection of other projects and creative explorations.</p>
+    </div>
+
+    <!-- Selected Content Display -->
+    <div class="selected-content-display" id="selectedContentDisplay">
+        <!-- Project 0: Short Fiction -->
+        <div class="project-card">
+            <div class="card-inner">
+                <div class="card-content">
+                    <div class="project-category">Creative Writing</div>
+                    <h3 class="project-title">Very Small Fires</h3>
+                    <p class="project-description">
+                        A creative writing platform showcasing short stories. Built with modern minimalist style for an engaging reading experience.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Web Development</span>
+                        <span class="tech-tag">Creative Writing</span>
+                    </div>
+                </div>
+                <div class="project-thumbnail">
+                    <img src="./assets/images/shortfiction.png" alt="Short Fiction Website">
+                    <button class="project-link" onclick="openViewer('website', 'http://verysmallfires.netlify.app', 'Very Small Fires')">
+                        <span>View Content</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 1: JRPG Graphics -->
+        <div class="project-card">
+            <div class="card-inner">
+                <div class="card-content">
+                    <div class="project-category">Game Development</div>
+                    <h3 class="project-title">JRPG Graphics Test</h3>
+                    <p class="project-description">
+                        A short test for a retro 3D JRPG using 2D billboard sprites in a voxel environment. Put together using Godot.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Motion Graphics</span>
+                        <span class="tech-tag">Digital Art</span>
+                        <span class="tech-tag">Godot</span>
+                    </div>
+                </div>
+                <div class="project-thumbnail">
+                    <img src="https://img.youtube.com/vi/gddRyCO-KXk/maxresdefault.jpg" alt="JRPG Graphics Test">
+                    <button class="project-link" onclick="openViewer('video', 'gddRyCO-KXk', 'JRPG Graphics Test')">
+                        <span>View Content</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 2: Crokinole -->
+        <div class="project-card">
+            <div class="card-inner">
+                <div class="project-thumbnail">
+                    <img src="https://img.youtube.com/vi/STjOcuAAVRo/maxresdefault.jpg" alt="3D Crokinole Game">
+                    <div class="thumbnail-overlay"></div>
+                    <div class="thumbnail-label">3D Model</div>
+                    <button class="play-button" onclick="openViewer('video', 'STjOcuAAVRo', '3D Crokinole Game')" aria-label="Play 3D Crokinole Game video" title="Play video">
+                        <div class="play-icon"></div>
+                    </button>
+                </div>
+                <div class="card-content">
+                    <div class="project-category">3D Modeling</div>
+                    <h3 class="project-title">3D Crokinole Game</h3>
+                    <p class="project-description">
+                        Some low poly assets for a potential Crokinole Game.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Video</span>
+                        <span class="tech-tag">3D Modelling</span>
+                    </div>
+                    <button class="project-link" onclick="openViewer('video', 'STjOcuAAVRo', '3D Crokinole Game')">
+                        <span>View Content</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 3: Branding -->
+        <div class="project-card">
+            <div class="card-inner">
+                <div class="project-thumbnail">
+                    <img src="https://img.youtube.com/vi/JKXWcitDX0E/maxresdefault.jpg" alt="Branding Showcase">
+                    <div class="thumbnail-overlay"></div>
+                    <div class="thumbnail-label">Design</div>
+                    <button class="play-button" onclick="openViewer('video', 'JKXWcitDX0E', 'Branding Showcase')" aria-label="Play Branding Showcase video" title="Play video">
+                        <div class="play-icon"></div>
+                    </button>
+                </div>
+                <div class="card-content">
+                    <div class="project-category">UI/UX Design</div>
+                    <h3 class="project-title">Branding Showcase</h3>
+                    <p class="project-description">
+                        A showcase of design and UI/UX demonstrating modern layout and design techniques.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Digital Art</span>
+                        <span class="tech-tag">UI/UX</span>
+                        <span class="tech-tag">Visual Design</span>
+                    </div>
+                    <button class="project-link" onclick="openViewer('video', 'JKXWcitDX0E', 'Branding Showcase')">
+                        <span>View Content</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 4: Game Concept -->
+        <div class="project-card">
+            <div class="card-inner">
+                <div class="project-thumbnail">
+                    <img src="https://img.youtube.com/vi/VGcvpgYtNVE/maxresdefault.jpg" alt="Game Design Concept">
+                    <div class="thumbnail-overlay"></div>
+                    <div class="thumbnail-label">Game Concept</div>
+                    <button class="play-button" onclick="openViewer('video', 'VGcvpgYtNVE', 'Game Design Concept')" aria-label="Play Game Design Concept video" title="Play video">
+                        <div class="play-icon"></div>
+                    </button>
+                </div>
+                <div class="card-content">
+                    <div class="project-category">Interactive Experience</div>
+                    <h3 class="project-title">Game Design Concept</h3>
+                    <p class="project-description">
+                        A concept for a point and click mobile game.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Video Game Concept</span>
+                        <span class="tech-tag">Voice Acting</span>
+                        <span class="tech-tag">Storytelling</span>
+                    </div>
+                    <button class="project-link" onclick="openViewer('video', 'VGcvpgYtNVE', 'Game Design Concept')">
+                        <span>View Content</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 5: Audio Essay -->
+        <div class="project-card">
+            <div class="card-inner">
+                <div class="project-thumbnail">
+                    <img src="https://img.youtube.com/vi/h10pqaztnr4/maxresdefault.jpg" alt="Audio Essay - John Donne vs Simon and Garfunkle">
+                    <div class="thumbnail-overlay"></div>
+                    <div class="thumbnail-label">Audio Essay</div>
+                    <button class="play-button" onclick="openViewer('video', 'h10pqaztnr4', 'Audio Essay: John Donne vs Simon and Garfunkle')" aria-label="Play Audio Essay video" title="Play video">
+                        <div class="play-icon"></div>
+                    </button>
+                </div>
+                <div class="card-content">
+                    <div class="project-category">Literary Analysis</div>
+                    <h3 class="project-title">John Donne vs Simon and Garfunkel</h3>
+                    <p class="project-description">
+                        A discourse on being an island - exploring the philosophical connections between John Donne's meditation and Simon and Garfunkel's interpretation.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Audio Essay</span>
+                        <span class="tech-tag">Literary Analysis</span>
+                        <span class="tech-tag">Philosophy</span>
+                    </div>
+                    <button class="project-link" onclick="openViewer('video', 'h10pqaztnr4', 'Audio Essay: John Donne vs Simon and Garfunkel')">
+                        <span>View Content</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 6: Qube Menu -->
+        <div class="project-card">
+            <div class="card-inner">
+                <div class="project-thumbnail">
+                    <img src="./assets/PDF/thumnails/qubethumb.png" alt="Official Qube Menu">
+                    <div class="thumbnail-overlay"></div>
+                    <div class="thumbnail-label">PDF</div>
+                </div>
+                <div class="card-content">
+                    <div class="project-category">Restaurant Design</div>
+                    <h3 class="project-title">Official Qube Menu</h3>
+                    <p class="project-description">
+                        Professional menu design for Qube restaurant featuring modern layout and elegant typography for an upscale dining experience.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Print Design</span>
+                        <span class="tech-tag">Typography</span>
+                        <span class="tech-tag">Layout Design</span>
+                    </div>
+                    <button class="project-link" onclick="openViewer('pdf', './assets/PDF/official_qube_menu.pdf', 'Official Qube Menu')">
+                        <span>View Content</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 6: Masquerade -->
+        <div class="project-card">
+            <div class="card-inner">
+                <div class="project-thumbnail">
+                    <img src="./assets/PDF/thumnails/masq_thumb.png" alt="Masquerade Brochure">
+                    <div class="thumbnail-overlay"></div>
+                    <div class="thumbnail-label">PDF</div>
+                </div>
+                <div class="card-content">
+                    <div class="project-category">Event Marketing</div>
+                    <h3 class="project-title">Masquerade Brochure</h3>
+                    <p class="project-description">
+                        Elegant masquerade event brochure with sophisticated design elements, featuring detailed event information and visual storytelling.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Brochure Design</span>
+                        <span class="tech-tag">Event Marketing</span>
+                        <span class="tech-tag">Visual Design</span>
+                    </div>
+                    <button class="project-link" onclick="openViewer('pdf', './assets/PDF/00_masqurade.pdf', 'Masquerade Event Brochure')">
+                        <span>View Content</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 7: Professional Brochure -->
+        <div class="project-card">
+            <div class="card-inner">
+                <div class="project-thumbnail">
+                    <img src="./assets/PDF/thumnails/pei_thumb.png" alt="Professional Brochure">
+                    <div class="thumbnail-overlay"></div>
+                    <div class="thumbnail-label">PDF</div>
+                </div>
+                <div class="card-content">
+                    <div class="project-category">Print Design</div>
+                    <h3 class="project-title">Professional Brochure</h3>
+                    <p class="project-description">
+                        Classic brochure design showcasing professional layout techniques and effective information hierarchy for business communication.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Print Design</span>
+                        <span class="tech-tag">Layout</span>
+                        <span class="tech-tag">Typography</span>
+                    </div>
+                    <button class="project-link" onclick="openViewer('pdf', './assets/PDF/00_brochure.pdf', 'Professional Brochure')">
+                        <span>View Content</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 9: Resume -->
+        <div class="project-card">
+            <div class="card-inner">
+                <div class="project-thumbnail">
+                    <img src="./assets/images/00_resume.png" alt="Professional Resume">
+                    <div class="thumbnail-overlay"></div>
+                    <div class="thumbnail-label">Image</div>
+                </div>
+                <div class="card-content">
+                    <div class="project-category">Document Design</div>
+                    <h3 class="project-title">Professional Resume</h3>
+                    <p class="project-description">
+                        Clean and professional resume design demonstrating strong typography and layout skills for effective personal branding.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Resume Design</span>
+                        <span class="tech-tag">Typography</span>
+                        <span class="tech-tag">Document Layout</span>
+                    </div>
+                    <button class="project-link" onclick="openViewer('image', './assets/images/00_resume.png', 'Professional Resume')">
+                        <span>View Content</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Viewer -->
+    <div class="content-viewer" id="contentViewer">
+        <!-- Dimming Overlay -->
+        <div class="viewer-overlay" onclick="closeViewer()"></div>
+
+        <!-- Viewer Container -->
+        <div class="viewer-container">
+            <!-- Controls Header -->
+            <div class="viewer-controls">
+                <button class="viewer-close-btn" onclick="closeViewer()" title="Close">✕</button>
+                <h2 class="viewer-title" id="viewerTitle"></h2>
+            </div>
+
+            <!-- Content Area -->
+            <div class="viewer-content" id="viewerContent">
+                <iframe id="viewerIframe" title="Content viewer" allowfullscreen allow="autoplay; encrypted-media" style="display: none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js -->
+    <script type="module" src="works.js"></script>
+</body>
+</html>

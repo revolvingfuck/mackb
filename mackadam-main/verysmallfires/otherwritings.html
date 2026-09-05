@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Writings | Very Small Fires</title>
+
+    <meta name="description" content="Essays and poems by Brian Mack (No-One). Other writings from the Very Small Fires collection.">
+    <meta name="author" content="Brian Mack">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#1a1a1a">
+
+    <link rel="icon" type="image/png" href="fires.png">
+    <link rel="apple-touch-icon" href="fires.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('fires.png');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            mix-blend-mode: luminosity;
+            opacity: 0.1;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0 30px 0;
+            position: relative;
+        }
+
+        .story-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #e8e8e8 25%, #cccccc 50%, #b8b8b8 75%, #999999 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .story-subtitle {
+            font-size: 1.1rem;
+            color: #aaaaaa;
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+
+        .story-content {
+            background: rgba(40, 40, 40, 0.6);
+            padding: 60px 40px;
+            border-radius: 15px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .story-list h3 {
+            color: #ffd580;
+            font-size: 1.3rem;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .story-list h3:first-of-type {
+            margin-bottom: 15px;
+        }
+
+        .story-list h3:not(:first-of-type) {
+            margin: 30px 0 15px 0;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4),
+                        0 0 20px rgba(255, 213, 128, 0.15);
+            border-color: rgba(255, 213, 128, 0.3);
+        }
+
+        .nav-link:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 20px auto 40px auto;
+            padding: 10px 25px;
+            background: rgba(255, 213, 128, 0.1);
+            color: #ffd580;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+            border: 1px solid rgba(255, 213, 128, 0.3);
+        }
+
+        .back-link:hover {
+            background: rgba(255, 213, 128, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 213, 128, 0.2);
+        }
+
+        .back-wrap {
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 15px; }
+            .story-content { padding: 40px 25px; margin-bottom: 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="story-title">Other Writings</h1>
+            <p class="story-subtitle">Essays and poems</p>
+        </header>
+        <main class="story-content">
+            <div class="story-list">
+                <h3>Essays</h3>
+                <a class="nav-link" href="advesary.html">The Unnatural Deployment of Our Natural Adversary</a>
+                <a class="nav-link" href="thewarsweinherit.html">The Wars We Inherit</a>
+                <a class="nav-link" href="TheUnhousedMind.html">The Unhoused Mind</a>
+                <a class="nav-link" href="oneoysterbedrecollection.html">One Oysterbed Recollection</a>
+
+                <h3>Fiction</h3>
+                <a class="nav-link" href="whiteratrobsonsq.html">The White Rat at Robson Sq</a>
+
+                <h3>Poems</h3>
+                <a class="nav-link" href="forthecomfortofanest.html">For the Comfort of a Nest</a>
+                <a class="nav-link" href="concretescreams.html">It Is Still Not Heard When the Concrete Screams in Pain</a>
+            </div>
+        </main>
+        <div class="back-wrap">
+            <a href="index.html" class="back-link">&larr; Back to Very Small Fires</a>
+        </div>
+    </div>
+</body>
+</html>

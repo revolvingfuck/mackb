@@ -1,0 +1,581 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    color: white;
+    overflow: hidden;
+}
+
+/* Background layers */
+#video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+#three-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* Navigation */
+nav {
+    position: fixed;
+    top: 24px;
+    left: 32px;
+    z-index: 50;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+nav.viewing {
+    opacity: 0;
+    transform: translateY(-50px);
+}
+
+.nav-glass {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    padding: 12px 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+}
+
+.nav-glass:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Content Select Container */
+.content-select-container {
+    position: fixed;
+    top: 240px;
+    left: 32px;
+    z-index: 50;
+    transition: all 0.5s ease;
+}
+
+.content-select-container.viewing {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-button {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    padding: 12px 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.dropdown-button:hover {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.dropdown-arrow {
+    transition: transform 0.3s ease;
+}
+
+.dropdown.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-content {
+    position: absolute;
+    top: calc(100% + 16px);
+    left: 0;
+    width: 320px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.dropdown.active .dropdown-content {
+    max-height: 600px;
+    opacity: 1;
+}
+
+.dropdown-section {
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-section:last-child {
+    border-bottom: none;
+}
+
+.dropdown-section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    color: white;
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Page Header */
+.page-header {
+    position: fixed;
+    top: 96px;
+    left: 32px;
+    z-index: 40;
+    max-width: 480px;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-header.viewing {
+    opacity: 0;
+    transform: translateY(100px);
+}
+
+.page-title {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    color: white;
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+}
+
+.page-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+/* Selected Content Display */
+.selected-content-display {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.selected-content-display.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.selected-content-display.viewing {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Project Cards */
+.project-card {
+    display: none;
+    width: 100%;
+}
+
+.project-card.active {
+    display: flex;
+    align-items: stretch;
+}
+
+.card-inner {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* Left side - Caption. The top padding clears the fixed ladder above it -
+   nav (24) then page-header (96) then Content Select (240) - so it cannot be
+   tuned on its own without the caption sliding under the dropdown. The short-
+   viewport block near the bottom of this file moves the whole ladder together.
+   min-height:0 lets this flex item shrink enough for its own overflow-y to
+   engage instead of the content spilling past the bottom of the screen. */
+.card-content {
+    position: relative;
+    z-index: 2;
+    padding: 340px 32px 32px 32px;
+    width: 450px;
+    flex-shrink: 0;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.project-category {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 16px;
+}
+
+.project-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    color: white;
+    line-height: 1.1;
+}
+
+.project-description {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 32px;
+}
+
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.tech-tag {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.tech-tag:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Thumbnail - Right side */
+.project-thumbnail {
+    position: relative;
+    flex: 1;
+    overflow: visible;
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.project-thumbnail img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+    user-select: none;
+}
+
+/* View Content Button */
+.project-link {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    user-select: none;
+}
+
+.project-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.project-link:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+}
+
+/* Content Viewer */
+.content-viewer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.content-viewer.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.viewer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+
+.viewer-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95vw;
+    height: 95vh;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.viewer-controls {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+}
+
+.viewer-close-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.viewer-close-btn:hover {
+    background: rgba(0, 0, 0, 0.95);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.1);
+}
+
+.viewer-title {
+    display: none;
+}
+
+.viewer-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.viewer-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Loading */
+.loading {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.loading.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Short viewports - a laptop panel, or any window with browser chrome eating
+   the height. The left column is a fixed ladder (nav, page header, Content
+   Select, then the caption), so every rung moves up together; nudging only the
+   caption slides it under the dropdown. These keep roughly the same gap
+   between the dropdown and the caption that the full-height layout has. */
+@media (max-height: 820px) {
+    nav {
+        top: 16px;
+    }
+
+    .page-header {
+        top: 70px;
+    }
+
+    .page-title {
+        font-size: 2.2rem;
+        margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+        font-size: 0.82rem;
+    }
+
+    .content-select-container {
+        top: 182px;
+    }
+
+    .card-content {
+        padding-top: 248px;
+    }
+
+    .project-title {
+        font-size: 2rem;
+        margin-bottom: 16px;
+    }
+
+    .project-description {
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav {
+        left: 16px;
+    }
+
+    .content-select-container {
+        left: 16px;
+    }
+
+    .page-header {
+        top: 80px;
+        left: 16px;
+        max-width: 320px;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .card-inner {
+        flex-direction: column;
+    }
+
+    .card-content {
+        width: 100%;
+        padding: 100px 20px 20px 20px;
+    }
+
+    .project-thumbnail {
+        padding: 20px;
+    }
+
+    .project-link {
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+
+    .project-title {
+        font-size: 1.5rem;
+    }
+}

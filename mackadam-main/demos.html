@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demos - Brian MacAdam</title>
+    <link rel="stylesheet" href="demos.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "./assets/three.js-master/build/three.module.min.js"
+        }
+    }
+    </script>
+</head>
+<body>
+    <video id="video-background" autoplay loop muted playsinline>
+        <source src="./232408_medium.mp4" type="video/mp4">
+    </video>
+
+    <img id="bolt-gif" src="./assets/bolt.gif?once" alt="Lightning bolt effect">
+
+    <div id="three-container"></div>
+
+    <script type="module" src="demos.js"></script>
+</body>
+</html>

@@ -1,0 +1,2276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomb Treasures</title>
+    <style>
+        @font-face {
+            font-family: '3DIsometric';
+            src: url('Web Open Font Format (.woff)/3DIsometric-Bold.woff2') format('woff2'),
+                 url('Web Open Font Format (.woff)/3DIsometric-Bold.woff') format('woff');
+            font-weight: bold;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: '3DIsometric';
+            src: url('Web Open Font Format (.woff)/3DIsometric-Regular.woff2') format('woff2'),
+                 url('Web Open Font Format (.woff)/3DIsometric-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: '3DIsometric';
+            src: url('Web Open Font Format (.woff)/3DIsometric-Black.woff2') format('woff2'),
+                 url('Web Open Font Format (.woff)/3DIsometric-Black.woff') format('woff');
+            font-weight: 900;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            overflow: hidden;
+            font-family: monospace;
+            background: #000000;
+        }
+        #root {
+            width: 100vw;
+            height: 100vh;
+        }
+        #mount {
+            width: 100%;
+            height: 100%;
+        }
+        #title-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('title.png') center center / cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        #title-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .title-3d {
+            position: relative;
+            font-size: 96px;
+            font-weight: 900;
+            font-family: '3DIsometric', monospace;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+            animation: titleFloat 3s ease-in-out infinite;
+            color: #ffffff;
+            text-shadow:
+                2px 2px 0px #e0e0e0,
+                4px 4px 0px #c0c0c0,
+                6px 6px 0px #a0a0a0,
+                8px 8px 0px #808080,
+                10px 10px 0px #606060,
+                12px 12px 0px #404040,
+                14px 14px 0px #202020,
+                16px 16px 30px rgba(255, 255, 255, 0.5),
+                0 0 40px rgba(255, 255, 255, 0.6);
+        }
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        .subtitle {
+            color: #ff0000;
+            font-size: 18px;
+            font-family: monospace;
+            letter-spacing: 6px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            text-shadow:
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 20px rgba(75, 0, 130, 0.6);
+            animation: subtitlePulse 2s ease-in-out infinite;
+        }
+        @keyframes subtitlePulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        .music-selection {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 50px;
+            align-items: center;
+            justify-content: center;
+        }
+        .music-button {
+            width: 120px;
+            height: 120px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            background: transparent;
+            padding: 0;
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+        .music-button.selected {
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.6), inset 0 0 20px rgba(0, 255, 136, 0.2);
+            animation: cursorPulse 1s ease-in-out infinite;
+        }
+        @keyframes cursorPulse {
+            0%, 100% {
+                border-color: #00ff88;
+                box-shadow: 0 0 20px rgba(0, 255, 136, 0.6), inset 0 0 20px rgba(0, 255, 136, 0.2);
+            }
+            50% {
+                border-color: #00ffff;
+                box-shadow: 0 0 30px rgba(0, 255, 255, 0.8), inset 0 0 30px rgba(0, 255, 255, 0.3);
+            }
+        }
+        .music-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+            animation: musicPulse 2s ease-in-out infinite;
+        }
+        .music-button.active img {
+            filter: drop-shadow(0 0 30px rgba(255, 255, 255, 1)) brightness(1.5);
+        }
+        .music-button:hover img {
+            transform: scale(1.1);
+        }
+        @keyframes musicPulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+            }
+            50% {
+                filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+            }
+        }
+        .music-particles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .music-button.active .music-particles {
+            opacity: 1;
+        }
+        .music-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+        .start-button {
+            background: transparent;
+            border: 3px solid transparent;
+            width: 250px;
+            height: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        .start-button.selected {
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.6), inset 0 0 20px rgba(0, 255, 136, 0.2);
+            animation: cursorPulse 1s ease-in-out infinite;
+        }
+        .start-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            filter: brightness(1.2);
+        }
+        .start-button:active {
+            transform: translateY(1px) scale(0.98);
+            filter: brightness(0.9);
+        }
+        @keyframes buttonGlow {
+            0%, 100% {
+                filter: brightness(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+            }
+            50% {
+                filter: brightness(1.1) drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+            }
+        }
+        .particles-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: particleFloat 10s linear infinite;
+            box-shadow:
+                0 0 6px rgba(255, 0, 0, 0.8),
+                0 0 12px rgba(75, 0, 130, 0.5);
+        }
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+                background: #ff0000;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            50% {
+                background: #4b0082;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(50px);
+                opacity: 0;
+                background: #000000;
+            }
+        }
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-size: 13px;
+            background: rgba(0,0,0,0.8);
+            padding: 14px 18px;
+            border-radius: 2px;
+            user-select: none;
+            letter-spacing: 0.5px;
+            display: none;
+        }
+        #ui.visible {
+            display: block;
+        }
+        .secrets {
+            margin-bottom: 6px;
+        }
+        .timer-row {
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        .timer-label {
+            opacity: 0.8;
+            font-size: 10px;
+        }
+        .timer-value {
+            color: #00ff88;
+            font-weight: bold;
+            font-family: monospace;
+        }
+        .best-time {
+            color: #ffd700;
+        }
+        .charge-row {
+            margin-bottom: 8px;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .charge-label {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+        .charge-bar {
+            display: flex;
+            gap: 2px;
+        }
+        .charge-block {
+            width: 16px;
+            height: 6px;
+            background: #333;
+            border: 1px solid #666;
+            transition: background 0.3s;
+        }
+        .charge-block.active {
+            background: #ff4444;
+        }
+        .jump-block {
+            width: 12px;
+            height: 6px;
+            background: #333;
+            border: 1px solid #666;
+            transition: background 0.3s;
+        }
+        .jump-block.active {
+            background: #00ff00;
+        }
+        .instructions {
+            font-size: 10px;
+            opacity: 0.6;
+            line-height: 1.4;
+        }
+        #complete {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 28px;
+            background: rgba(0,0,0,0.95);
+            padding: 32px 64px;
+            border-radius: 2px;
+            text-align: center;
+            letter-spacing: 2px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div id="title-screen">
+            <div class="particles-bg" id="particles-bg"></div>
+            <div class="title-3d">TOMB TREASURES</div>
+            <div class="music-selection">
+                <button class="music-button" id="music-a">
+                    <img src="a.png" alt="Music A">
+                    <div class="music-particles" id="particles-a"></div>
+                </button>
+                <button class="music-button" id="music-b">
+                    <img src="b.png" alt="Music B">
+                    <div class="music-particles" id="particles-b"></div>
+                </button>
+            </div>
+            <button class="start-button" id="start-button">
+                <img src="startbutton.gif" alt="Start" style="width: 100%; height: 100%; object-fit: contain;">
+            </button>
+        </div>
+        <div id="mount"></div>
+        <div id="ui">
+            <div class="secrets">SECRETS: <span id="found-count">0</span>/26</div>
+            <div class="timer-row">
+                <span class="timer-label">TIME:</span> <span class="timer-value" id="current-time">0:00.0</span>
+            </div>
+            <div class="timer-row">
+                <span class="timer-label">BEST:</span> <span class="timer-value best-time" id="best-time">--:--.-</span>
+            </div>
+            <div class="charge-row">
+                <span class="charge-label">BEACON:</span>
+                <div class="charge-bar" id="beacon-charges">
+                    <div class="charge-block active"></div>
+                    <div class="charge-block active"></div>
+                    <div class="charge-block active"></div>
+                </div>
+            </div>
+            <div class="charge-row">
+                <span class="charge-label">JUMPS:</span>
+                <div class="charge-bar" id="jump-charges">
+                    <div class="jump-block"></div>
+                    <div class="jump-block"></div>
+                    <div class="jump-block"></div>
+                    <div class="jump-block"></div>
+                    <div class="jump-block"></div>
+                </div>
+            </div>
+            <div class="instructions">
+                WHITE: Easy | YELLOW: Medium | BLUE: Hard<br>
+                GREEN: Jump Powerup<br>
+                WASD: Move | E: Climb Ladder | SPACE: Jump<br>
+                F: Beacon | DRAG: Rotate | SCROLL: Zoom<br>
+                <br>
+                GAMEPAD: D-Pad: Move | A: Jump | B: Climb<br>
+                Right Stick: Camera | Y: Beacon
+            </div>
+        </div>
+        <div id="complete">COMPLETE</div>
+        <div id="warning" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#ff4444;font-size:18px;background:rgba(0,0,0,0.9);padding:20px 40px;border-radius:2px;text-align:center;letter-spacing:2px;font-family:monospace;"></div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+let gameStarted = false;
+
+        // Title screen particles - using THREE.js like in the game
+        const titleScene = new THREE.Scene();
+        const titleCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        titleCamera.position.z = 30;
+
+        const titleRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        titleRenderer.setSize(window.innerWidth, window.innerHeight);
+        titleRenderer.setClearColor(0x000000, 0);
+
+        const particlesBg = document.getElementById('particles-bg');
+        particlesBg.appendChild(titleRenderer.domElement);
+        titleRenderer.domElement.style.position = 'absolute';
+        titleRenderer.domElement.style.top = '0';
+        titleRenderer.domElement.style.left = '0';
+        titleRenderer.domElement.style.width = '100%';
+        titleRenderer.domElement.style.height = '100%';
+
+        // Create atmospheric particles
+        const titleParticles = new THREE.Group();
+        const titleParticleCount = 100;
+        const titleParticleGeom = new THREE.SphereGeometry(0.1, 6, 6);
+
+        for (let i = 0; i < titleParticleCount; i++) {
+            const particleMat = new THREE.MeshBasicMaterial({
+                color: Math.random() > 0.5 ? 0x4a90e2 : 0xffffff,
+                transparent: true,
+                opacity: 0.3 + Math.random() * 0.3
+            });
+            const particle = new THREE.Mesh(titleParticleGeom, particleMat);
+            particle.position.set(
+                (Math.random() - 0.5) * 100,
+                (Math.random() - 0.5) * 60,
+                (Math.random() - 0.5) * 50
+            );
+            particle.userData = {
+                speed: 0.02 + Math.random() * 0.03,
+                offset: Math.random() * Math.PI * 2,
+                radius: 1 + Math.random() * 2
+            };
+            titleParticles.add(particle);
+        }
+        titleScene.add(titleParticles);
+
+        // Animate title screen particles
+        let titleTime = 0;
+        function animateTitleScreen() {
+            if (!gameStarted) {
+                requestAnimationFrame(animateTitleScreen);
+                titleTime += 0.01;
+
+                titleParticles.children.forEach(p => {
+                    p.userData.offset += p.userData.speed * 0.016;
+                    p.position.x += Math.sin(p.userData.offset) * p.userData.radius * 0.016;
+                    p.position.z += Math.cos(p.userData.offset) * p.userData.radius * 0.016;
+                    p.material.opacity = 0.2 + Math.sin(titleTime * 2 + p.userData.offset) * 0.2;
+
+                    // Wrap particles
+                    if (p.position.x > 50) p.position.x = -50;
+                    if (p.position.x < -50) p.position.x = 50;
+                    if (p.position.z > 25) p.position.z = -25;
+                    if (p.position.z < -25) p.position.z = 25;
+                });
+
+                titleRenderer.render(titleScene, titleCamera);
+            }
+        }
+        animateTitleScreen();
+
+        // Audio setup
+        const startSound = new Audio('sound/start.mp3');
+        const beaconSound = new Audio('sound/beacon.mp3');
+        const collectJumpSound = new Audio('sound/collectjump.mp3');
+        const useJumpSound = new Audio('sound/usejump.mp3');
+        const collectGemSound = new Audio('sound/collect.mp3');
+        const walkingSound = new Audio('sound/walking.mp3');
+        const completeSound = new Audio('sound/complete.mp3');
+
+        // Background music
+        const musicA = new Audio('sound/A.mp3');
+        const musicB = new Audio('sound/B.mp3');
+        musicA.loop = true;
+        musicB.loop = true;
+        musicA.volume = 0.5;
+        musicB.volume = 0.5;
+
+        let selectedMusic = null;
+
+        // Create particles for music buttons
+        function createMusicParticles(containerId) {
+            const container = document.getElementById(containerId);
+            const particleCount = 12;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'music-particle';
+                const angle = (i / particleCount) * Math.PI * 2;
+                const radius = 40 + Math.random() * 10; // Tightened from 60-80 to 40-50
+                const x = 50 + Math.cos(angle) * radius;
+                const y = 50 + Math.sin(angle) * radius;
+                particle.style.left = x + '%';
+                particle.style.top = y + '%';
+                particle.style.animation = `particleOrbit ${2 + Math.random()}s linear infinite`;
+                particle.style.animationDelay = `${i * 0.1}s`;
+                container.appendChild(particle);
+            }
+        }
+
+        createMusicParticles('particles-a');
+        createMusicParticles('particles-b');
+
+        // Add particle orbit animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleOrbit {
+                0% { transform: translate(-50%, -50%) rotate(0deg) translateX(0px) rotate(0deg); opacity: 0.8; }
+                50% { transform: translate(-50%, -50%) rotate(180deg) translateX(5px) rotate(-180deg); opacity: 1; }
+                100% { transform: translate(-50%, -50%) rotate(360deg) translateX(0px) rotate(-360deg); opacity: 0.8; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Music selection handlers
+        const musicABtn = document.getElementById('music-a');
+        const musicBBtn = document.getElementById('music-b');
+
+        function selectMusicA() {
+            if (selectedMusic === 'A') return;
+
+            // Stop the other track
+            musicB.pause();
+            musicB.currentTime = 0;
+            musicBBtn.classList.remove('active');
+
+            // Mark as selected (will play when game starts)
+            musicABtn.classList.add('active');
+            selectedMusic = 'A';
+        }
+
+        function selectMusicB() {
+            if (selectedMusic === 'B') return;
+
+            // Stop the other track
+            musicA.pause();
+            musicA.currentTime = 0;
+            musicABtn.classList.remove('active');
+
+            // Mark as selected (will play when game starts)
+            musicBBtn.classList.add('active');
+            selectedMusic = 'B';
+        }
+
+        musicABtn.addEventListener('click', selectMusicA);
+        musicBBtn.addEventListener('click', selectMusicB);
+
+        // Gamepad support for title screen
+        let titleGamepadIndex = null;
+        let lastTitleButtonState = {x: false, b: false, a: false, lb: false, rb: false};
+        let lastDpadTitleState = {up: false, down: false, left: false, right: false};
+
+        // Cursor navigation
+        const titleButtons = [
+            document.getElementById('music-a'),
+            document.getElementById('music-b'),
+            document.getElementById('start-button')
+        ];
+        let currentSelection = 0;
+
+        function updateSelection() {
+            titleButtons.forEach((btn, index) => {
+                if (index === currentSelection) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
+
+        // Set initial selection
+        updateSelection();
+
+        // Keyboard navigation for title screen
+        window.addEventListener('keydown', (e) => {
+            if (gameStarted) return;
+
+            const key = e.key.toLowerCase();
+
+            // Arrow key navigation
+            if (key === 'arrowleft' || key === 'a') {
+                e.preventDefault();
+                if (currentSelection > 0) {
+                    currentSelection--;
+                    updateSelection();
+                }
+            } else if (key === 'arrowright' || key === 'd') {
+                e.preventDefault();
+                if (currentSelection < titleButtons.length - 1) {
+                    currentSelection++;
+                    updateSelection();
+                }
+            } else if (key === 'arrowup' || key === 'w') {
+                e.preventDefault();
+                if (currentSelection === 2) {
+                    currentSelection = 0;
+                    updateSelection();
+                }
+            } else if (key === 'arrowdown' || key === 's') {
+                e.preventDefault();
+                if (currentSelection < 2) {
+                    currentSelection = 2;
+                    updateSelection();
+                }
+            } else if (key === 'enter' || key === ' ') {
+                // Enter or Space activates selected button
+                e.preventDefault();
+                titleButtons[currentSelection].click();
+            } else if (key === '1') {
+                // Number 1 for Music A
+                e.preventDefault();
+                selectMusicA();
+            } else if (key === '2') {
+                // Number 2 for Music B
+                e.preventDefault();
+                selectMusicB();
+            }
+        });
+
+        window.addEventListener('gamepadconnected', (e) => {
+            titleGamepadIndex = e.gamepad.index;
+            console.log('Gamepad connected on title screen:', e.gamepad.id);
+        });
+
+        window.addEventListener('gamepaddisconnected', (e) => {
+            if (titleGamepadIndex === e.gamepad.index) {
+                titleGamepadIndex = null;
+            }
+        });
+
+        function pollTitleGamepad() {
+            if (titleGamepadIndex === null || gameStarted) return;
+
+            const gamepads = navigator.getGamepads();
+            const gp = gamepads[titleGamepadIndex];
+            if (!gp) return;
+
+            // D-pad navigation (with left stick as fallback)
+            const dpadLeft = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
+            const dpadRight = gp.buttons[15]?.pressed || gp.axes[0] > 0.5;
+            const dpadUp = gp.buttons[12]?.pressed || gp.axes[1] < -0.5;
+            const dpadDown = gp.buttons[13]?.pressed || gp.axes[1] > 0.5;
+
+            // Navigate left
+            if (dpadLeft && !lastDpadTitleState.left) {
+                if (currentSelection > 0) {
+                    currentSelection--;
+                    updateSelection();
+                }
+            }
+
+            // Navigate right
+            if (dpadRight && !lastDpadTitleState.right) {
+                if (currentSelection < titleButtons.length - 1) {
+                    currentSelection++;
+                    updateSelection();
+                }
+            }
+
+            // Navigate up
+            if (dpadUp && !lastDpadTitleState.up) {
+                if (currentSelection === 2) { // If on start button, go to music buttons
+                    currentSelection = 0;
+                    updateSelection();
+                }
+            }
+
+            // Navigate down
+            if (dpadDown && !lastDpadTitleState.down) {
+                if (currentSelection < 2) { // If on music buttons, go to start
+                    currentSelection = 2;
+                    updateSelection();
+                }
+            }
+
+            lastDpadTitleState = {up: dpadUp, down: dpadDown, left: dpadLeft, right: dpadRight};
+
+            // A button - activate selected button
+            const aPressed = gp.buttons[0]?.pressed || false;
+            if (aPressed && !lastTitleButtonState.a) {
+                titleButtons[currentSelection].click();
+            }
+
+            // X button (index 2) - select Music A
+            const xPressed = gp.buttons[2]?.pressed || false;
+            if (xPressed && !lastTitleButtonState.x) {
+                selectMusicA();
+            }
+
+            // B button (index 1) - select Music B
+            const bPressed = gp.buttons[1]?.pressed || false;
+            if (bPressed && !lastTitleButtonState.b) {
+                selectMusicB();
+            }
+
+            // LB/RB (bumpers) - toggle between music options
+            const lbPressed = gp.buttons[4]?.pressed || gp.buttons[6]?.pressed || false;
+            const rbPressed = gp.buttons[5]?.pressed || gp.buttons[7]?.pressed || false;
+
+            if (lbPressed && !lastTitleButtonState.lb) {
+                selectMusicA();
+            }
+            if (rbPressed && !lastTitleButtonState.rb) {
+                selectMusicB();
+            }
+
+            lastTitleButtonState = {x: xPressed, b: bPressed, a: aPressed, lb: lbPressed, rb: rbPressed};
+        }
+
+        // Poll gamepad in title screen animation loop
+        function animateTitleScreenWithGamepad() {
+            if (!gameStarted) {
+                requestAnimationFrame(animateTitleScreenWithGamepad);
+                pollTitleGamepad();
+            }
+        }
+        animateTitleScreenWithGamepad();
+        // Start button handler
+        document.getElementById('start-button').addEventListener('click', () => {
+            if (gameStarted) return;
+            gameStarted = true;
+
+            // Play start sound
+            startSound.play().catch(e => console.log('Audio play failed:', e));
+
+            // Resume the selected music track when game starts
+            if (selectedMusic === 'A') {
+                musicA.play().catch(e => console.log('Music A play failed:', e));
+            } else if (selectedMusic === 'B') {
+                musicB.play().catch(e => console.log('Music B play failed:', e));
+            }
+
+            document.getElementById('title-screen').classList.add('hidden');
+            document.getElementById('ui').classList.add('visible');
+
+            // Start the game after transition
+            setTimeout(() => {
+                animate();
+            }, 500);
+        });
+
+        const mountEl = document.getElementById('mount');
+        let found = 0;
+        let beaconCharges = 3;
+        let jumpCharges = 0;
+
+        // Timer variables
+        let timerStarted = false;
+        let timerStartTime = 0;
+        let currentTime = 0;
+        let bestTime = localStorage.getItem('tombTreasuresBestTime') ? parseFloat(localStorage.getItem('tombTreasuresBestTime')) : null;
+        let gameCompleted = false;
+
+        // Format time as M:SS.T (minutes:seconds.tenths)
+        function formatTime(seconds) {
+            if (seconds === null || seconds === undefined) return '--:--.-';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            const tenths = Math.floor((seconds % 1) * 10);
+            return `${mins}:${secs.toString().padStart(2, '0')}.${tenths}`;
+        }
+
+        // Update timer display
+        function updateTimerDisplay() {
+            document.getElementById('current-time').textContent = formatTime(currentTime);
+            document.getElementById('best-time').textContent = formatTime(bestTime);
+        }
+
+        // Start the timer on first move
+        function startTimer() {
+            if (!timerStarted && !gameCompleted) {
+                timerStarted = true;
+                timerStartTime = Date.now();
+            }
+        }
+
+        function setFound(value) {
+            found = typeof value === 'function' ? value(found) : value;
+            document.getElementById('found-count').textContent = found;
+            if (found === 26 && !gameCompleted) {
+                gameCompleted = true;
+                // Freeze movement - game is over
+                moving = false;
+                jumping = false;
+                walkingSound.pause();
+                walkingSound.currentTime = 0;
+                stopAnimation(0.3);
+
+                document.getElementById('complete').style.display = 'block';
+
+                // Update best time if current time is better or no best time exists
+                if (bestTime === null || currentTime < bestTime) {
+                    bestTime = currentTime;
+                    localStorage.setItem('tombTreasuresBestTime', bestTime.toString());
+                    updateTimerDisplay();
+                }
+
+                // Play completion sound
+                completeSound.currentTime = 0;
+                completeSound.play().catch(e => console.log('Complete sound failed:', e));
+            }
+        }
+
+        // Initialize timer display
+        updateTimerDisplay();
+
+        let softlockTimer = null;
+        function checkSoftlock() {
+            if (gameCompleted) return;
+            if (jumps > 0) return; // jumps remain, no softlock possible
+
+            const el = document.getElementById('warning');
+            clearTimeout(softlockTimer);
+
+            if (pe > 0 && !ladderMap[pz][px]) {
+                // Physically stranded: elevated with no jumps and no ladder
+                el.textContent = 'NO JUMPS — STRANDED';
+                el.style.display = 'block';
+                softlockTimer = setTimeout(() => { el.style.display = 'none'; }, 3500);
+            } else if (found < 26) {
+                // Secrets remain but jumps are exhausted — puzzle is dead-ended
+                el.textContent = 'OUT OF JUMPS';
+                el.style.display = 'block';
+                softlockTimer = setTimeout(() => { el.style.display = 'none'; }, 3500);
+            }
+        }
+
+        function setBeaconCharges(value) {
+            beaconCharges = value;
+            const blocks = document.querySelectorAll('#beacon-charges .charge-block');
+            blocks.forEach((block, i) => {
+                block.classList.toggle('active', i < beaconCharges);
+            });
+        }
+
+        function setJumpCharges(value) {
+            jumpCharges = value;
+            const blocks = document.querySelectorAll('#jump-charges .jump-block');
+            blocks.forEach((block, i) => {
+                block.classList.toggle('active', i < jumpCharges);
+            });
+        }
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0a0a);
+        scene.fog = new THREE.Fog(0x0a0a0a, 30, 80);
+
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(40, 45, 40);
+        camera.lookAt(0, 5, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        mountEl.appendChild(renderer.domElement);
+
+        // Lighting
+        scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+        const keyLight = new THREE.DirectionalLight(0xffffff, 0.6);
+        keyLight.position.set(30, 50, 20);
+        keyLight.castShadow = true;
+        keyLight.shadow.mapSize.setScalar(2048);
+        keyLight.shadow.camera.left = keyLight.shadow.camera.bottom = -50;
+        keyLight.shadow.camera.right = keyLight.shadow.camera.top = 50;
+        scene.add(keyLight);
+        const fillLight = new THREE.DirectionalLight(0x4a90e2, 0.2);
+        fillLight.position.set(-30, 20, -20);
+        scene.add(fillLight);
+
+        // Materials
+        const mat = {
+            wall: new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9 }),
+            floor: new THREE.MeshStandardMaterial({ color: 0x0d0d0d, roughness: 0.95 }),
+            platform: new THREE.MeshStandardMaterial({ color: 0x252525, roughness: 0.8 }),
+            accent: new THREE.MeshStandardMaterial({ color: 0x3a3a3a, roughness: 0.6 }),
+            player: new THREE.MeshStandardMaterial({ color: 0xff4444, emissive: 0xff4444, emissiveIntensity: 0.3 }),
+            ladder: new THREE.MeshStandardMaterial({ color: 0x8b4513, roughness: 0.9 })
+        };
+
+        // Hand-crafted challenging maze
+        const size = 25, wallSize = 2;
+        const maze = [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1],
+            [1,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1],
+            [1,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,1],
+            [1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,1],
+            [1,1,1,1,1,0,1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,1,1,0,1],
+            [1,0,0,0,1,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1],
+            [1,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,1,1,1,1,0,1],
+            [1,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,1],
+            [1,0,1,1,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,1,1,0,1,0,1],
+            [1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1],
+            [1,1,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1],
+            [1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,1],
+            [1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1],
+            [1,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,1],
+            [1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,1],
+            [1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,0,1],
+            [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,1],
+            [1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,1,1,0,1,0,1],
+            [1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+            [1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
+        const elevationMap = Array(size).fill().map(() => Array(size).fill(0));
+        const ladderMap = Array(size).fill().map(() => Array(size).fill(null));
+
+        // Validate maze connectivity - ensure all walkable areas are reachable
+        function validateAndFixMaze() {
+            const visited = Array(size).fill().map(() => Array(size).fill(false));
+            const queue = [];
+
+            // Find starting position
+            let startX = -1, startZ = -1;
+            for (let z = 1; z < size - 1 && startX === -1; z++) {
+                for (let x = 1; x < size - 1; x++) {
+                    if (maze[z][x] === 0) {
+                        startX = x;
+                        startZ = z;
+                        break;
+                    }
+                }
+            }
+
+            if (startX === -1) return; // No walkable tiles
+
+            // Flood fill from start
+            queue.push([startX, startZ]);
+            visited[startZ][startX] = true;
+            let reachableCount = 1;
+
+            while (queue.length > 0) {
+                const [x, z] = queue.shift();
+                const neighbors = [[x-1,z], [x+1,z], [x,z-1], [x,z+1]];
+
+                for (let [nx, nz] of neighbors) {
+                    if (nx >= 0 && nx < size && nz >= 0 && nz < size &&
+                        maze[nz][nx] === 0 && !visited[nz][nx]) {
+                        visited[nz][nx] = true;
+                        queue.push([nx, nz]);
+                        reachableCount++;
+                    }
+                }
+            }
+
+            // Count total walkable tiles
+            let totalWalkable = 0;
+            for (let z = 0; z < size; z++) {
+                for (let x = 0; x < size; x++) {
+                    if (maze[z][x] === 0) totalWalkable++;
+                }
+            }
+
+            // Fix unreachable areas by creating connections
+            if (reachableCount < totalWalkable) {
+                console.log(`Found ${totalWalkable - reachableCount} unreachable tiles. Fixing...`);
+
+                for (let z = 1; z < size - 1; z++) {
+                    for (let x = 1; x < size - 1; x++) {
+                        if (maze[z][x] === 0 && !visited[z][x]) {
+                            // Found unreachable tile, connect it to nearest reachable tile
+                            let minDist = Infinity;
+                            let bestWall = null;
+
+                            // Check adjacent walls
+                            const walls = [
+                                [x-1, z], [x+1, z], [x, z-1], [x, z+1]
+                            ];
+
+                            for (let [wx, wz] of walls) {
+                                if (maze[wz][wx] === 1) {
+                                    // Check if removing this wall connects to reachable area
+                                    const beyondWall = [
+                                        [wx-1, wz], [wx+1, wz], [wx, wz-1], [wx, wz+1]
+                                    ];
+
+                                    for (let [bx, bz] of beyondWall) {
+                                        if (bx >= 0 && bx < size && bz >= 0 && bz < size &&
+                                            visited[bz] && visited[bz][bx]) {
+                                            const dist = Math.abs(bx - x) + Math.abs(bz - z);
+                                            if (dist < minDist) {
+                                                minDist = dist;
+                                                bestWall = [wx, wz];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (bestWall) {
+                                maze[bestWall[1]][bestWall[0]] = 0;
+                                visited[z][x] = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        validateAndFixMaze();
+
+        const collectables = [];
+
+        // Helper function to check if a position is adjacent to a walkable path
+        function isNearPath(x, z) {
+            const neighbors = [
+                [x-1,z], [x+1,z], [x,z-1], [x,z+1],
+                [x-1,z-1], [x+1,z-1], [x-1,z+1], [x+1,z+1]
+            ];
+            for (let [nx, nz] of neighbors) {
+                if (nx >= 0 && nx < size && nz >= 0 && nz < size && maze[nz][nx] === 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Helper function to check if wall is at a junction (multiple paths nearby)
+        function isAtJunction(x, z) {
+            if (maze[z][x] !== 1) return false;
+            let adjacentPaths = 0;
+            const neighbors = [[x-1,z], [x+1,z], [x,z-1], [x,z+1]];
+            for (let [nx, nz] of neighbors) {
+                if (nx >= 0 && nx < size && nz >= 0 && nz < size && maze[nz][nx] === 0) {
+                    adjacentPaths++;
+                }
+            }
+            return adjacentPaths >= 2;
+        }
+
+        // Build maze geometry
+        for (let z = 0; z < size; z++) {
+            for (let x = 0; x < size; x++) {
+                const px = (x - size/2) * wallSize, pz = (z - size/2) * wallSize;
+
+                if (maze[z][x] === 1) {
+                    // Keep walls near critical paths lower to ensure visibility and navigation
+                    // Walls at junctions or next to paths should be shorter
+                    let h;
+                    if (isAtJunction(x, z)) {
+                        // Junctions get low walls for better visibility
+                        h = 2;
+                    } else if (isNearPath(x, z)) {
+                        // Walls near paths can be medium height
+                        h = Math.random() > 0.7 ? 3 : 2;
+                    } else {
+                        // Interior walls can be taller for visual variety
+                        h = Math.random() > 0.85 ? 6 : Math.random() > 0.6 ? 4.5 : Math.random() > 0.4 ? 3 : 2;
+                    }
+
+                    const wall = new THREE.Mesh(new THREE.BoxGeometry(wallSize, h, wallSize), mat.wall);
+                    wall.position.set(px, h/2, pz);
+                    wall.castShadow = wall.receiveShadow = true;
+                    scene.add(wall);
+
+                    // Only add towers to tall walls that aren't near critical paths
+                    if (h >= 4.5 && !isNearPath(x, z) && Math.random() > 0.6) {
+                        const th = 3 + Math.random() * 2, ts = 0.6 + Math.random() * 0.4;
+                        const tower = new THREE.Mesh(new THREE.BoxGeometry(ts, th, ts), mat.accent);
+                        tower.position.set(px, h + th/2, pz);
+                        tower.castShadow = true;
+                        scene.add(tower);
+                    }
+                } else {
+                    const floor = new THREE.Mesh(new THREE.BoxGeometry(wallSize * 0.98, 0.1, wallSize * 0.98), mat.floor);
+                    floor.position.set(px, -0.05, pz);
+                    floor.receiveShadow = true;
+                    scene.add(floor);
+                }
+            }
+        }
+
+        // Platforms with ladders (replacing stairs)
+        const platforms = [
+            {x:10,z:6,w:3,h:3,height:3,dir:'south'},{x:6,z:14,w:2,h:3,height:4,dir:'east'},
+            {x:18,z:10,w:3,h:2,height:2.5,dir:'west'},{x:14,z:18,w:2,h:2,height:5,dir:'north'},
+            {x:4,z:20,w:2,h:2,height:3.5,dir:'south'},{x:20,z:20,w:3,h:3,height:4.5,dir:'west'},
+            {x:12,z:4,w:2,h:3,height:3,dir:'north'},{x:22,z:8,w:2,h:2,height:3.5,dir:'south'}
+        ];
+
+        platforms.forEach(({x,z,w,h,height,dir}) => {
+            const px = (x - size/2) * wallSize, pz = (z - size/2) * wallSize;
+            const plat = new THREE.Mesh(new THREE.BoxGeometry(w*wallSize*0.9, 0.3, h*wallSize*0.9), mat.platform);
+            plat.position.set(px, height, pz);
+            plat.castShadow = plat.receiveShadow = true;
+            scene.add(plat);
+
+            // Note: Don't set elevationMap for platforms - they float above ground
+            // Only ladder tiles will have elevation changes
+
+            // Add ladder to platform based on direction
+            const offset = {
+                north:{x:0,z:-h*wallSize*0.5}, south:{x:0,z:h*wallSize*0.5},
+                east:{x:w*wallSize*0.5,z:0}, west:{x:-w*wallSize*0.5,z:0}
+            }[dir];
+
+            const ladderX = x + Math.floor(w/2);
+            const ladderZ = z + Math.floor(h/2);
+
+            if (dir === 'north') {
+                const ladderZ_actual = z - 1;
+                if (ladderZ_actual >= 0 && ladderZ_actual < size && maze[ladderZ_actual][ladderX] === 0) {
+                    createLadder(ladderX, ladderZ_actual, height);
+                }
+            } else if (dir === 'south') {
+                const ladderZ_actual = z + h;
+                if (ladderZ_actual >= 0 && ladderZ_actual < size && maze[ladderZ_actual][ladderX] === 0) {
+                    createLadder(ladderX, ladderZ_actual, height);
+                }
+            } else if (dir === 'east') {
+                const ladderX_actual = x + w;
+                if (ladderX_actual >= 0 && ladderX_actual < size && maze[ladderZ][ladderX_actual] === 0) {
+                    createLadder(ladderX_actual, ladderZ, height);
+                }
+            } else if (dir === 'west') {
+                const ladderX_actual = x - 1;
+                if (ladderX_actual >= 0 && ladderX_actual < size && maze[ladderZ][ladderX_actual] === 0) {
+                    createLadder(ladderX_actual, ladderZ, height);
+                }
+            }
+        });
+
+        // Helper function to create a ladder
+        function createLadder(x, z, h) {
+            const px = (x-size/2)*wallSize, pz = (z-size/2)*wallSize;
+
+            for (let i = 0; i < Math.floor(h/0.4); i++) {
+                const rung = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.05, wallSize*0.6), mat.ladder);
+                rung.position.set(px, i*0.4+0.2, pz);
+                scene.add(rung);
+            }
+
+            [[-wallSize*0.25], [wallSize*0.25]].forEach(([oz]) => {
+                const side = new THREE.Mesh(new THREE.BoxGeometry(0.08, h, 0.08), mat.ladder);
+                side.position.set(px, h/2, pz+oz);
+                scene.add(side);
+            });
+
+            const top = new THREE.Mesh(new THREE.BoxGeometry(wallSize*0.8, 0.2, wallSize*0.8), mat.platform);
+            top.position.set(px, h, pz);
+            top.castShadow = top.receiveShadow = true;
+            scene.add(top);
+
+            ladderMap[z][x] = {bottom:0, top:h};
+            // Ladders are at ground level (0) - climbing changes your elevation
+            if (elevationMap[z][x] === undefined || elevationMap[z][x] > 0) {
+                elevationMap[z][x] = 0;
+            }
+        }
+
+        // Additional standalone ladders
+        [{x:8,z:8,h:6},{x:20,z:15,h:5},{x:12,z:22,h:7},{x:16,z:6,h:4.5},{x:4,z:10,h:5.5}].forEach(({x,z,h}) => {
+            if (x >= 0 && x < size && z >= 0 && z < size && maze[z][x] === 0) {
+                createLadder(x, z, h);
+            }
+        });
+
+        // Bridges - connecting areas (float above ground, cross over walls)
+        // All coords use consistent (x - size/2)*wallSize formula on both axes
+        const bridgeDefs = [
+            {x:3,  z:1,  len:3, dir:'x', h:3.0},   // NW: crosses wall at (4,1)
+            {x:17, z:1,  len:3, dir:'x', h:2.5},   // NE: crosses wall at (18,1)
+            {x:11, z:9,  len:3, dir:'x', h:4.0},   // C:  crosses wall at (12,9)
+            {x:13, z:7,  len:3, dir:'x', h:3.5},   // N-mid: crosses wall at (14,7)
+            {x:19, z:3,  len:3, dir:'x', h:2.5},   // NE-2: crosses wall at (20,3)
+        ];
+        bridgeDefs.forEach(({x,z,len,dir,h}) => {
+            for (let i = 0; i < len; i++) {
+                const tx = dir==='x' ? x+i : x;
+                const tz = dir==='z' ? z+i : z;
+                const bx = (tx - size/2)*wallSize;
+                const bz = (tz - size/2)*wallSize;
+                const plank = new THREE.Mesh(new THREE.BoxGeometry(dir==='x'?wallSize:1.2, 0.15, dir==='z'?wallSize:1.2), mat.platform);
+                plank.position.set(bx, h, bz);
+                plank.castShadow = plank.receiveShadow = true;
+                scene.add(plank);
+            }
+        });
+
+        // Collectables - Load gem models
+        const gltfLoader = new GLTFLoader();
+        const gemModels = [];
+        let gemsLoaded = 0;
+        const totalGems = 3;
+
+        // Load the gem models
+        const gemPaths = [
+            'models/gems/01/crystal.glb',
+            'models/gems/02/d00a72aedddf43fdbd530df377e71615_Textured.gltf',
+            'models/gems/03/crystal (1).glb'
+        ];
+
+        gemPaths.forEach((path, index) => {
+            gltfLoader.load(path, (gltf) => {
+                gemModels[index] = gltf.scene;
+                gemsLoaded++;
+            }, undefined, (error) => {
+                console.error('Error loading gem model:', path, error);
+                gemsLoaded++;
+            });
+        });
+
+        // Fallback geometries if models don't load
+        const geoms = [
+            new THREE.SphereGeometry(0.3,12,12), new THREE.OctahedronGeometry(0.35),
+            new THREE.TetrahedronGeometry(0.4), new THREE.DodecahedronGeometry(0.3),
+            new THREE.IcosahedronGeometry(0.35), new THREE.TorusGeometry(0.25,0.1,8,12)
+        ];
+
+        function createGemCollectable(color, emissiveIntensity = 0.5) {
+            // Use loaded gem model if available, otherwise use fallback geometry
+            if (gemModels.length > 0 && gemModels[0]) {
+                const gemIndex = Math.floor(Math.random() * gemModels.length);
+                const gem = gemModels[gemIndex].clone();
+                gem.traverse((child) => {
+                    if (child instanceof THREE.Mesh) {
+                        const mat = child.material.clone();
+                        mat.emissive = new THREE.Color(color);
+                        mat.emissiveIntensity = emissiveIntensity;
+                        mat.color = new THREE.Color(color);
+                        child.material = mat;
+                        child.castShadow = true;
+                    }
+                });
+                gem.scale.set(0.3, 0.3, 0.3);
+                return gem;
+            } else {
+                // Fallback to geometry
+                return new THREE.Mesh(
+                    geoms[Math.floor(Math.random()*geoms.length)],
+                    new THREE.MeshStandardMaterial({color:color,emissive:color,emissiveIntensity:emissiveIntensity,roughness:0.2,metalness:0.8})
+                );
+            }
+        }
+
+        // White - ground level, scattered throughout
+        const whitePositions = [
+            {x:3,z:1},{x:7,z:3},{x:11,z:5},{x:17,z:1},{x:21,z:3},
+            {x:1,z:9},{x:5,z:11},{x:13,z:13},{x:19,z:9},{x:23,z:11},
+            {x:3,z:17},{x:9,z:19}
+        ];
+
+        whitePositions.forEach(pos => {
+            if (maze[pos.z][pos.x] === 0) {
+                const obj = createGemCollectable(0xffffff, 0.5);
+                obj.position.set((pos.x-size/2)*wallSize, 0.5, (pos.z-size/2)*wallSize);
+                obj.castShadow = true;
+                obj.userData = {hidden:true, rotSpeed:0.5+Math.random()};
+                scene.add(obj);
+                collectables.push(obj);
+            }
+        });
+
+        // Yellow - platforms
+        platforms.slice(0,8).forEach(p => {
+            const obj = createGemCollectable(0xffdd00, 0.5);
+            obj.position.set((p.x-size/2)*wallSize, p.height+0.5, (p.z-size/2)*wallSize);
+            obj.castShadow = true;
+            obj.userData = {hidden:true, rotSpeed:0.5+Math.random(), elev:p.height};
+            scene.add(obj);
+            collectables.push(obj);
+        });
+
+        // Jump powerups - green, in open areas
+        [{x:13,z:7},{x:11,z:17}].forEach(pos => {
+            const obj = new THREE.Mesh(new THREE.OctahedronGeometry(0.4),
+                new THREE.MeshStandardMaterial({color:0x00ff00,emissive:0x00ff00,emissiveIntensity:0.7,roughness:0.2,metalness:0.8}));
+            obj.position.set((pos.x-size/2)*wallSize, 0.5, (pos.z-size/2)*wallSize);
+            obj.castShadow = true;
+            obj.userData = {hidden:true, rotSpeed:0.8, isJump:true};
+
+            // Create particle system for jump powerup
+            const particleGroup = new THREE.Group();
+            const particleCount = 20;
+            const particleGeom = new THREE.SphereGeometry(0.05, 6, 6);
+            const particles = [];
+
+            for (let i = 0; i < particleCount; i++) {
+                const particleMat = new THREE.MeshBasicMaterial({
+                    color: 0x00ff00,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                const particle = new THREE.Mesh(particleGeom, particleMat);
+                const angle = (i / particleCount) * Math.PI * 2;
+                const radius = 0.6;
+                particle.position.set(
+                    Math.cos(angle) * radius,
+                    Math.sin(i * 0.5) * 0.3,
+                    Math.sin(angle) * radius
+                );
+                particle.userData = {
+                    angle: angle,
+                    radius: radius,
+                    speed: 0.02 + Math.random() * 0.02,
+                    verticalOffset: i * 0.1
+                };
+                particleGroup.add(particle);
+                particles.push(particle);
+            }
+
+            obj.userData.particleGroup = particleGroup;
+            obj.userData.particles = particles;
+            obj.add(particleGroup);
+
+            scene.add(obj);
+            collectables.push(obj);
+        });
+
+        // Blue - ladders & bridges
+        const ladderLocs = [{x:8,z:8,h:6},{x:20,z:15,h:5},{x:12,z:22,h:7},{x:16,z:6,h:4.5},{x:4,z:10,h:5.5}];
+        ladderLocs.slice(0,3).forEach(l => {
+            const obj = createGemCollectable(0x4444ff, 0.5);
+            obj.position.set((l.x-size/2)*wallSize, l.h+0.5, (l.z-size/2)*wallSize);
+            obj.castShadow = true;
+            obj.userData = {hidden:true, rotSpeed:0.5+Math.random(), elev:l.h};
+            scene.add(obj);
+            collectables.push(obj);
+        });
+
+        // Blue on bridges - gems placed at midpoint of each bridge using correct world formula
+        // Coords match bridgeDefs above: mid tile of each bridge, directly on the wall tile
+        const bridgeGems = [
+            {wx: -17, h: 3.0, wz: -23},   // bridge (3,1): mid tile (4,1) world
+            {wx:  11, h: 2.5, wz: -23},   // bridge (17,1): mid tile (18,1) world
+            {wx:  -1, h: 4.0, wz:  -7},   // bridge (11,9): mid tile (12,9) world
+            {wx:   3, h: 3.5, wz: -10},   // bridge (13,7): mid tile (14,7) world
+            {wx:  15, h: 2.5, wz: -18},   // bridge (19,3): mid tile (20,3) world
+        ];
+        bridgeGems.forEach(({wx, h, wz}) => {
+            const obj = createGemCollectable(0x4444ff, 0.5);
+            obj.position.set(wx, h + 0.5, wz);
+            obj.castShadow = true;
+            obj.userData = {hidden:true, rotSpeed:0.5+Math.random(), elev:h};
+            scene.add(obj);
+            collectables.push(obj);
+        });
+
+        // Blue requiring jumps - isolated platforms
+        const jumpRequired = [
+            {x:9,z:9},
+            {x:17,z:17},
+            {x:21,z:13}
+        ];
+
+        jumpRequired.forEach(pos => {
+            if (maze[pos.z] && maze[pos.z][pos.x] === 0) {
+                const obj = createGemCollectable(0x4444ff, 0.5);
+                obj.position.set((pos.x-size/2)*wallSize, 0.5, (pos.z-size/2)*wallSize);
+                obj.castShadow = true;
+                obj.userData = {hidden:true, rotSpeed:0.5+Math.random()};
+                scene.add(obj);
+                collectables.push(obj);
+            }
+        });
+
+        // Bat model system
+        let batModel = null;
+        const activeBats = [];
+
+        // Load bat model
+        gltfLoader.load('models/bat/f710700a177d4b12895e1d0a126f9b9f_Textured.gltf', (gltf) => {
+            batModel = gltf.scene;
+            console.log('Bat model loaded successfully');
+
+            // Set up textures for the bat
+            batModel.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+
+            // Make the template invisible - we only clone it for spawning
+            batModel.visible = false;
+        }, undefined, (error) => {
+            console.error('Error loading bat model:', error);
+        });
+
+        // Function to spawn a bat
+        function spawnBat() {
+            if (!batModel || !gameStarted) return;
+            if (activeBats.length >= 3) return; // hard cap - prevents unbounded accumulation
+
+            const bat = batModel.clone();
+
+            // Random starting position at the edge of the maze
+            const side = Math.floor(Math.random() * 4); // 0: north, 1: east, 2: south, 3: west
+            const edgeDistance = (size / 2 + 5) * wallSize;
+            const randomOffset = (Math.random() - 0.5) * size * wallSize * 0.8;
+
+            let startX, startZ, endX, endZ;
+
+            switch(side) {
+                case 0: // North
+                    startX = randomOffset;
+                    startZ = -edgeDistance;
+                    endX = randomOffset + (Math.random() - 0.5) * 20;
+                    endZ = edgeDistance;
+                    break;
+                case 1: // East
+                    startX = edgeDistance;
+                    startZ = randomOffset;
+                    endX = -edgeDistance;
+                    endZ = randomOffset + (Math.random() - 0.5) * 20;
+                    break;
+                case 2: // South
+                    startX = randomOffset;
+                    startZ = edgeDistance;
+                    endX = randomOffset + (Math.random() - 0.5) * 20;
+                    endZ = -edgeDistance;
+                    break;
+                case 3: // West
+                    startX = -edgeDistance;
+                    startZ = randomOffset;
+                    endX = edgeDistance;
+                    endZ = randomOffset + (Math.random() - 0.5) * 20;
+                    break;
+            }
+
+            const height = 15 + Math.random() * 10; // Fly at varying heights overhead
+
+            bat.position.set(startX, height, startZ);
+            bat.scale.set(0.8, 0.8, 0.8);
+
+            // Calculate direction for bat to face
+            const direction = new THREE.Vector3(endX - startX, 0, endZ - startZ);
+            direction.normalize();
+            const angle = Math.atan2(direction.x, direction.z);
+            bat.rotation.y = angle;
+
+            // Store animation data
+            bat.userData = {
+                startPos: new THREE.Vector3(startX, height, startZ),
+                endPos: new THREE.Vector3(endX, height, endZ),
+                progress: 0,
+                speed: 0.15 + Math.random() * 0.1, // Varying speeds
+                wingFlap: 0,
+                flapSpeed: 8 + Math.random() * 4,
+                birthTime: Date.now(),
+                lifetime: 15000 // 15 seconds to cross
+            };
+
+            scene.add(bat);
+            activeBats.push(bat);
+        }
+
+        // Spawn bats periodically
+        let lastBatSpawn = 0;
+        const batSpawnInterval = 8000; // Spawn a bat every 8 seconds
+
+        // Player - load from GLTF model with animations
+        const player = new THREE.Group();
+
+        // Create a placeholder while model loads
+        const body = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.8,0.3), mat.player);
+        body.position.y = 0.4;
+        body.castShadow = true;
+        player.add(body);
+
+        // Animation system
+        let mixer = null;
+        let animations = {
+            walk: null,
+            jump: null,
+            climb: null
+        };
+        let currentAction = null;
+        let playerModel = null;
+
+        // Load animations
+        const animationFiles = [
+            { name: 'walk', path: 'models/Animation_Walking_withSkin.glb' },
+            { name: 'jump', path: 'models/Animation_Jump_Over_Obstacle_2_withSkin.glb' },
+            { name: 'climb', path: 'models/Animation_Ladder_Climb_Finish_withSkin.glb' }
+        ];
+
+        let loadedCount = 0;
+
+        animationFiles.forEach(({ name, path }) => {
+            gltfLoader.load(path, (gltf) => {
+                if (!playerModel && gltf.scene) {
+                    // First model loaded - use it as the base
+                    playerModel = gltf.scene;
+                    player.remove(body); // Remove placeholder
+
+                    // Set up materials
+                    const textureLoader = new THREE.TextureLoader();
+                    const texture = textureLoader.load('models/texture_diffuse.png', (tex) => {
+                        tex.flipY = false;
+                        tex.encoding = THREE.sRGBEncoding;
+                    });
+                    const normalMap = textureLoader.load('models/texture_normal.png', (tex) => {
+                        tex.flipY = false;
+                    });
+                    const roughnessMap = textureLoader.load('models/texture_roughness.png', (tex) => {
+                        tex.flipY = false;
+                    });
+                    const metallicMap = textureLoader.load('models/texture_metallic.png', (tex) => {
+                        tex.flipY = false;
+                    });
+
+                    playerModel.traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                            const modelMaterial = new THREE.MeshStandardMaterial({
+                                map: texture,
+                                normalMap: normalMap,
+                                roughnessMap: roughnessMap,
+                                metalnessMap: metallicMap,
+                                roughness: 0.8,
+                                metalness: 0.2,
+                                side: THREE.FrontSide
+                            });
+                            child.material = modelMaterial;
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                        }
+                    });
+
+                    playerModel.scale.set(0.8, 0.8, 0.8);
+                    playerModel.position.y = 0;
+                    player.add(playerModel);
+
+                    // Create animation mixer
+                    mixer = new THREE.AnimationMixer(playerModel);
+                }
+
+                // Store the animation clip
+                if (gltf.animations && gltf.animations.length > 0) {
+                    animations[name] = gltf.animations[0];
+                    console.log(`Loaded ${name} animation`);
+                }
+
+                loadedCount++;
+                if (loadedCount === animationFiles.length) {
+                    console.log('All animations loaded');
+                }
+            }, undefined, (error) => {
+                console.error(`Error loading ${name} animation:`, error);
+                loadedCount++;
+            });
+        });
+
+        // Function to play an animation
+        function playAnimation(name, loop = true, crossfadeDuration = 0.2) {
+            if (!mixer || !animations[name]) return;
+
+            const newAction = mixer.clipAction(animations[name]);
+
+            if (currentAction && currentAction !== newAction) {
+                currentAction.fadeOut(crossfadeDuration);
+            }
+
+            newAction.reset();
+            newAction.fadeIn(crossfadeDuration);
+            newAction.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce);
+            newAction.clampWhenFinished = !loop;
+            newAction.play();
+
+            currentAction = newAction;
+        }
+
+        // Function to stop all animations
+        function stopAnimation(fadeOutDuration = 0.2) {
+            if (currentAction) {
+                currentAction.fadeOut(fadeOutDuration);
+                currentAction = null;
+            }
+        }
+
+        let startX=1, startZ=1;
+        for (let z=0; z<size; z++) for (let x=0; x<size; x++)
+            if (maze[z][x]===0 && elevationMap[z][x]===0) { startX=x; startZ=z; break; }
+
+        // Create player particle system for when jump is active
+        const playerParticleGroup = new THREE.Group();
+        const playerParticleCount = 30;
+        const playerParticleGeom = new THREE.SphereGeometry(0.08, 6, 6);
+        const playerParticles = [];
+
+        for (let i = 0; i < playerParticleCount; i++) {
+            const particleMat = new THREE.MeshBasicMaterial({
+                color: 0x00ff00,
+                transparent: true,
+                opacity: 0
+            });
+            const particle = new THREE.Mesh(playerParticleGeom, particleMat);
+            const angle = (i / playerParticleCount) * Math.PI * 2;
+            const radius = 0.8;
+            particle.position.set(
+                Math.cos(angle) * radius,
+                0.5 + Math.sin(i * 0.3) * 0.4,
+                Math.sin(angle) * radius
+            );
+            particle.userData = {
+                angle: angle,
+                radius: radius,
+                speed: 0.03 + Math.random() * 0.02,
+                verticalOffset: i * 0.05
+            };
+            playerParticleGroup.add(particle);
+            playerParticles.push(particle);
+        }
+
+        playerParticleGroup.visible = false;
+        player.add(playerParticleGroup);
+
+        let px=startX, pz=startZ, pe=0;
+        player.position.set((px-size/2)*wallSize, pe, (pz-size/2)*wallSize);
+        scene.add(player);
+
+        // Tile highlight & trail
+        const highlight = new THREE.Mesh(new THREE.BoxGeometry(wallSize*0.95,0.15,wallSize*0.95),
+            new THREE.MeshStandardMaterial({color:0xffffff,emissive:0xffffff,emissiveIntensity:1,transparent:true,opacity:0.8}));
+        highlight.position.y = 0.05;
+        scene.add(highlight);
+
+        const trail = [];
+
+        // Directional key indicators
+        const keyLabels = [];
+        const createKeyLabel = (text, pos, color) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = color;
+            ctx.font = 'bold 80px monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 64, 64);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+                map: texture,
+                transparent: true,
+                opacity: 0.8
+            }));
+            sprite.position.copy(pos);
+            sprite.scale.set(3, 3, 1);
+            sprite.userData.baseY = pos.y;
+            sprite.userData.offset = Math.random() * Math.PI * 2;
+            scene.add(sprite);
+            keyLabels.push(sprite);
+        };
+
+        const edgeOffset = (size/2 + 3) * wallSize;
+        createKeyLabel('W', new THREE.Vector3(0, 5, -edgeOffset), '#00ff88');
+        createKeyLabel('S', new THREE.Vector3(0, 5, edgeOffset), '#00ff88');
+        createKeyLabel('A', new THREE.Vector3(-edgeOffset, 5, 0), '#00ff88');
+        createKeyLabel('D', new THREE.Vector3(edgeOffset, 5, 0), '#00ff88');
+
+        // Atmospheric particles
+        const particles = new THREE.Group();
+        const particleCount = 100;
+        const particleGeom = new THREE.SphereGeometry(0.1, 6, 6);
+
+        for (let i = 0; i < particleCount; i++) {
+            const particleMat = new THREE.MeshBasicMaterial({
+                color: Math.random() > 0.5 ? 0x4a90e2 : 0xffffff,
+                transparent: true,
+                opacity: 0.3 + Math.random() * 0.3
+            });
+            const particle = new THREE.Mesh(particleGeom, particleMat);
+            particle.position.set(
+                (Math.random() - 0.5) * size * wallSize,
+                Math.random() * 15 + 2,
+                (Math.random() - 0.5) * size * wallSize
+            );
+            particle.userData = {
+                speed: 0.02 + Math.random() * 0.03,
+                offset: Math.random() * Math.PI * 2,
+                radius: 1 + Math.random() * 2
+            };
+            particles.add(particle);
+        }
+        scene.add(particles);
+
+        // Distant light swells
+        const swells = [];
+        for (let i = 0; i < 5; i++) {
+            const swell = new THREE.PointLight(
+                [0x4a90e2, 0xff6b6b, 0x9b59b6, 0xf39c12][Math.floor(Math.random() * 4)],
+                0,
+                30
+            );
+            swell.position.set(
+                (Math.random() - 0.5) * size * wallSize * 0.8,
+                5 + Math.random() * 10,
+                (Math.random() - 0.5) * size * wallSize * 0.8
+            );
+            swell.userData = {
+                baseIntensity: 0.5 + Math.random() * 0.5,
+                speed: 0.5 + Math.random() * 0.5,
+                offset: Math.random() * Math.PI * 2
+            };
+            scene.add(swell);
+            swells.push(swell);
+        }
+
+        // Shadow planes
+        const shadows = [];
+        for (let i = 0; i < 3; i++) {
+            const shadowGeom = new THREE.PlaneGeometry(8, 8);
+            const shadowMat = new THREE.MeshBasicMaterial({
+                color: 0x000000,
+                transparent: true,
+                opacity: 0,
+                side: THREE.DoubleSide
+            });
+            const shadow = new THREE.Mesh(shadowGeom, shadowMat);
+            shadow.rotation.x = -Math.PI / 2;
+            shadow.position.y = 0.01;
+            shadow.userData = {
+                targetOpacity: 0,
+                baseX: (Math.random() - 0.5) * size * wallSize * 0.6,
+                baseZ: (Math.random() - 0.5) * size * wallSize * 0.6,
+                speed: 0.3 + Math.random() * 0.4,
+                offset: Math.random() * Math.PI * 2
+            };
+            scene.add(shadow);
+            shadows.push(shadow);
+        }
+
+        // Beacon
+        const beacon = new THREE.SpotLight(0xff0000, 0, 100, Math.PI/8, 0.5);
+        beacon.position.set(0,50,0);
+        beacon.target = player;
+        beacon.visible = false;
+        scene.add(beacon);
+        scene.add(beacon.target);
+
+        const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.3,1.5,50,16,1,true),
+            new THREE.MeshBasicMaterial({color:0xff0000,transparent:true,opacity:0,side:THREE.DoubleSide}));
+        beam.position.y = 25;
+        scene.add(beam);
+
+        let charges=3, beaconActive=false, lastUse=0, cooldown=0;
+        let jumps=0, jumping=false;
+
+        // Movement
+        let moving=false, startPos=new THREE.Vector3(), endPos=new THREE.Vector3(), progress=0;
+        const moveDur = 0.15;
+
+        // Camera shake
+        let shakeIntensity = 0;
+        const baseAngle = Math.PI / 4;
+        const baseDist = 60;
+        const baseHeight = 45;
+
+        // Shared trail tile material - defined once, reused per tile to avoid per-step allocations
+        const trailMat = new THREE.MeshStandardMaterial({
+            color: 0xffffff, emissive: 0xffffff,
+            emissiveIntensity: 0.3, transparent: true, opacity: 0.6
+        });
+        const trailGeom = new THREE.BoxGeometry(wallSize*0.95, 0.12, wallSize*0.95);
+
+        function tryMove(dx, dz) {
+            if (moving || jumping) return;
+            const nx=px+dx, nz=pz+dz;
+            if (nx>=0 && nx<size && nz>=0 && nz<size && maze[nz][nx]===0) {
+                const te = elevationMap[nz][nx];
+                const targetIsLadder = ladderMap[nz][nx] !== null;
+                const currentIsLadder = ladderMap[pz][px] !== null;
+
+                // Movement rules (three conditions, evaluated in order):
+                // 1. Player is currently on a ladder tile - always allow horizontal exit
+                //    (elevation-independent: ladder top may not match adjacent platform exactly)
+                // 2. Same elevation as target - always allow
+                // 3. Target is a ladder tile - always allow (stepping onto base)
+                const canMove = currentIsLadder ||
+                               pe === te ||
+                               targetIsLadder;
+
+                if (canMove) {
+                    // Start timer on first move
+                    startTimer();
+
+                    const t = new THREE.Mesh(trailGeom, trailMat.clone());
+                    t.position.set((px-size/2)*wallSize, pe+0.05, (pz-size/2)*wallSize);
+                    t.userData.time = Date.now();
+                    scene.add(t);
+                    trail.push(t);
+                    if (trail.length>2) scene.remove(trail.shift());
+
+                    moving=true; progress=0;
+                    startPos.copy(player.position);
+                    // Use current elevation if target elevation is undefined
+                    const targetElevation = te !== undefined ? te : pe;
+                    endPos.set((nx-size/2)*wallSize, targetElevation, (nz-size/2)*wallSize);
+                    px=nx; pz=nz; pe=targetElevation;
+                    player.rotation.y = dx!==0 ? (dx>0 ? -Math.PI/2 : Math.PI/2) : (dz>0 ? 0 : Math.PI);
+
+                    // Play walking animation and sound
+                    playAnimation('walk', true, 0.1);
+                    if (walkingSound.paused) {
+                        walkingSound.currentTime = 0;
+                        walkingSound.play().catch(e => console.log('Walking sound failed:', e));
+                    }
+                }
+            }
+        }
+
+        function tryJump(dx, dz) {
+            if (moving || jumping || jumps <= 0) return;
+            // Jump 2 tiles instead of 1
+            const nx=px+dx*2, nz=pz+dz*2;
+            if (nx>=0 && nx<size && nz>=0 && nz<size && maze[nz][nx]===0) {
+                const te = elevationMap[nz][nx];
+                // Only allow jumping to tiles with defined elevation within tolerance.
+                // Undefined elevation tiles are not valid jump targets - prevents invisible platforms.
+                if (te !== undefined && Math.abs(te - pe) <= 0.8) {
+                    // Start timer on first move
+                    startTimer();
+
+                    jumps--;
+                    setJumpCharges(jumps);
+                    jumping=true;
+                    progress=0;
+                    startPos.copy(player.position);
+                    // Use current elevation if target elevation is undefined
+                    const targetElevation = te !== undefined ? te : pe;
+                    endPos.set((nx-size/2)*wallSize, targetElevation, (nz-size/2)*wallSize);
+                    px=nx; pz=nz; pe=targetElevation;
+                    player.rotation.y = dx!==0 ? (dx>0 ? -Math.PI/2 : Math.PI/2) : (dz>0 ? 0 : Math.PI);
+
+                    // Play jump animation and sound
+                    playAnimation('jump', false, 0.1);
+                    walkingSound.pause();
+                    walkingSound.currentTime = 0;
+                    useJumpSound.currentTime = 0;
+                    useJumpSound.play().catch(e => console.log('Jump sound failed:', e));
+                }
+            }
+        }
+
+        function tryClimb() {
+            if (moving || jumping) return;
+            const lad = ladderMap[pz][px];
+            if (!lad) return;
+
+            // Start timer on first move
+            startTimer();
+
+            // Toggle between bottom and top
+            const te = pe === lad.bottom ? lad.top : lad.bottom;
+
+            moving=true; progress=0;
+            startPos.copy(player.position);
+            endPos.set(player.position.x, te, player.position.z);
+            pe=te;
+
+            shakeIntensity = 0.4;
+            player.scale.set(0.95, 1.05, 0.95);
+
+            // Play climbing animation
+            playAnimation('climb', false, 0.1);
+        }
+
+        function fireBeacon() {
+            if (charges>0 && !beaconActive) {
+                charges--; setBeaconCharges(charges);
+                beaconActive=true;
+                beacon.visible=true; beacon.intensity=3;
+                beam.material.opacity=0.4;
+                lastUse=Date.now();
+
+                // Play beacon sound
+                beaconSound.currentTime = 0; // Reset to start
+                beaconSound.play().catch(e => console.log('Beacon sound failed:', e));
+
+                shakeIntensity = 1.2;
+                player.scale.set(1.15, 0.85, 1.15);
+
+                setTimeout(() => { beaconActive=false; beacon.visible=false; beam.material.opacity=0; }, 1500);
+            }
+        }
+
+        window.addEventListener('keydown', e => {
+            if (gameCompleted || moving || jumping) return;
+            const k = e.key.toLowerCase();
+            if (k==='w' || k==='arrowup') { e.preventDefault(); tryMove(0,-1); }
+            else if (k==='s' || k==='arrowdown') { e.preventDefault(); tryMove(0,1); }
+            else if (k==='a' || k==='arrowleft') { e.preventDefault(); tryMove(-1,0); }
+            else if (k==='d' || k==='arrowright') { e.preventDefault(); tryMove(1,0); }
+            else if (k==='e') { e.preventDefault(); tryClimb(); }
+            else if (k==='f') { e.preventDefault(); fireBeacon(); }
+            else if (k===' ' && jumps > 0) {
+                e.preventDefault();
+                const facing = player.rotation.y;
+                let dx = 0, dz = 0;
+                if (Math.abs(facing) < 0.1) dz = 1;
+                else if (Math.abs(facing - Math.PI) < 0.1) dz = -1;
+                else if (Math.abs(facing - Math.PI/2) < 0.1) dx = -1;
+                else if (Math.abs(facing + Math.PI/2) < 0.1) dx = 1;
+                tryJump(dx, dz);
+            }
+        });
+
+        // Gamepad support
+        let gamepadIndex = null;
+        let lastDpadState = {up:false, down:false, left:false, right:false};
+        let lastButtonState = {a:false, b:false, y:false};
+
+        window.addEventListener('gamepadconnected', (e) => {
+            gamepadIndex = e.gamepad.index;
+            console.log('Gamepad connected:', e.gamepad.id);
+        });
+
+        window.addEventListener('gamepaddisconnected', (e) => {
+            if (gamepadIndex === e.gamepad.index) {
+                gamepadIndex = null;
+            }
+        });
+
+        function pollGamepad() {
+            if (gamepadIndex === null || gameCompleted) return;
+
+            const gamepads = navigator.getGamepads();
+            const gp = gamepads[gamepadIndex];
+            if (!gp) return;
+
+            const dpadUp = gp.buttons[12]?.pressed || gp.axes[1] < -0.5;
+            const dpadDown = gp.buttons[13]?.pressed || gp.axes[1] > 0.5;
+            const dpadLeft = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
+            const dpadRight = gp.buttons[15]?.pressed || gp.axes[0] > 0.5;
+
+            if (dpadUp && !lastDpadState.up) tryMove(0, -1);
+            if (dpadDown && !lastDpadState.down) tryMove(0, 1);
+            if (dpadLeft && !lastDpadState.left) tryMove(-1, 0);
+            if (dpadRight && !lastDpadState.right) tryMove(1, 0);
+
+            lastDpadState = {up:dpadUp, down:dpadDown, left:dpadLeft, right:dpadRight};
+
+            const aPressed = gp.buttons[0]?.pressed || false;
+            if (aPressed && !lastButtonState.a && jumps > 0) {
+                const facing = player.rotation.y;
+                let dx = 0, dz = 0;
+                if (Math.abs(facing) < 0.1) dz = 1;
+                else if (Math.abs(facing - Math.PI) < 0.1) dz = -1;
+                else if (Math.abs(facing - Math.PI/2) < 0.1) dx = -1;
+                else if (Math.abs(facing + Math.PI/2) < 0.1) dx = 1;
+                tryJump(dx, dz);
+            }
+
+            // B button (index 1) for climbing
+            const bPressed = gp.buttons[1]?.pressed || false;
+            if (bPressed && !lastButtonState.b) {
+                tryClimb();
+            }
+
+            const yPressed = gp.buttons[2]?.pressed || gp.buttons[3]?.pressed || false;
+            if (yPressed && !lastButtonState.y) {
+                fireBeacon();
+            }
+
+            lastButtonState = {a:aPressed, b:bPressed, y:yPressed};
+
+            const rightX = gp.axes[2] || gp.axes[3] || 0;
+            const rightY = gp.axes[3] || gp.axes[4] || 0;
+
+            const deadzone = 0.15;
+            if (Math.abs(rightX) > deadzone) {
+                targetAngle -= rightX * 0.03;
+            }
+            if (Math.abs(rightY) > deadzone) {
+                targetHeight = Math.max(20, Math.min(80, targetHeight - rightY * 0.8));
+            }
+        }
+
+        // Camera controls
+        let dragging=false, lastMouse={x:0,y:0};
+        let angle=baseAngle, dist=baseDist, height=baseHeight;
+        let targetAngle=baseAngle, targetDist=baseDist, targetHeight=baseHeight;
+
+        function updateCam() {
+            angle += (targetAngle - angle) * 0.15;
+            dist += (targetDist - dist) * 0.15;
+            height += (targetHeight - height) * 0.15;
+
+            const shakeX = (Math.random() - 0.5) * shakeIntensity;
+            const shakeY = (Math.random() - 0.5) * shakeIntensity;
+            const shakeZ = (Math.random() - 0.5) * shakeIntensity;
+
+            camera.position.set(
+                Math.cos(angle)*dist + shakeX,
+                height + shakeY,
+                Math.sin(angle)*dist + shakeZ
+            );
+            camera.lookAt(0,5,0);
+
+            shakeIntensity *= 0.9;
+        }
+
+        renderer.domElement.addEventListener('mousedown', e => { dragging=true; lastMouse={x:e.clientX,y:e.clientY}; });
+        renderer.domElement.addEventListener('mousemove', e => {
+            if (!dragging) return;
+            const dx = (e.clientX-lastMouse.x) * 0.008;
+            const dy = (e.clientY-lastMouse.y) * 0.15;
+
+            targetAngle -= dx;
+            targetHeight = Math.max(20, Math.min(80, targetHeight - dy));
+
+            lastMouse = {x:e.clientX, y:e.clientY};
+        });
+        renderer.domElement.addEventListener('mouseup', () => dragging=false);
+        renderer.domElement.addEventListener('wheel', e => {
+            e.preventDefault();
+            targetDist = Math.max(30, Math.min(100, targetDist + e.deltaY*0.08));
+        }, {passive:false});
+
+        // Animation
+        const clock = new THREE.Clock();
+        let time=0;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+            time += 0.01;
+            const now = Date.now();
+
+            pollGamepad();
+
+            if (!beaconActive && charges<3 && (now-lastUse)>6000) {
+                cooldown+=delta;
+                if (cooldown>=1) { charges=Math.min(3,charges+1); setBeaconCharges(charges); cooldown=0; }
+            }
+
+            beacon.position.set(player.position.x, 50, player.position.z);
+            beam.position.set(player.position.x, 25, player.position.z);
+            highlight.position.set((px-size/2)*wallSize, pe+0.08, (pz-size/2)*wallSize);
+
+            updateCam();
+
+            keyLabels.forEach(k => {
+                k.position.y = k.userData.baseY + Math.sin(time * 2 + k.userData.offset) * 0.5;
+                k.material.opacity = 0.6 + Math.sin(time * 3 + k.userData.offset) * 0.2;
+            });
+
+            trail.forEach((t,i) => {
+                const age = (now-t.userData.time)/1000;
+                const fade = Math.max(0, 1-age/2);
+                const pos = 1-(trail.length-i-1)/2;
+                t.material.opacity = fade*pos*0.6;
+                t.material.emissiveIntensity = fade*pos*0.3;
+                if (fade<=0) { scene.remove(t); trail.splice(i,1); }
+            });
+
+            particles.children.forEach(p => {
+                p.userData.offset += p.userData.speed * delta;
+                p.position.x += Math.sin(p.userData.offset) * p.userData.radius * delta;
+                p.position.z += Math.cos(p.userData.offset) * p.userData.radius * delta;
+                p.material.opacity = 0.2 + Math.sin(time * 2 + p.userData.offset) * 0.2;
+
+                if (p.position.x > size * wallSize / 2) p.position.x = -size * wallSize / 2;
+                if (p.position.x < -size * wallSize / 2) p.position.x = size * wallSize / 2;
+                if (p.position.z > size * wallSize / 2) p.position.z = -size * wallSize / 2;
+                if (p.position.z < -size * wallSize / 2) p.position.z = size * wallSize / 2;
+            });
+
+            swells.forEach(s => {
+                s.intensity = s.userData.baseIntensity * (1 + Math.sin(time * s.userData.speed + s.userData.offset) * 0.8);
+            });
+
+            shadows.forEach(s => {
+                const cycle = Math.sin(time * s.userData.speed + s.userData.offset);
+                s.userData.targetOpacity = cycle > 0.7 ? 0.3 : 0;
+                s.material.opacity += (s.userData.targetOpacity - s.material.opacity) * delta * 2;
+                s.position.x = s.userData.baseX + Math.sin(time * 0.3 + s.userData.offset) * 3;
+                s.position.z = s.userData.baseZ + Math.cos(time * 0.3 + s.userData.offset) * 3;
+            });
+
+            if (moving) {
+                progress += delta/moveDur;
+                if (progress>=1) {
+                    progress=1;
+                    moving=false;
+                    player.scale.set(1, 1.1, 1);
+                    // Stop animation and walking sound
+                    stopAnimation(0.2);
+                    walkingSound.pause();
+                    walkingSound.currentTime = 0;
+                    checkSoftlock();
+                }
+                const t = progress*progress*(3-2*progress);
+                player.position.lerpVectors(startPos, endPos, t);
+                if (!playerModel) body.position.y = 0.4+Math.sin(progress*Math.PI)*0.15;
+
+                player.scale.lerp(new THREE.Vector3(1, 1, 1), 0.3);
+            }
+
+            if (jumping) {
+                progress += delta/(moveDur*1.3);
+                if (progress>=1) {
+                    progress=1;
+                    jumping=false;
+                    player.scale.set(1.2, 0.8, 1.2);
+                    shakeIntensity = 1.5;
+                    // Stop animation after jumping
+                    stopAnimation(0.2);
+                    walkingSound.pause();
+                    walkingSound.currentTime = 0;
+                    checkSoftlock();
+                }
+                const t = progress*progress*(3-2*progress);
+                player.position.lerpVectors(startPos, endPos, t);
+                const jumpHeight = Math.sin(progress * Math.PI) * 3.5;
+                player.position.y = endPos.y + jumpHeight;
+                if (!playerModel) body.position.y = 0.4;
+
+                if (progress < 0.5) {
+                    player.scale.lerp(new THREE.Vector3(0.9, 1.3, 0.9), 0.2);
+                } else {
+                    player.scale.lerp(new THREE.Vector3(1, 1, 1), 0.15);
+                }
+            }
+
+            // Update timer
+            if (timerStarted && !gameCompleted) {
+                currentTime = (Date.now() - timerStartTime) / 1000; // Convert to seconds
+                updateTimerDisplay();
+            }
+
+            // Update animation mixer
+            if (mixer) {
+                mixer.update(delta);
+            }
+
+            collectables.forEach(obj => {
+                if (obj.userData.collected) return;
+                if (obj.userData.hidden) {
+                    const dx=obj.position.x-player.position.x, dz=obj.position.z-player.position.z, dy=obj.position.y-player.position.y;
+                    if (Math.sqrt(dx*dx+dz*dz)<1.5 && Math.abs(dy)<1.5) {
+                        obj.userData.hidden=false;
+                        obj.traverse(child => {
+                            if (child.isMesh && child.material) child.material.emissiveIntensity = 1.5;
+                        });
+
+                        obj.scale.set(2.5, 2.5, 2.5);
+
+                        if (obj.userData.isJump) {
+                            // Play collect jump power-up sound
+                            collectJumpSound.currentTime = 0;
+                            collectJumpSound.play().catch(e => console.log('Collect jump sound failed:', e));
+
+                            shakeIntensity = 0.8;
+                            player.scale.set(1.1, 0.9, 1.1);
+                            setTimeout(() => {
+                                scene.remove(obj);
+                                obj.userData.collected = true;
+                                jumps++;
+                                setJumpCharges(jumps);
+                            }, 250);
+                        } else {
+                            // Play collect gem sound
+                            collectGemSound.currentTime = 0;
+                            collectGemSound.play().catch(e => console.log('Collect gem sound failed:', e));
+
+                            shakeIntensity = 0.5;
+                            player.scale.set(1.05, 0.95, 1.05);
+                            setTimeout(() => { scene.remove(obj); obj.userData.collected = true; setFound(f=>f+1); }, 250);
+                        }
+                    }
+                    obj.rotation.y = time*obj.userData.rotSpeed;
+                    obj.rotation.x = Math.sin(time*0.7)*0.3;
+                    obj.position.y = obj.userData.baseY || obj.position.y;
+                    if (!obj.userData.baseY) obj.userData.baseY = obj.position.y;
+                    obj.position.y = obj.userData.baseY + Math.sin(time * 2) * 0.15;
+
+                    // Animate jump powerup particles
+                    if (obj.userData.isJump && obj.userData.particles) {
+                        obj.userData.particles.forEach((p, i) => {
+                            p.userData.angle += p.userData.speed;
+                            p.position.x = Math.cos(p.userData.angle) * p.userData.radius;
+                            p.position.z = Math.sin(p.userData.angle) * p.userData.radius;
+                            p.position.y = 0 + Math.sin(time * 3 + p.userData.verticalOffset) * 0.4;
+                        });
+                    }
+                }
+            });
+
+            // Show/hide and animate player particles based on jump charges
+            if (jumps > 0) {
+                playerParticleGroup.visible = true;
+                playerParticles.forEach((p, i) => {
+                    p.material.opacity = 0.5 + Math.sin(time * 4 + i) * 0.3;
+                    p.userData.angle += p.userData.speed;
+                    p.position.x = Math.cos(p.userData.angle) * p.userData.radius;
+                    p.position.z = Math.sin(p.userData.angle) * p.userData.radius;
+                    p.position.y = 0.5 + Math.sin(time * 3 + p.userData.verticalOffset) * 0.5;
+                });
+            } else {
+                playerParticleGroup.visible = false;
+            }
+
+            // Spawn bats periodically
+            if (now - lastBatSpawn > batSpawnInterval && gameStarted) {
+                spawnBat();
+                lastBatSpawn = now;
+            }
+
+            // Animate bats
+            for (let i = activeBats.length - 1; i >= 0; i--) {
+                const bat = activeBats[i];
+                const age = now - bat.userData.birthTime;
+
+                if (age > bat.userData.lifetime) {
+                    // Remove old bat
+                    scene.remove(bat);
+                    activeBats.splice(i, 1);
+                    continue;
+                }
+
+                // Move bat along path
+                bat.userData.progress += bat.userData.speed * delta;
+                const t = Math.min(bat.userData.progress, 1);
+                bat.position.lerpVectors(bat.userData.startPos, bat.userData.endPos, t);
+
+                // Add bobbing motion
+                bat.position.y += Math.sin(time * 3 + i) * 0.3;
+
+                // Wing flap animation (rotate the bat slightly)
+                bat.userData.wingFlap += bat.userData.flapSpeed * delta;
+                bat.rotation.z = Math.sin(bat.userData.wingFlap) * 0.2;
+                bat.rotation.x = Math.sin(bat.userData.wingFlap * 1.3) * 0.15;
+
+                // Slight weaving motion
+                const weaveOffset = Math.sin(time * 2 + i) * 0.5;
+                bat.position.x += weaveOffset * delta;
+            }
+
+            renderer.render(scene, camera);
+        }
+        // Don't start animating until the start button is clicked
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth/window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

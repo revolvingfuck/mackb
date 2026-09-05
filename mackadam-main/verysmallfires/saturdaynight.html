@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saturday Night, Vol. II | Very Small Fires</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .background-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(70, 70, 70, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(50, 50, 50, 0.1) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+            z-index: 1;
+            animation: atmosphericShift 20s ease-in-out infinite alternate;
+        }
+        @keyframes atmosphericShift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-10px, -5px) scale(1.02); }
+        }
+        header {
+            text-align: center;
+            padding: 60px 0;
+            position: relative;
+        }
+        .story-title {
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffffff, #cccccc, #999999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+        .story-subtitle {
+            font-size: 1.1rem;
+            color: #aaaaaa;
+            font-style: italic;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+        .story-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 0.9rem;
+            color: #888888;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+        .story-content {
+            background: rgba(40, 40, 40, 0.6);
+            padding: 60px 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.2s forwards;
+        }
+        .story-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: left;
+        }
+        .story-text p {
+            margin-bottom: 1.5em;
+            text-indent: 0;
+        }
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #ffd580;
+            margin: 0 0 1.5em 0;
+            padding-left: 20px;
+            border-left: 3px solid rgba(255, 213, 128, 0.4);
+        }
+        .section-title + p {
+            margin-top: 0;
+        }
+        .story-text .section-title ~ .section-title {
+            margin-top: 3em;
+        }
+        .story-text p:last-child {
+            margin-bottom: 0;
+            font-style: italic;
+            font-size: 1.05rem;
+            text-align: center;
+            text-indent: 0;
+            margin-top: 2em;
+            padding-top: 2em;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .navigation {
+            text-align: center;
+            padding: 30px 0 60px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.5s forwards;
+        }
+        .nav-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            .story-content {
+                padding: 40px 25px;
+                margin-bottom: 40px;
+            }
+            .story-meta {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .story-text {
+                font-size: 1.05rem;
+            }
+            .story-text p {
+                margin-bottom: 1.3em;
+            }
+            .section-title {
+                font-size: 1.05rem;
+                padding-left: 15px;
+            }
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .story-content {
+                animation: fadeInUp 1s ease-out 1.2s forwards, breathe 8s ease-in-out infinite;
+            }
+            @keyframes breathe {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-2px); }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-texture"></div>
+    <div class="container">
+        <header>
+            <h1 class="story-title">Saturday Night</h1>
+            <p class="story-subtitle">Very Small Fires, Vol. II</p>
+            <div class="story-meta">
+                <span>Fiction</span>
+                <span>•</span>
+                <span>Prince Edward Island</span>
+            </div>
+        </header>
+        <main class="story-content">
+            <div class="story-text">
+                <h2 class="section-title">I. 1951 — Before</h2>
+
+                <p>There was no radio in the Gallant kitchen yet, so the radio was Mavis herself, thirteen and standing on a chair so her voice would carry over the fiddle. No electricity out this far, no paved road either, just the lane and the ruts the lane made and the lamp swinging on its hook throwing everybody's shadow twice their size across the wall.</p>
+
+                <p>The table had been pushed back against the wall and the floor swept twice, once for dust and once for show. A jug came out from under the counter where it lived between Saturdays, moonshine somebody's uncle ran off a still nobody talked about and everybody knew was in the shed behind the barn. It went down like it was still burning on the way, and the men made the same face every time like it was the first time, and passed it hand to hand without much ceremony.</p>
+
+                <p>The house still smelled like Tuesday's canning, vinegar worked so far into the wood by now that no scrubbing got it out, mixed under the woodsmoke and whatever was left simmering low on the stove for whoever came in hungry later. Mason jars lined the cellar stairs in rows, beets and relish and chow and mustard pickles put up for the winter, the whole root cellar smelling like a held breath of brine.</p>
+
+                <p>Old Angus MacPhee played the fiddle like he was born with it. He'd walk from three farms over if word went out, and word always went out, because word going out was the whole point — a kitchen swept and cleared of its table, a jug on the counter, somebody's uncle keeping time on the floorboards with the heel of his boot, hard enough you could feel it up through your own feet if you stood close. The dancing wasn't wide, there wasn't room for wide — feet stayed under the body, quick and close to the floor, heels doing the talking, the whole room shaking a little on its foundation by the third or fourth reel.</p>
+
+                <p>Mavis didn't know yet that this was a thing that could end. It was just Saturday. It was just what a Saturday was, if you were born on the Island and born rural, which was the only way she'd ever known how to be born. Sunday was stiff collar and stiff pew and a silence you had to hold in your mouth for an hour, and that was exactly why Saturday night went as loud and as late as it did — it was the last of you before you had to put the good version on.</p>
+
+                <h2 class="section-title">II. 1958 — The Signal</h2>
+
+                <p>The Arsenaults got their radio the same spring the Hoedown started, and something in that felt like a betrayal for about a year before it felt like a gift.</p>
+
+                <p>Because here was the thing nobody said out loud. Not every farm could still fill a kitchen. The roads were better now, which meant people didn't need each other's houses the way they used to, which meant fiddlers like Old Angus MacPhee were dying off two and three a winter, and there was no one exactly like them coming up behind. So the radio didn't replace the kitchen party. It was what was left of it, gathered up and sent out over the wire so that everyone who used to walk to a house could just turn a dial instead, and hear "Mountain Dew" come crackling in at six o'clock, and know that somewhere in Charlottetown a whole province was doing the same thing at the same time.</p>
+
+                <p>The radio itself sat on a doily on top of the icebox, a brown wood-cased thing with a dial that glowed a dull amber in the dark kitchen, and getting it tuned right meant standing close with one hand on the knob, turning it a hair's width at a time through the hiss until a fiddle came up clean out of the static. Alphonse Arsenault thought it was foolishness, a radio pretending to be a party — no jug passed hand to hand, no floor shaking under anybody's boots, just a box making noise at you. His wife Delima thought it was the party's ghost, and she'd take a ghost over nothing. She'd still put the kettle on Saturdays at six, out of habit more than thirst, and sit close enough to the radio that the tea went lukewarm in the cup before she remembered to drink it.</p>
+
+                <p>The kettle ticked as it cooled on the stove behind her. She let it.</p>
+
+                <h2 class="section-title">III. 1967 — The Leaving</h2>
+
+                <p>Anneke was seventeen and leaving. Everyone her age was leaving, or talking about it, the way you talk about weather that's definitely coming. She stood in the driveway with a suitcase that had belonged to her mother and her mother before that, the leather gone soft and dark at the corners from other people's hands, and her father said the only thing he knew how to say, which was not about love. It was: don't forget to write.</p>
+
+                <p>She didn't forget to write. But what she really didn't forget was Saturday. Wherever she landed — and she landed in Nova Scotia, married a man from Burncoat, built a life that had nothing structurally to do with home anymore — she kept her Saturday evenings the way some people keep a Sunday. Six to nine. Radio tuned as close to the edge of static as it would go, one hand always ready on the dial, waiting for the signal to drift far enough across the Strait to catch. Some nights it came in clean enough to hear the studio chair creak under the host. Some nights it was barely a thread of fiddle under a wash of static, and she'd lean in toward the radio like leaning would help, like she could pull the sound the last few miles across the water by wanting it hard enough.</p>
+
+                <p>Her husband learned not to plan anything for that window. He didn't understand it, not really, but he understood that it wasn't the music. It was that for three hours a week, his wife went home, without going anywhere at all.</p>
+
+                <h2 class="section-title">IV. 1984 — The Girl Who Hated It</h2>
+
+                <p>Chloe Blacquiere was eleven and thought the Hoedown was the single most embarrassing thing her family did. Every Saturday, without discussion, without anyone even reaching for the dial anymore because the dial had memorized itself, the kitchen radio went to CFCY, and her mother sat with a cup of tea going cold in her hand, and sometimes cried a little at songs that weren't even sad, they were just old, and old seemed to do the same thing to her that sad did.</p>
+
+                <p>Chloe wanted her own music. She had a Walkman she'd saved for, the foam pads on the headphones gone flat and a little greasy from wear, and she'd go sit on the porch steps with it clipped to her belt so the Hoedown was just a shape of sound leaking out through the screen door behind her, present but muffled under whatever tape she had going, and she told herself she'd escaped it.</p>
+
+                <p>Inside, the fiddle kept on without her. Her mother's tea went cold the way it always did. For a while nothing happened at all, the way nothing happens on a summer porch, and that was the whole of it.</p>
+
+                <p>She hadn't. She just didn't know that yet. Nobody does, at eleven.</p>
+
+                <h2 class="section-title">V. 1999 — The Dedication</h2>
+
+                <p>Colin Gallant was twenty-six and calling in, which he would have died before admitting at eleven. His grandmother Mavis had passed that spring, ninety-one years old and still able to name every fiddler who'd ever played her family's kitchen back before the electricity came through. There was a song she used to hum along to badly, off the beat, happy to be off the beat, and he wanted it played for her, publicly, on the thing she'd never missed in fifty years of Saturdays.</p>
+
+                <p>The host — someone new by then, but with the same unhurried radio voice, the kind that sounded like it had all the time in the world because on a Saturday night in rural PEI, it did — read his dedication out over the air. For Mavis Gallant, from her grandson Colin, who says she never missed a Saturday.</p>
+
+                <p>He sat in his truck in the driveway to hear it, engine off, windows up, like the cab was a kind of church, the vinyl seat cold under him and the dash lights the only light going. And for three minutes and change, felt a kitchen around him he'd never actually stood in — a lamp swinging on a hook, a boot heel keeping time on the floorboards, a fiddle he'd only ever heard about — none of which he'd seen, all of which he somehow still had, passed down to him not as a memory but as a frequency.</p>
+
+                <h2 class="section-title">VI. 2016 — The Fight</h2>
+
+                <p>When the station changed it — swapped the host, pre-recorded what used to be live, let "Mountain Dew" quietly drop off the top of the show like nobody would notice — the phones lit up inside the first ten minutes. Chloe Blacquiere noticed, forty-three now and driving a milk truck with the radio tuned to the same spot it had been tuned to her whole childhood, the dash of the truck rattling faintly under the fiddle the way it always had, some habit of the metal itself by now. So did Anneke, eighty-six, radio still fixed on the same frequency in a house that was not on the Island and had not been for almost fifty years, her hearing gone soft enough now that she kept the volume up loud enough to hear it in the next room. So did people who'd never once called in, never once sent a dedication, people who just needed the six-to-nine to be the six-to-nine.</p>
+
+                <p>For a week it was just that — phones ringing into a back office, the same small thing said over and over in a hundred different voices. No speeches. A lot of please.</p>
+
+                <p>The complaints went in from kitchens and trucks and porches and one Nova Scotia farmhouse where an old woman dictated a letter to her granddaughter because her hands didn't do what she wanted them to anymore, and what CFCY got, in the end, wasn't really a complaint. It was a province telling a radio station, gently and then not gently, that the show had never belonged to them. It only ever lived there. The station backed down inside two weeks. Brought the host's format back. Brought "Mountain Dew" back. Started calling themselves caretakers of the thing instead of owners of it, and never used the word owners again.</p>
+
+                <h2 class="section-title">VII. Now</h2>
+
+                <p>Nobody left alive remembers Old Angus MacPhee's fiddling firsthand, or the Arsenaults' first Saturday with the radio, or Mavis Gallant's kitchen with the table pushed back against the wall. The roads out to where those farms were are paved now and mostly have different names. But some Saturday nights, if you're driving one of them around six o'clock with the window cracked, you'll catch a truck radio tuned to CFCY, the same three hours it's always been, the dedications still going out to people who are gone, from people who aren't ready to be finished saying so.</p>
+
+                <p>Some Saturdays the signal still runs the length of the province and out past it, past the Strait, into a kitchen that isn't even on the Island anymore, and nobody at the station knows her name, and it finds her anyway.</p>
+            </div>
+        </main>
+        <div class="navigation">
+            <a href="index.html" class="nav-link">← Back to Stories</a>
+        </div>
+    </div>
+</body>
+</html>

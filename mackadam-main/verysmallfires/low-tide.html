@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low Tide | Very Small Fires</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Source+Sans+Pro:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1c1c1c;
+            --text: #e5e0d5;
+            --text-muted: #7a756d;
+            --excerpt-bg: #262626;
+            --excerpt-border: #5a5650;
+            --serif: 'Playfair Display', Georgia, serif;
+            --sans: 'Source Sans Pro', -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 17px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--serif);
+            line-height: 1.75;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 44rem;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 6rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        h1 {
+            font-family: var(--serif);
+            font-size: 2.75rem;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.01em;
+        }
+
+        .subtitle {
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .metadata {
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+
+        .metadata span {
+            display: block;
+        }
+
+        .metadata .dot {
+            margin: 0.4rem 0;
+            font-size: 0.4rem;
+            line-height: 1;
+        }
+
+        /* Excerpt block */
+        .excerpt {
+            background: var(--excerpt-bg);
+            border-left: 4px solid var(--excerpt-border);
+            padding: 1.75rem 1.75rem 1.75rem 1.5rem;
+            margin: 2.5rem 0 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .excerpt p {
+            font-family: var(--serif);
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin: 0;
+        }
+
+        /* Body text */
+        article {
+            margin-top: 1.5rem;
+        }
+
+        article p {
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+        }
+
+        article em {
+            font-style: italic;
+        }
+
+        /* Section breaks */
+        .break {
+            text-align: center;
+            margin: 2.25rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 0.4em;
+        }
+
+        .break::before {
+            content: '• • •';
+        }
+
+        /* Lyrics block */
+        .lyrics {
+            font-style: italic;
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--excerpt-border);
+            color: var(--text);
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            font-family: var(--sans);
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            html {
+                font-size: 16px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                padding: 2.5rem 1.25rem 4rem;
+            }
+
+            .excerpt {
+                padding: 1.5rem 1.5rem 1.5rem 1.25rem;
+            }
+
+            .excerpt p {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Low Tide</h1>
+            <p class="subtitle">A shoreline, a sister, and being let go a little at a time</p>
+            <div class="metadata">
+                <span>Literary Nonfiction</span>
+                <span class="dot">•</span>
+                <span>Prince Edward Island</span>
+                <span class="dot">•</span>
+                <span>986 words</span>
+            </div>
+        </header>
+
+        <div class="excerpt">
+            <p>Not gone. Just too far, the curve of the shore taking her out of sight, the same way the water took the bottom out from under my own feet the second I stepped wrong.</p>
+        </div>
+
+        <article>
+            <p>Me and Robyn were the only kids either of us knew, aside from cousins we saw every other weekend. Nowhere off the Trans-Canada, North Tryon, and before school there was nobody else.</p>
+
+            <p>Mum would take us to the beach like it was nothing. Like going to the park. She'd lay out with a book and let us have the whole shore, and it felt like the world got bigger every time we pulled off the road and I could hear the water before I could see it.</p>
+
+            <p>Sometimes she'd come walk low tide with us, barefoot, straight into the crabgrass without flinching, and it always impressed me, that. I was too scared to step in it barefoot, sure there was something down in there waiting to close on my foot, some crab or some sharp thing, and she'd just walk through it like it was nothing at all. I wanted to be that unafraid of things. I wasn't yet.</p>
+
+            <div class="break"></div>
+
+            <p>The sand back home is orange and hot and dusty in the sun, pillowy on top, the kind of hot that made you hop foot to foot if you'd forgotten your shoes at the car. But wet, packed down near the water, it goes dark — mahogany, almost clay, cool enough to press your whole foot into and feel it hold your shape after you'd already moved on. And under the water, if you're not careful where you put your foot, a plume comes up. Red-brown, sudden, blooming out from underfoot like something disturbed that shouldn't have been. Then you can't see the bottom anymore. You're walking blind, and for a second, every second, some part of a nine-year-old's brain is sure that's exactly when something is going to touch your foot.</p>
+
+            <p>I learned to study the water first. Step where it stayed clear. Take the long way around a place instead of walking straight through it, if straight through meant not being able to see what I was stepping on. It felt like a kind of secret knowledge, figuring that out. Like I'd cracked something the water was trying to hide from me.</p>
+
+            <div class="break"></div>
+
+            <p>There were periwinkles, and you could spend an hour just picking them up and setting them back down somewhere better, for no reason, just because you could. Jellyfish, the kind you learn to walk around without needing to be told twice, purple-blue and heavy-looking, washed up and drying stiff. Oyster shells, a crab carcass here and there, bleached and picked over, and I'd turn those over with a stick like there might be something worth finding underneath, there never was, I checked every time anyway. Driftwood worn soft at the edges, good for building something out of if you had enough of it and enough time, and we always had enough time. And sea glass — we hunted for that the way other kids hunted for anything, patient and half-serious, turning over rocks that weren't rocks at all but old glass gone frosted and green, and holding a good piece up to the light like it was worth something, because to us it was.</p>
+
+            <p>And the plants. Dry brittle stuff washed up and curling like old rope left in the sun, that you could snap in your hands just to hear it snap. Thick red frilly clumps of it, Irish moss, that you'd find in heaps if you knew where to look, and it smelled like the whole ocean concentrated down into one pile. Long stringy strands, neon green, tangled up wherever the tide had left it. And the black ribbon kind — that was everywhere, so much of it some days that it piled up in drifts you could rake into huge piles if you wanted, and some mornings there'd be so much they'd have to bulldoze it off the beach just to clear the sand again, and I remember thinking that was the strangest thing, that the ocean could make more of something than a whole beach knew what to do with.</p>
+
+            <div class="break"></div>
+
+            <p>Sometimes I'd walk as far down the beach as I could go, past where Robyn had stopped to do whatever she was doing, past where Mum's book was just a shape and not a book anymore. Far enough the beach narrowed to almost nothing, waves right up alongside me on one side, a cliff rising up close on the other, no room left in between. And I'd look back.</p>
+
+            <p>And I couldn't see her anymore.</p>
+
+            <p>Not gone. Just too far, the curve of the shore taking her out of sight, the same way the water took the bottom out from under my own feet the second I stepped wrong. I knew she was still there. I knew if I turned around and walked back she'd still be exactly where I left her, lying in the sand with her book, not even looking up, and that not looking up was its own kind of trust, hers in me, or maybe just hers in the beach, that nothing there would take me somewhere she couldn't get me back from. I didn't think about that part then. I only thought about how far I'd gone, and how good it felt to have gone that far on my own, and I'd stand there a minute at the edge of not being able to see her, just to feel it, before I'd walk back.</p>
+
+            <p>And then I'd walk back, and she still wouldn't look up. She never did. I used to think it was because she wasn't worried. I think now it was the opposite — that not looking up was the biggest thing she could give me, the whole beach and a sister down the length of it and no eyes on me at all, and I took it the way you take the things you don't know are gifts. I just walked back and sat down in the sand beside her and started looking for glass.</p>
+
+        </article>
+
+        <footer>
+            Very Small Fires
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bleeding Hearts | Very Small Fires</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Source+Sans+Pro:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1c1c1c;
+            --text: #e5e0d5;
+            --text-muted: #7a756d;
+            --excerpt-bg: #262626;
+            --excerpt-border: #5a5650;
+            --serif: 'Playfair Display', Georgia, serif;
+            --sans: 'Source Sans Pro', -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 17px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--serif);
+            line-height: 1.75;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 44rem;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 6rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        h1 {
+            font-family: var(--serif);
+            font-size: 2.75rem;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.01em;
+        }
+
+        .subtitle {
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .metadata {
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+
+        .metadata span {
+            display: block;
+        }
+
+        .metadata .dot {
+            margin: 0.4rem 0;
+            font-size: 0.4rem;
+            line-height: 1;
+        }
+
+        /* Excerpt block */
+        .excerpt {
+            background: var(--excerpt-bg);
+            border-left: 4px solid var(--excerpt-border);
+            padding: 1.75rem 1.75rem 1.75rem 1.5rem;
+            margin: 2.5rem 0 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .excerpt p {
+            font-family: var(--serif);
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin: 0;
+        }
+
+        /* Body text */
+        article {
+            margin-top: 1.5rem;
+        }
+
+        article p {
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+        }
+
+        article em {
+            font-style: italic;
+        }
+
+        /* Section breaks */
+        .break {
+            text-align: center;
+            margin: 2.25rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 0.4em;
+        }
+
+        .break::before {
+            content: '• • •';
+        }
+
+        /* Lyrics block */
+        .lyrics {
+            font-style: italic;
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--excerpt-border);
+            color: var(--text);
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            font-family: var(--sans);
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            html {
+                font-size: 16px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                padding: 2.5rem 1.25rem 4rem;
+            }
+
+            .excerpt {
+                padding: 1.5rem 1.5rem 1.5rem 1.25rem;
+            }
+
+            .excerpt p {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bleeding Hearts</h1>
+            <p class="subtitle">A cure, a poison, and the family that never wanted to know the difference</p>
+            <div class="metadata">
+                <span>Literary Fiction</span>
+                <span class="dot">•</span>
+                <span>Prince Edward Island</span>
+                <span class="dot">•</span>
+                <span>1,229 words</span>
+            </div>
+        </header>
+
+        <div class="excerpt">
+            <p>The fever broke, or the fever had been going to break anyway, and nobody in that house was ever going to be the one to find out which.</p>
+        </div>
+
+        <article>
+            <p>The plant grew wild along the fence line, low and spreading, dark heart-shaped flowers hanging off a curved stem like something on a hook. Every June it came back on its own, nobody planted it, nobody watered it, and it didn't ask for anything the rest of the year either.</p>
+
+            <p>Grammy called it by a different name than the one in the seed catalogue, an old word passed down instead of a Latin one, and she'd send you out to cut a handful when someone in the family had a fever that wouldn't break, or a stomach that wouldn't settle, or a headache that had gone on past what aspirin could touch. You boiled the root, not the flower, the flower was just how you found it, and the water went a dull brown and bitter-smelling, and you drank it in small sips because a big sip brought it back up.</p>
+
+            <p>It worked, or it seemed to work, or enough people said it worked over enough years that nobody questioned it, which amounts to the same thing out here. There was a whole shelf of it in people's heads, plants that did things, plants you didn't touch bare-handed, plants you gave to livestock and plants you kept away from livestock, and none of it was written down anywhere, it just moved house to house, mother to daughter, the way the fence line itself moved a little further out every ten years without anyone deciding it should.</p>
+
+            <div class="break"></div>
+
+            <p>You remember one time clear enough, home sick from school with a fever that had you seeing the ceiling move, Grammy's hand flat and cool on your forehead first, then the sound of her out at the fence line with the kitchen shears, then the smell of the root going into the pot, earthy and a little like wet dirt even before the water started to change colour. She stood over it the whole time it boiled, never left the stove, timed it by the smell more than the clock. The cup she brought up to your room was chipped on one side and she always turned the chip away from your mouth without ever saying why. You drank it in the sips she told you to, little ones, and it tasted the way the smell had promised it would, and somewhere in the two hours after that the fever broke, or the fever had been going to break anyway, and nobody in that house was ever going to be the one to find out which.</p>
+
+            <div class="break"></div>
+
+            <p>Dandelions came up first every spring, and nobody let them go to waste as just a weed. The greens went in a pan with a bit of fat before they got too bitter to eat, and the flowers went into a crock with sugar and water and whatever else the recipe called for that year, left to sit and work in a dark corner of the cellar until it came out the other side as wine, cloudy yellow, sharper than it had any right to be from a flower that grew in the ditch. Yarrow got picked and dried for cuts, packed straight into a wound to stop the bleeding. Plantain, the broad-leaved kind that grew flat against the ground wherever the grass had been walked on too much, got chewed up and pressed onto a bee sting or a bug bite, and it actually took the sting out, or people said it did, same as everything else out here, said with enough certainty for enough generations that certainty was all the proof anybody needed. Burdock got dug in the fall, the taproot going down deeper than the shovel wanted to follow, scrubbed and boiled for a tonic that was supposed to clean the blood, whatever that meant to the people saying it. Elderberry got picked in late summer, the dark clusters stripped off the stem by the handful, cooked down with sugar into a syrup kept in the cupboard through the winter for the first cough that came around. Comfrey grew thick and hairy-leaved along the shed, and the leaves got crushed into a poultice for a sprained wrist or a bruised shin, wrapped on tight with a strip of old bedsheet and left overnight, the leaf gone dark and flat by morning like it had taken something out of you and kept it.</p>
+
+            <div class="break"></div>
+
+            <p>What Grammy never said out loud, but timed the whole thing around, was that the root only helped in the amount she gave it. Too long in the pot, too much in the cup, and the same medicine turned on you — that was why the sips were small, why she stood over the stove and never wandered off, why she measured by a sense she couldn't have explained if you'd asked. The cure and the harm were the same plant at different doses, and the only thing standing between them was a woman who knew, in her hands, exactly where one became the other.</p>
+
+            <div class="break"></div>
+
+            <p>The dog got into it in August, the year nobody was watching close enough. An old collie, slow in the hips by then, the kind of dog that spent its whole day finding a new patch of shade to lie in, and it must have grazed a mouthful without anyone seeing, dug at the root the way dogs dig at things for no reason anyone can name. By evening it wouldn't get up. By morning its gums had gone the wrong colour, pale where they should have been pink, and its breathing had a catch in it, a small hitch every fourth or fifth breath, like something inside was deciding whether to keep going.</p>
+
+            <p>There was no vet close enough to matter in time. There was just the family standing in the yard, and the same plant that had settled every fever and every bad stomach for two generations sitting right there along the fence, green and ordinary, doing to the dog exactly what it had never done to a person, or exactly what it had always been capable of doing and simply hadn't yet.</p>
+
+            <p>Somebody got water into her with a turkey baster, a little at a time, and somebody else called around to every number they had for anyone who might know something more than the rest of them did, and mostly what came back was the same thing said different ways, that there wasn't much to do now but wait and see which way it went. She lay in the shade of the back step where she'd always liked to lie anyway, and the family took turns sitting with her through the night, and by the second morning her gums had gone pink again and she lifted her head on her own and that was the whole of the good news anybody got, and it was enough.</p>
+
+            <div class="break"></div>
+
+            <p>Nobody blamed the plant. Nobody cut it down or salted the ground where it grew. It came back the next June the same as ever, heart-shaped and hanging off its curved stem, and somebody still cut a handful of it that summer when the fever came around again, boiled the root the same as always, the water going that same dull brown in the same pot on the same stove, Grammy standing over it the way she always had, timing it by feel instead of a clock.</p>
+
+        </article>
+
+        <footer>
+            Very Small Fires
+        </footer>
+    </div>
+</body>
+</html>

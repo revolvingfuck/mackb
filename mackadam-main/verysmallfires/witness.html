@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Witness</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .background-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(70, 70, 70, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(50, 50, 50, 0.1) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+            z-index: 1;
+            animation: atmosphericShift 20s ease-in-out infinite alternate;
+        }
+        @keyframes atmosphericShift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-10px, -5px) scale(1.02); }
+        }
+        header {
+            text-align: center;
+            padding: 60px 0;
+            position: relative;
+        }
+        .story-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffffff, #cccccc, #999999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+        .story-subtitle {
+            font-size: 1.1rem;
+            color: #aaaaaa;
+            font-style: italic;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+        .story-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 0.9rem;
+            color: #888888;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+        .story-content {
+            background: rgba(40, 40, 40, 0.6);
+            padding: 60px 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.2s forwards;
+        }
+        .story-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: left;
+        }
+        .story-text p {
+            margin-bottom: 1.5em;
+            text-indent: 0;
+        }
+        .story-text p:first-child {
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-indent: 0;
+            margin-bottom: 2em;
+            padding-left: 20px;
+            border-left: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        .section-break {
+            text-align: center;
+            margin: 3em 0;
+            color: #666;
+            font-size: 1.5rem;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            .story-content {
+                padding: 40px 25px;
+                margin-bottom: 40px;
+            }
+            .story-meta {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .story-text {
+                font-size: 1.05rem;
+            }
+            .story-text p {
+                margin-bottom: 1.3em;
+            }
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .story-content {
+                animation: fadeInUp 1s ease-out 1.2s forwards, breathe 8s ease-in-out infinite;
+            }
+            @keyframes breathe {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-2px); }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-texture"></div>
+    <div class="container">
+        <header>
+            <h1 class="story-title">Witness</h1>
+            <p class="story-subtitle">Metabolically expensive</p>
+            <div class="story-meta">
+                <span>Fiction</span>
+                <span>•</span>
+                <span>~10,000 words</span>
+            </div>
+        </header>
+        <main class="story-content">
+            <div class="story-text">
+                <p>Witness is metabolically expensive.</p>
+
+                <p>Rain fell the day Raymond saw his mother again. He stood under the bus shelter, water pooling at his feet. She came out of the pharmacy with her son and his wife—a young woman Raymond didn't recognize, laughing at something his brother had said. They crossed the street together. Halfway across, his mother touched her son's arm to make a point, her fingers resting there as she spoke. A small gesture. Casual. The kind that means I have known you since you were small and I still know you now.</p>
+
+
+                <p>Raymond did not call out. He watched them reach the far curb and disappear around the corner. The bus came. He rode it to the end of the line, then back again. He was nineteen. He had been in three group homes. He knew the arithmetic: the people who are supposed to love you can choose not to. And the world will not stop turning. No alarm sounds. The choice is simply made. It can always be made.</p>
+
+                <p>He carried that knowledge like a stone in his pocket. It shaped his economy: give without expectation. Fix what's broken. Walk away before anyone can say thank you—or no.</p>
+
+                <div class="section-break">***</div>
+
+                <p>Raymond was thirty-two when he first saw the boat.</p>
+
+                <p>He'd taken a wrong turn coming back from the hardware store. The streets curved in ways that defied the grid. He slowed at a stop sign and saw it sitting in a backyard on blocks. Twenty-two feet. Wooden hull. Blue tarp half off, water pooled in the low spots.</p>
+
+                <p>He put the truck in park.</p>
+
+                <p>The yard was small. Cedar fence gone gray. The house was yellow, paint peeling. A plastic kiddie pool leaned against the fence.</p>
+
+                <p>He walked up the driveway. The boat was white with a blue stripe. The tarp had been letting water sit. He could see the stain on the wood where it had overflowed.</p>
+
+                <p>He pulled the tarp back. Water came off in a sheet. The cockpit was full—six inches, maybe more. Leaves. A beer can. The seats were cracked, varnish gone.</p>
+
+                <p>He climbed up on the blocks. Looked into the cabin through the open hatch. Dark. Mildew smell. Cushions pulled off and stacked, black with mold. Tools scattered on the sole. Someone had been working here. Then stopped.</p>
+
+                <p>"What the fuck are you doing?"</p>
+
+                <p>Raymond turned. A woman stood in the driveway. Dark hair pulled back. Bare feet. One hand held a dish towel.</p>
+
+                <p>He climbed down. "The tarp came loose. Water's getting in."</p>
+
+                <p>"I can see that."</p>
+
+                <p>"I was checking how bad."</p>
+
+                <p>She stared at him. "By climbing into my yard."</p>
+
+                <p>"Yeah." He stopped. "I should've knocked."</p>
+
+                <p>"Yeah."</p>
+
+                <p>Rain dripped off the tarp. A dog barked down the block.</p>
+
+                <p>She folded the towel. "You know boats."</p>
+
+                <p>"I worked at a marina. Five years."</p>
+
+                <p>"Doing what?"</p>
+
+                <p>"Maintenance. Repairs."</p>
+
+                <p>She looked at the boat. Her jaw was tight. "My father's."</p>
+
+                <p>"Okay."</p>
+
+                <p>"He died three years ago." She climbed up on the blocks, looked into the cockpit. Climbed back down. "How bad."</p>
+
+                <p>"The seats are done. The cabin needs the mold treated. But the hull's okay. It's not gone yet."</p>
+
+                <p>"Yet."</p>
+
+                <p>"No."</p>
+
+                <p>She studied him. "Ana Reyes."</p>
+
+                <p>"Raymond Comer."</p>
+
+                <p>"You live around here?"</p>
+
+                <p>"Maple Street. Above the bodega."</p>
+
+                <p>"You want to help."</p>
+
+                <p>"If you want."</p>
+
+                <p>"Why?"</p>
+
+                <p>He looked at the pooled water. The dark stain. "Because it needs doing."</p>
+
+                <p>She almost smiled. "That's not really an answer."</p>
+
+                <p>"I know."</p>
+
+                <p>She nodded toward the boat. "Pull the rest of the tarp off. Let it air. I'll get a pump."</p>
+
+                <p>"Okay."</p>
+
+                <p>"And Raymond? Next time knock first."</p>
+
+                <div class="section-break">***</div>
+
+                <p>He came back Saturday. Brought a wet-dry vac and mildew cleaner. Knocked.</p>
+
+                <p>Ana answered in paint-stained jeans. Looked at what he'd brought. "You didn't ask if I wanted you to come back."</p>
+
+                <p>"You want me to leave?"</p>
+
+                <p>She considered. "No."</p>
+
+                <p>A boy appeared behind her. Seven or eight. Small. He stared at Raymond.</p>
+
+                <p>"This is Leo," Ana said. "Leo, this is Raymond. He's helping with Grandpa's boat."</p>
+
+                <p>"Are you Mom's boyfriend?"</p>
+
+                <p>"Leo—"</p>
+
+                <p>"No," Raymond said.</p>
+
+                <p>Leo nodded. "Okay."</p>
+
+                <p>They worked three hours. Raymond vacuumed the cockpit. Ana pulled the cushions and laid them in the sun. The mildew had eaten through to the foam.</p>
+
+                <p>"They're gone," he said.</p>
+
+                <p>"I know."</p>
+
+                <p>"You can get new ones made—"</p>
+
+                <p>"I know." Sharper. Then: "I'll handle it."</p>
+
+                <p>He went back to vacuuming.</p>
+
+                <p>Leo appeared at his elbow. "What's that?"</p>
+
+                <p>"Wet-dry vac."</p>
+
+                <p>"Can I try?"</p>
+
+                <p>Raymond glanced at Ana. She was scrubbing teak, her back to them. "Ask your mom."</p>
+
+                <p>"Mom! Can I?"</p>
+
+                <p>"If Raymond says okay."</p>
+
+                <p>Raymond handed him the wand. Leo's hands were too small for the grip. He didn't say anything. Let him work it out.</p>
+
+                <p>When the cockpit was dry they moved below. The cabin was tight with three of them. Ana started on the forward bulkhead. Raymond took the settees. Leo sat in the companionway, legs dangling.</p>
+
+                <p>"Grandpa built this?" Leo asked.</p>
+
+                <p>"No. He bought it when I was little."</p>
+
+                <p>"Did you go sailing?"</p>
+
+                <p>"Yeah."</p>
+
+                <p>"Can we?"</p>
+
+                <p>Ana's hand stopped. "Maybe. When it's fixed."</p>
+
+                <p>"When will it be fixed?"</p>
+
+                <p>"I don't know, baby."</p>
+
+                <p>Raymond sprayed cleaner. Didn't say anything.</p>
+
+                <p>They worked until noon. When they climbed out Ana stood in the cockpit looking at what they'd done. The wood was wet from cleaner. The cabin smelled like chemicals instead of rot.</p>
+
+                <p>"It's a start," Raymond said.</p>
+
+                <p>"Yeah."</p>
+
+                <p>Leo had gone inside. They stood there.</p>
+
+                <p>"You coming back?" Ana asked.</p>
+
+                <p>"You want me to?"</p>
+
+                <p>She looked at him. "Yeah."</p>
+
+                <p>"Okay."</p>
+
+                <p>He gathered the vac. Started toward his truck.</p>
+
+                <p>"Raymond."</p>
+
+                <p>He turned.</p>
+
+                <p>"Thank you."</p>
+
+                <p>He nodded. Drove home with the words sitting strange in his chest.</p>
+
+                <div class="section-break">***</div>
+
+                <p>Raymond came back the next Saturday. And the one after. They fell into a rhythm. He'd bring tools. She'd bring coffee. Leo would appear and disappear, sometimes helping, sometimes just watching.</p>
+
+                <p>The work went slow. Ana had been sanding the hull in sections. Raymond could see she'd started near the bow and worked aft about six feet before stopping. The sanded section was smooth. The rest was rough with old paint, blistered in places.</p>
+
+                <p>"You want to keep sanding?" he asked.</p>
+
+                <p>"I was going to."</p>
+
+                <p>"Okay." He picked up a sanding block. Started where she'd left off.</p>
+
+                <p>After twenty minutes she stopped. "You're going across the grain."</p>
+
+                <p>He looked. He was. "Yeah."</p>
+
+                <p>"It matters."</p>
+
+                <p>"I know."</p>
+
+                <p>"So why—"</p>
+
+                <p>"I wasn't thinking." He switched direction. Felt her watching him. Didn't look up.</p>
+
+                <p>They sanded in silence. The work was hard. Repetitive. His shoulders burned. Ana moved steadily, her rhythm even. She'd done this before.</p>
+
+                <p>"Your dad teach you?" he asked.</p>
+
+                <p>"Some. Mostly I watched."</p>
+
+                <p>"He do all the maintenance?"</p>
+
+                <p>"Yeah." She paused. "He was particular."</p>
+
+                <p>Raymond nodded. Kept sanding.</p>
+
+                <p>"You're doing it wrong," she said.</p>
+
+                <p>He stopped. "What?"</p>
+
+                <p>"Too much pressure. You're going to burn through."</p>
+
+                <p>He looked at the block in his hand. The wood under it. She was right. "Okay."</p>
+
+                <p>"Like this." She showed him. Less pressure. Longer strokes.</p>
+
+                <p>He tried to copy her. It felt wrong but he did it anyway.</p>
+
+                <p>"Better," she said.</p>
+
+                <p>They worked until the section was done. Ten feet of hull, smooth and bare. It didn't look like much.</p>
+
+                <p>"It's going to take months," Ana said.</p>
+
+                <p>"Yeah."</p>
+
+                <p>"Maybe a year."</p>
+
+                <p>"Maybe."</p>
+
+                <p>She sat back on her heels. Looked at the boat. "I don't know if I can do this."</p>
+
+                <p>"You've been doing it."</p>
+
+                <p>"For three years. And look how far I've gotten."</p>
+
+                <p>Raymond looked at the sanded section. The tools organized in the grass. The companionway hatch she'd repaired with new hinges. "You've gotten pretty far."</p>
+
+                <p>"Not far enough."</p>
+
+                <p>He didn't know what to say to that. He gathered the sanding blocks. Put them in the toolbox she kept under a tarp.</p>
+
+                <p>"You don't have to keep coming back," Ana said.</p>
+
+                <p>"I know."</p>
+
+                <p>"I mean it. You don't owe me anything."</p>
+
+                <p>"I know that too."</p>
+
+                <p>She looked at him. "Then why?"</p>
+
+                <p>Because the boat was her father's. Because she'd been working on it alone for three years. Because stopping felt like giving up and he knew what that looked like from the inside.</p>
+
+                <p>"I like the work," he said.</p>
+
+                <p>It wasn't the whole truth. But it was true enough.</p>
+
+                <div class="section-break">***</div>
+
+                <p>April became May. They sanded. Raymond brought a heat gun for the blisters. Ana scraped. The paint came off in curls. Leo rode his bike in circles in the driveway, the training wheels scraping concrete.</p>
+
+                <p>One Saturday Ana didn't come out. Leo appeared instead.</p>
+
+                <p>"Mom's sick," he said.</p>
+
+                <p>"Okay."</p>
+
+                <p>"She said you could work if you want. Or you could go home."</p>
+
+                <p>Raymond looked at the boat. Half the hull was bare now. The other half still waited. "I'll work."</p>
+
+                <p>Leo nodded. Went back inside.</p>
+
+                <p>Raymond worked alone. The silence was different without Ana there. He became aware of small sounds. The scraper against wood. Birds. A lawnmower three houses down.</p>
+
+                <p>After an hour Leo came back with a sandwich on a paper plate. Peanut butter and jelly, cut diagonal.</p>
+
+                <p>"Mom said you should eat."</p>
+
+                <p>"Thanks."</p>
+
+                <p>Leo sat on the grass. Watched him work. "Are you going to marry my mom?"</p>
+
+                <p>Raymond stopped scraping. "What?"</p>
+
+                <p>"Marcus at school says when a man comes to your house every week he's gonna marry your mom."</p>
+
+                <p>"Marcus is wrong."</p>
+
+                <p>"So you're not?"</p>
+
+                <p>"No."</p>
+
+                <p>Leo thought about this. "Do you like her?"</p>
+
+                <p>Raymond set the scraper down. "Yeah. I like her."</p>
+
+                <p>"She likes you too. She doesn't yell as much when you're here."</p>
+
+                <p>"She yells at you?"</p>
+
+                <p>"Sometimes. When she's tired." Leo picked at the grass. "Dad used to make her tired."</p>
+
+                <p>Raymond didn't know what to say to that. "Where's your dad now?"</p>
+
+                <p>"I don't know. Gone." Said it matter-of-fact. The way kids do when they've stopped expecting different.</p>
+
+                <p>They sat there. Raymond ate the sandwich. Leo pulled up grass and let it fall.</p>
+
+                <p>"You're good at this," Leo said, nodding at the hull.</p>
+
+                <p>"It's just scraping."</p>
+
+                <p>"Mom says her dad was good at it too."</p>
+
+                <p>"Yeah?"</p>
+
+                <p>"She says he could fix anything on a boat. She says that's why she has to learn. So she can be like him."</p>
+
+                <p>Raymond looked at the bare wood. The sections Ana had done by herself over three years. Slow and careful. Getting it right.</p>
+
+                <p>"She's already like him," Raymond said.</p>
+
+                <p>Leo seemed satisfied with that. He got up and went back inside.</p>
+
+                <p>Raymond worked until the light started to fail. When he was putting tools away Ana came out. She wore sweatpants and an old t-shirt. Her hair was down. She looked tired.</p>
+
+                <p>"You didn't have to stay," she said.</p>
+
+                <p>"I know."</p>
+
+                <p>She came over. Looked at what he'd done. Six more feet of hull, bare and smooth. "Thank you."</p>
+
+                <p>"It's just scraping."</p>
+
+                <p>"It's not." She wrapped her arms around herself. "Leo said you two talked."</p>
+
+                <p>"Yeah."</p>
+
+                <p>"He ask you personal questions?"</p>
+
+                <p>"Some."</p>
+
+                <p>"I'm sorry. He doesn't have a filter."</p>
+
+                <p>"It's fine."</p>
+
+                <p>She nodded. Stood there. "His dad left when Leo was four. Just didn't come home one day. Didn't call. Didn't explain." She looked at the boat. "I waited six months before I accepted it. Kept thinking he'd come back. He didn't."</p>
+
+                <p>Raymond put the scraper in the toolbox. Didn't look at her.</p>
+
+                <p>"Leo doesn't remember him much. But he remembers waiting. He remembers me waiting." She paused. "I don't want him to learn that again. That people leave."</p>
+
+                <p>"Okay."</p>
+
+                <p>"So if you're going to stop coming, just tell me. Don't just stop."</p>
+
+                <p>He looked at her then. She was crying. Not making noise. Just tears running down her face.</p>
+
+                <p>"I'm not going to stop," he said.</p>
+
+                <p>"You might."</p>
+
+                <p>"I won't."</p>
+
+                <p>"You don't know that."</p>
+
+                <p>"No." He didn't. People left. He knew that better than most. "But I'm not planning to."</p>
+
+                <p>She wiped her face with her sleeve. Nodded. Went back inside.</p>
+
+                <p>Raymond loaded the tools into his truck. Drove home. His apartment was small. One bedroom. Kitchen with a broken cabinet he still hadn't fixed. He made dinner. Ate it standing at the counter. The cabinet door swung slightly when he opened the fridge.</p>
+
+                <p>He thought about Ana crying. About Leo asking if he was going to marry his mother. About the boat sitting in the backyard, half-stripped, waiting.</p>
+
+                <p>He didn't know what he was doing. Didn't know if this was help or harm.</p>
+
+                <p>But he came back the next Saturday anyway.</p>
+
+                <div class="section-break">***</div>
+
+                <p>June. They finished stripping the hull. Ana bought primer. Raymond showed her how to thin it. They worked side by side, brushing it on in long strokes. The boat turned gray.</p>
+
+                <p>"It looks worse," Ana said.</p>
+
+                <p>"It's supposed to."</p>
+
+                <p>"My dad would hate this."</p>
+
+                <p>"Yeah?"</p>
+
+                <p>"He liked things to look right." She dipped her brush. "Even when they were half-done. Especially then."</p>
+
+                <p>Raymond thought about that. "You're not your dad."</p>
+
+                <p>"I know."</p>
+
+                <p>"So it doesn't have to look like he'd do it."</p>
+
+                <p>She stopped painting. Looked at him. "He knew what he was doing. I'm just guessing."</p>
+
+                <p>"You're not guessing. You've been working on this boat for three years."</p>
+
+                <p>"By myself. Fucking it up."</p>
+
+                <p>"You haven't fucked it up."</p>
+
+                <p>"The cushions are rotted. The varnish is gone. I left the tarp on wrong for two years."</p>
+
+                <p>"And you're fixing it."</p>
+
+                <p>"With your help."</p>
+
+                <p>"So?"</p>
+
+                <p>She set her brush down. "So what happens when you leave? When you get tired of this? I'll be back where I started."</p>
+
+                <p>Raymond dipped his brush. Kept painting. "Then you'll keep going. Like you did before."</p>
+
+                <p>"It took me three years to get six feet done."</p>
+
+                <p>"Yeah."</p>
+
+                <p>"That's not good enough."</p>
+
+                <p>"Why not?"</p>
+
+                <p>She didn't answer. Just picked up her brush and started painting again.</p>
+
+                <p>They worked until the primer was done. The hull was gray and ugly and covered. It looked nothing like her father's boat. It looked like a boat someone was trying to save.</p>
+
+                <div class="section-break">***</div>
+
+                <p>July. Leo's birthday. Ana invited Raymond to the party. He almost said no. Stood in his apartment holding the phone, thinking of reasons to decline.</p>
+
+                <p>He went.</p>
+
+                <p>The party was in the backyard. Four kids from school. Leo's grandmother—Ana's mother—a small woman with gray hair who watched Raymond like she was waiting for him to do something wrong. Cake from the grocery store. Hot dogs on a grill that wouldn't light until Raymond fiddled with the gas line.</p>
+
+                <p>The kids played in the kiddie pool. Leo's grandmother sat in a lawn chair and talked to Ana in Spanish. Raymond stood by the grill, turning hot dogs, listening to words he didn't understand.</p>
+
+                <p>Ana came over. "You okay?"</p>
+
+                <p>"Yeah."</p>
+
+                <p>"My mom wants to know if you're staying for cake."</p>
+
+                <p>"You want me to?"</p>
+
+                <p>"I invited you."</p>
+
+                <p>"That's not what I asked."</p>
+
+                <p>She looked at him. "Yeah. I want you to."</p>
+
+                <p>He stayed. They sang happy birthday. Leo blew out candles—eight of them this year. Asked for a wish. Closed his eyes. When he opened them he was looking at Raymond.</p>
+
+                <p>"What'd you wish for?" one of the kids asked.</p>
+
+                <p>"Can't tell," Leo said. "Or it won't come true."</p>
+
+                <p>Raymond ate cake. Leo's grandmother asked him questions in English now. Where he was from. What he did. If he had family. He answered. Kept his answers short. She nodded after each one like she was filing them away.</p>
+
+                <p>When the kids went back to the pool she leaned over. "You know what you're doing?"</p>
+
+                <p>"Ma'am?"</p>
+
+                <p>"With my daughter. With my grandson. You know what you're doing?"</p>
+
+                <p>"No ma'am."</p>
+
+                <p>She seemed to appreciate that. "Good. People who think they know are the dangerous ones."</p>
+
+                <p>She went inside. Ana sat down next to Raymond. "What'd she say?"</p>
+
+                <p>"Asked if I knew what I was doing."</p>
+
+                <p>"What'd you tell her?"</p>
+
+                <p>"The truth."</p>
+
+                <p>Ana laughed. Short and sharp. "She likes you."</p>
+
+                <p>"How can you tell?"</p>
+
+                <p>"She didn't tell you to leave."</p>
+
+                <p>They sat there. Watched Leo and his friends shriek in the pool. The sun was going down. The boat sat at the edge of the yard, gray primer drying in the heat.</p>
+
+                <p>"Thank you for coming," Ana said.</p>
+
+                <p>"Yeah."</p>
+
+                <p>"I mean it. Leo asked if you'd be here. I wasn't sure you would."</p>
+
+                <p>"I said I would."</p>
+
+                <p>"I know. But people say things."</p>
+
+                <p>Raymond looked at her. "I'm not your ex."</p>
+
+                <p>"I know."</p>
+
+                <p>"Do you?"</p>
+
+                <p>She was quiet. "I'm trying to."</p>
+
+                <p>That was honest. He could work with honest.</p>
+
+                <div class="section-break">***</div>
+
+                <p>August. Heat sat heavy in the yard. They painted the hull white. Two coats. The work was slower in the heat. The paint wanted to run. Raymond showed Ana how to thin each stroke, how to watch for sags.</p>
+
+                <p>Leo brought them water in plastic cups. Sat in the shade and asked questions.</p>
+
+                <p>"When can we sail it?"</p>
+
+                <p>"Not yet," Ana said.</p>
+
+                <p>"But when?"</p>
+
+                <p>"When it's done."</p>
+
+                <p>"When's that?"</p>
+
+                <p>"I don't know."</p>
+
+                <p>Leo frowned. Kicked at the grass. "Grandpa would know."</p>
+
+                <p>Ana's brush stopped. "Yeah. He would."</p>
+
+                <p>"Do you miss him?"</p>
+
+                <p>"Every day."</p>
+
+                <p>"Me too." Leo was quiet. "I don't remember him much. Just some things."</p>
+
+                <p>"Like what?"</p>
+
+                <p>"He smelled like coffee. And he let me steer the boat once. I was little."</p>
+
+                <p>"You were four."</p>
+
+                <p>"Was I good at it?"</p>
+
+                <p>"You almost hit the dock."</p>
+
+                <p>Leo grinned. "Did Grandpa get mad?"</p>
+
+                <p>"No. He laughed." Ana went back to painting. Her strokes were careful. Deliberate. "He said everyone hits the dock the first time."</p>
+
+                <p>Raymond listened. Painted. Didn't add anything.</p>
+
+                <p>That night Ana asked him to stay for dinner. He said yes without thinking about it. Realized too late what that meant.</p>
+
+                <p>The house was small inside. Living room with a couch that sagged in the middle. Kitchen barely big enough for the three of them. Pictures on the walls—Ana and Leo, Ana and her father on the boat, Leo as a baby.</p>
+
+                <p>Ana made spaghetti. Raymond set the table. Leo talked about school, about a kid named Marcus who'd brought a snake for show and tell. Raymond listened. Answered when Leo asked him questions. Felt strange sitting at someone else's table.</p>
+
+                <p>After dinner Leo went to watch TV. Ana washed dishes. Raymond dried.</p>
+
+                <p>"You don't have to," she said.</p>
+
+                <p>"I know."</p>
+
+                <p>They worked in silence. The window over the sink looked out at the boat. White now. Clean. Still up on blocks.</p>
+
+                <p>"My mom asked about you," Ana said.</p>
+
+                <p>"Yeah?"</p>
+
+                <p>"She wanted to know if you were staying."</p>
+
+                <p>"What'd you tell her?"</p>
+
+                <p>"That I didn't know." Ana handed him a plate. "Are you?"</p>
+
+                <p>Raymond dried it. Set it on the counter. "I keep coming back."</p>
+
+                <p>"That's not the same thing."</p>
+
+                <p>"No."</p>
+
+                <p>"So which is it?"</p>
+
+                <p>He looked at her. She was watching him. Waiting.</p>
+
+                <p>"I don't know," he said. "I've never done this before."</p>
+
+                <p>"Done what?"</p>
+
+                <p>"Any of it. The boat. Dinner. Being here."</p>
+
+                <p>"You've never had dinner before?"</p>
+
+                <p>"Not like this. Not—" He stopped. Didn't know how to explain it. The way the house felt. The pictures on the wall. Leo's voice from the other room. All of it familiar to her and foreign to him.</p>
+
+                <p>Ana turned off the water. Dried her hands. "My ex used to say he was staying. Every time we fought. Every time I asked. He'd say he wasn't going anywhere." She looked out at the boat. "Then one day he was just gone. No explanation. No goodbye."</p>
+
+                <p>Raymond set the towel down.</p>
+
+                <p>"So when you say you don't know," Ana said, "I hear him. I hear all the times he said he did know and he was lying."</p>
+
+                <p>"I'm not lying."</p>
+
+                <p>"I know. That's what scares me."</p>
+
+                <p>They stood there. The sink dripped. Leo laughed at something on TV.</p>
+
+                <p>"I can go," Raymond said.</p>
+
+                <p>"Is that what you want?"</p>
+
+                <p>"No."</p>
+
+                <p>"Then don't." She turned to face him. "But don't stay because you feel bad for me. Or because you think I need saving. Stay because you want to be here."</p>
+
+                <p>"I do want to be here."</p>
+
+                <p>"Why?"</p>
+
+                <p>He thought about that. About the boat. The work. Leo's questions. Ana's careful corrections when he did something wrong. The way she'd cried when she asked him not to disappear.</p>
+
+                <p>"I don't know," he said. "But I do."</p>
+
+                <p>She nodded. Picked up the towel. "Okay."</p>
+
+                <p>They finished the dishes. Raymond left before it got dark. Drove home thinking about the way Ana's house felt. Full. Loud. Nothing like his apartment.</p>
+
+                <p>He parked outside the bodega. Walked upstairs. The apartment was quiet. The cabinet door hung crooked. He stood there looking at it.</p>
+
+                <p>Then he got his toolbox. Fixed it. The door closed straight when he was done.</p>
+
+                <div class="section-break">***</div>
+
+                <p>September. They painted the waterline stripe. Blue. Ana's father had liked blue. They taped off the line carefully. Raymond held the level while Ana marked it with a pencil.</p>
+
+                <p>"Higher," she said.</p>
+
+                <p>He adjusted.</p>
+
+                <p>"There."</p>
+
+                <p>They painted slowly. The stripe had to be perfect. Ana's father would have insisted on it.</p>
+
+                <p>Halfway through Leo appeared with his backpack. "Can Raymond pick me up from school tomorrow?"</p>
+
+                <p>Ana stopped painting. "What?"</p>
+
+                <p>"Marcus's dad picks him up sometimes. And Tyler's uncle. Can Raymond?"</p>
+
+                <p>"Raymond has work."</p>
+
+                <p>"I could," Raymond said.</p>
+
+                <p>Ana looked at him. "You don't have to."</p>
+
+                <p>"I know."</p>
+
+                <p>"It's out of your way."</p>
+
+                <p>"It's fine."</p>
+
+                <p>She hesitated. Leo watched them both.</p>
+
+                <p>"Okay," Ana said. "If you're sure."</p>
+
+                <p>Raymond picked Leo up the next day. The kid came out of the building with two other boys. Stopped when he saw Raymond's truck. Grinned. Said something to his friends that made them look over.</p>
+
+                <p>"That your dad?" one of them asked.</p>
+
+                <p>"No," Leo said. "That's Raymond."</p>
+
+                <p>He climbed in. Buckled up. "They thought you were my dad."</p>
+
+                <p>"I heard."</p>
+
+                <p>"I told them you weren't."</p>
+
+                <p>"Okay."</p>
+
+                <p>Leo was quiet for a minute. "Would you want to be? Someone's dad?"</p>
+
+                <p>Raymond kept his eyes on the road. "I haven't thought about it."</p>
+
+                <p>"Why not?"</p>
+
+                <p>"Just haven't."</p>
+
+                <p>"Do you like kids?"</p>
+
+                <p>"I like you."</p>
+
+                <p>Leo seemed satisfied with that. "Mom says you're staying for dinner again."</p>
+
+                <p>"If that's okay."</p>
+
+                <p>"It's okay. She makes better food when you're there."</p>
+
+                <p>Raymond almost smiled. "Yeah?"</p>
+
+                <p>"Yeah. Usually it's just mac and cheese. Or sandwiches."</p>
+
+                <p>They drove to Ana's house. She was in the yard working on the boat. She'd started on the varnish. The teak was wet and dark.</p>
+
+                <p>"How was school?" she asked Leo.</p>
+
+                <p>"Fine. We had a test."</p>
+
+                <p>"How'd you do?"</p>
+
+                <p>"Okay." He disappeared into the house.</p>
+
+                <p>Ana looked at Raymond. "Thank you."</p>
+
+                <p>"It's no problem."</p>
+
+                <p>"Still."</p>
+
+                <p>They worked on the varnish together. Three coats. Each one had to dry before the next. The work was meditative. Brush. Smooth. Watch for runs.</p>
+
+                <p>"Leo asked if you wanted to be someone's dad," Ana said.</p>
+
+                <p>Raymond's brush stilled. "Yeah."</p>
+
+                <p>"What'd you tell him?"</p>
+
+                <p>"That I haven't thought about it."</p>
+
+                <p>"Have you?"</p>
+
+                <p>He dipped the brush. Started on the next section. "No."</p>
+
+                <p>"Why not?"</p>
+
+                <p>"Didn't have anyone to think about it with."</p>
+
+                <p>She was quiet. Kept working.</p>
+
+                <p>"Would you want to?" she asked. "If you did think about it?"</p>
+
+                <p>Raymond thought about Leo in the truck. About the kid's friends asking if he was his dad. About the way Leo had corrected them but smiled anyway.</p>
+
+                <p>"Maybe," he said.</p>
+
+                <p>Ana nodded. Didn't say anything else. They finished the first coat as the sun went down.</p>
+
+                <div class="section-break">***</div>
+
+                <p>October. The varnish was done. The boat looked almost right. White hull. Blue stripe. Teak gleaming. They stood back and looked at it.</p>
+
+                <p>"It's close," Ana said.</p>
+
+                <p>"Yeah."</p>
+
+                <p>"We still need to step the mast. Rig it. Get the sails."</p>
+
+                <p>"Yeah."</p>
+
+                <p>"And the engine's seized."</p>
+
+                <p>"I know."</p>
+
+                <p>She sat down on the grass. Raymond sat next to her. They looked at the boat together.</p>
+
+                <p>"My dad would've had this done in six months," she said.</p>
+
+                <p>"You're not your dad."</p>
+
+                <p>"I know. But I wanted to do it like he would. I wanted to—" She stopped. Shook her head. "I don't know what I wanted."</p>
+
+                <p>"You wanted to keep him close."</p>
+
+                <p>She looked at him. "Yeah."</p>
+
+                <p>"You have."</p>
+
+                <p>"Have I?"</p>
+
+                <p>"The boat's still here. You're still working on it. That's him."</p>
+
+                <p>"It's taking too long."</p>
+
+                <p>"So?"</p>
+
+                <p>"So I'm tired. I've been tired for three years."</p>
+
+                <p>Raymond picked at the grass. "You could stop."</p>
+
+                <p>"I can't."</p>
+
+                <p>"Why not?"</p>
+
+                <p>"Because if I stop—" Her voice caught. "If I stop then it's really over. He's really gone. And I can't—" She wiped her eyes. "I can't let him go yet."</p>
+
+                <p>Raymond understood that. Carrying someone after they were gone. Holding onto the weight because putting it down meant admitting they weren't coming back.</p>
+
+                <p>"You don't have to let him go," he said. "You just have to let the boat be yours now too."</p>
+
+                <p>She cried. Quiet. Raymond sat next to her and didn't say anything else. Just sat there until she stopped.</p>
+
+                <div class="section-break">***</div>
+
+                <p>November. They worked on the engine. Raymond pulled it apart on a tarp in the driveway. Pistons. Gaskets. Fuel lines crusted with old gas.</p>
+
+                <p>"It's fucked," he said.</p>
+
+                <p>"Can you fix it?"</p>
+
+                <p>"I don't know."</p>
+
+                <p>"Try."</p>
+
+                <p>He tried. Ordered parts. Waited for them to arrive. Worked on the engine piece by piece. Ana watched. Asked questions. Handed him tools.</p>
+
+                <p>"You didn't have to learn this," he said.</p>
+
+                <p>"I want to."</p>
+
+                <p>"Why?"</p>
+
+                <p>"Because next time I'll know."</p>
+
+                <p>Next time. He heard the assumption in it. That there would be a next time. That she'd keep the boat. Keep working on it. That it wouldn't end here.</p>
+
+                <p>The engine took three weeks. When he finally got it running it sounded rough. Loud. But it ran.</p>
+
+                <p>Ana stood there listening to it. "It sounds different."</p>
+
+                <p>"It's old."</p>
+
+                <p>"It sounds different than when my dad ran it."</p>
+
+                <p>"Probably."</p>
+
+                <p>She was quiet. "That's okay."</p>
+
+                <p>They let it run for twenty minutes. Watching for leaks. Listening to the rhythm. When Raymond shut it off the silence felt heavy.</p>
+
+                <p>"We could launch it," Ana said.</p>
+
+                <p>"Not yet. We still need—"</p>
+
+                <p>"I know. But we could. Soon."</p>
+
+                <p>Raymond looked at the boat. At everything they'd done. "Yeah. Soon."</p>
+
+                <div class="section-break">***</div>
+
+                <p>December. Leo asked if Raymond was coming for Christmas.</p>
+
+                <p>"I don't know," Ana said.</p>
+
+                <p>"Why not?"</p>
+
+                <p>"Because I haven't asked him."</p>
+
+                <p>"So ask him."</p>
+
+                <p>Ana looked at Raymond. They were working on the mast. Sanding the wood smooth. "You want to come for Christmas?"</p>
+
+                <p>"You want me to?"</p>
+
+                <p>"I wouldn't ask if I didn't."</p>
+
+                <p>"Okay."</p>
+
+                <p>"Okay?"</p>
+
+                <p>"Yeah."</p>
+
+                <p>Leo grinned. "Can we get a tree?"</p>
+
+                <p>"We always get a tree."</p>
+
+                <p>"A big one. Since Raymond's coming."</p>
+
+                <p>They got a tree. Ana and Leo picked it out. Raymond drove them to the lot and helped tie it to the truck. They set it up in the living room. It was too big. The top bent against the ceiling.</p>
+
+                <p>"It's perfect," Leo said.</p>
+
+                <p>They decorated it with lights and ornaments that had belonged to Ana's father. Small wooden boats. Anchors. A sailor in a yellow slicker. Leo hung them carefully. Explained each one.</p>
+
+                <p>Raymond helped. Hung the ones Leo couldn't reach. Strung the lights. Stood back when they were done and looked at it.</p>
+
+                <p>"What do you think?" Ana asked.</p>
+
+                <p>"It's good."</p>
+
+                <p>"Just good?"</p>
+
+                <p>"It's really good."</p>
+
+                <p>She smiled. "Better."</p>
+
+                <p>Christmas morning Raymond showed up early. Brought coffee. Ana made breakfast. Eggs and toast. They ate at the small table.</p>
+
+                <p>Leo opened presents. A bike helmet. A model sailboat kit. New shoes. He thanked them after each one. Hugged his mom. Then hugged Raymond too.</p>
+
+                <p>Raymond held still. Let the kid hug him. Didn't know what to do with his hands.</p>
+
+                <p>"I got you something," Leo said.</p>
+
+                <p>"You didn't have to."</p>
+
+                <p>"I wanted to."</p>
+
+                <p>Leo handed him a package wrapped in newspaper. Raymond opened it. Inside was a drawing. The boat. White hull. Blue stripe. Three people standing next to it. Stick figures. One tall. One medium. One small.</p>
+
+                <p>"That's us," Leo said. "When we launch it."</p>
+
+                <p>Raymond looked at the drawing. At the three figures. At the boat between them.</p>
+
+                <p>"Thank you," he said.</p>
+
+                <p>Leo beamed.</p>
+
+                <p>Ana gave him a package too. Smaller. Heavier. Raymond opened it. Inside was a brass compass. Old. The glass was scratched but it still worked.</p>
+
+                <p>"It was my dad's," she said. "He used it on the boat."</p>
+
+                <p>Raymond turned it over in his hands. "I can't—"</p>
+
+                <p>"Yes you can."</p>
+
+                <p>"Ana—"</p>
+
+                <p>"He would've wanted someone to use it. Someone who—" She stopped. "Someone who cared about the boat."</p>
+
+                <p>Raymond looked at her. She looked back. Steady.</p>
+
+                <p>"Thank you," he said.</p>
+
+                <p>They spent the day together. Watched Leo build his model boat. Ate leftovers for lunch. Fell asleep on the couch while a movie played.</p>
+
+                <p>Raymond woke up with Ana's head on his shoulder. Leo asleep on the other end of the couch. The TV still on. The tree lights glowing.</p>
+
+                <p>He sat there. Didn't move. Didn't want to wake them.</p>
+
+                <p>Outside the window he could see the boat. White and waiting.</p>
+
+                <div class="section-break">***</div>
+
+                <p>January. They stepped the mast. Raymond rented a crane. It took four hours. The mast went up slow. Ana guided it. Leo watched from the fence.</p>
+
+                <p>When it was up and bolted down they stood back and looked at it.</p>
+
+                <p>"It's a boat again," Leo said.</p>
+
+                <p>"Yeah," Ana said. "It is."</p>
+
+                <p>They rigged it over the next two weeks. Stays. Shrouds. Halyards. Raymond showed Ana the knots. She practiced until her hands knew them without thinking.</p>
+
+                <p>The sails came last. Ana had ordered them months ago. They arrived in long bags. White dacron. New. Her father's sails had rotted years ago.</p>
+
+                <p>They bent them on together. Main and jib. Raymond showed Ana how to attach the slides. How to tension the luff.</p>
+
+                <p>When they were done the boat sat there on blocks. Mast up. Sails furled. Almost ready.</p>
+
+                <p>"We need to launch it," Ana said.</p>
+
+                <p>"Yeah."</p>
+
+                <p>"I'm scared."</p>
+
+                <p>"Why?"</p>
+
+                <p>"What if it sinks?"</p>
+
+                <p>"It won't."</p>
+
+                <p>"You don't know that."</p>
+
+                <p>"No. But we did the work. It's sound."</p>
+
+                <p>She looked at the boat. "My dad launched it every spring. Same day every year. May first."</p>
+
+                <p>"We could wait until then."</p>
+
+                <p>"That's four months."</p>
+
+                <p>"So we wait."</p>
+
+                <p>She shook her head. "No. We've waited long enough."</p>
+
+                <p>They scheduled the launch for the end of January. A Saturday. Raymond rented a trailer. Borrowed a friend's truck.</p>
+
+                <p>The day before Leo got sick. Fever. Throwing up. Ana stayed home with him. Called Raymond.</p>
+
+                <p>"We have to postpone," she said.</p>
+
+                <p>"Okay."</p>
+
+                <p>"I'm sorry."</p>
+
+                <p>"Don't be. We'll do it when he's better."</p>
+
+                <p>But Leo stayed sick. Days turned into a week. The fever wouldn't break. Ana took him to the doctor. Then the hospital. Pneumonia.</p>
+
+                <p>Raymond came to the hospital. Brought Ana coffee. Sat with her in the waiting room while Leo slept.</p>
+
+                <p>"I should've waited," Ana said. "Should've launched it in May like my dad always did."</p>
+
+                <p>"This isn't because of the boat."</p>
+
+                <p>"I know. But it feels like—" She stopped. "It feels like I'm being punished."</p>
+
+                <p>"For what?"</p>
+
+                <p>"For changing things. For not doing it his way."</p>
+
+                <p>Raymond didn't know what to say to that. He sat there. Drank bad hospital coffee. Watched Ana watch the door to Leo's room.</p>
+
+                <p>Leo came home after five days. Thin. Pale. Ana kept him home from school for another week. Raymond came by but didn't stay long. Brought soup. Asked if they needed anything. Left when Ana said no.</p>
+
+                <p>He came back the following Saturday. Knocked. Ana answered.</p>
+
+                <p>"How is he?"</p>
+
+                <p>"Better. Watching TV."</p>
+
+                <p>"You need help with anything?"</p>
+
+                <p>She looked past him at the boat. "Not today."</p>
+
+                <p>He nodded. Started to leave.</p>
+
+                <p>"Raymond."</p>
+
+                <p>He turned.</p>
+
+                <p>"Thank you. For the hospital. For being there."</p>
+
+                <p>"Yeah."</p>
+
+                <p>He drove home. Didn't know what else to do.</p>
+
+                <div class="section-break">***</div>
+
+                <p>March. Ana texted. <em>Can you come by?</em></p>
+
+                <p>He came. She was in the yard looking at the boat. Leo was inside doing homework.</p>
+
+                <p>"I want to finish it," she said.</p>
+
+                <p>"Okay."</p>
+
+                <p>"But I need to do a real survey. Check everything. Make sure it's actually safe before we put it in the water."</p>
+
+                <p>"Makes sense."</p>
+
+                <p>They spent the day going over the boat. Checking seams. Testing fittings. Raymond crawled into the bilge with a flashlight. Looked at every through-hull. Every seacock.</p>
+
+                <p>One of them stopped him. Bronze fitting. Green with corrosion. The threads were pitted. When he touched it, it moved slightly in the hull.</p>
+
+                <p>He backed out. Found Ana on deck.</p>
+
+                <p>"The through-hull for the cockpit drain is bad."</p>
+
+                <p>"How bad?"</p>
+
+                <p>"It's corroded. Threads are compromised. It could fail."</p>
+
+                <p>She climbed down. Looked at it. "Can we just seal it better?"</p>
+
+                <p>"No. It needs to be replaced."</p>
+
+                <p>"Okay. I'll order one."</p>
+
+                <p>"It's not cheap. Bronze fittings run three, four hundred."</p>
+
+                <p>She was quiet. "Okay. I'll save up."</p>
+
+                <p>"How long?"</p>
+
+                <p>"I don't know. A month? Two?"</p>
+
+                <p>Raymond nodded. Didn't say anything. They finished the survey. He wrote down what needed fixing. Small things mostly. The through-hull was the only critical item.</p>
+
+                <p>He left that afternoon. Drove to the marine supply store in Tacoma. Found the fitting they needed. $387 with tax. He stood there holding it. Thinking about Ana saving for two months. About the boat sitting on blocks waiting. About what happens when a through-hull fails at sea.</p>
+
+                <p>He bought it.</p>
+
+                <div class="section-break">***</div>
+
+                <p>He came back Tuesday. Ana was at work. Leo was at school. He let himself into the yard through the gate. He'd been coming here for almost a year. It felt normal now.</p>
+
+                <p>He pulled out the old fitting. It came out easier than it should have. The threads barely held. He cleaned the hull. Applied sealant. Installed the new fitting. Torqued it down proper. Let the sealant cure.</p>
+
+                <p>He was cleaning up when Ana came home.</p>
+
+                <p>She got out of her car. Saw him. Saw the tools. Walked over.</p>
+
+                <p>"What are you doing?"</p>
+
+                <p>"The through-hull. I replaced it."</p>
+
+                <p>She climbed up on the blocks. Looked at where he'd been working. "I didn't ask you to do that."</p>
+
+                <p>"I know. But it needed—"</p>
+
+                <p>"I said I'd order one."</p>
+
+                <p>"It's already done."</p>
+
+                <p>"I can see that." Her voice was flat. "How much was it?"</p>
+
+                <p>"Don't worry about it."</p>
+
+                <p>"How much, Raymond."</p>
+
+                <p>"Three eighty-seven."</p>
+
+                <p>She was quiet. "And you just decided."</p>
+
+                <p>"It was dangerous. The old one was ready to fail."</p>
+
+                <p>"So you went and bought it. And installed it. On my boat. Without asking me."</p>
+
+                <p>"Ana—"</p>
+
+                <p>"Get out."</p>
+
+                <p>He stopped. "What?"</p>
+
+                <p>"Get out of my yard."</p>
+
+                <p>"I was trying to help."</p>
+
+                <p>"I didn't ask for your help. Not with this. I said I would handle it."</p>
+
+                <p>"In two months. While that fitting could fail any time."</p>
+
+                <p>"It's been like that for three years. It could've waited two more months."</p>
+
+                <p>"That's not—"</p>
+
+                <p>"This is my father's boat." Her voice cracked. "This is the last thing I have of him. And you just—you just decided you knew better. That your timeline was more important than mine."</p>
+
+                <p>"I was thinking about safety."</p>
+
+                <p>"You were thinking about fixing it. Because that's what you do. You see something broken and you fix it without asking if anyone wants it fixed."</p>
+
+                <p>Raymond felt heat in his face. "The fitting was corroded."</p>
+
+                <p>"I know. I saw it too."</p>
+
+                <p>"And you were going to wait two months."</p>
+
+                <p>"Yes. Because it's my boat. My decision. My father's legacy. And you don't get to take that away from me just because you have the money and the time and the expertise."</p>
+
+                <p>"I wasn't trying to take anything."</p>
+
+                <p>"But you did." She was crying now. "You took my timeline. My way of doing this. You took the choice of when and how and made it yours."</p>
+
+                <p>Raymond looked at the new fitting. Bright bronze. Sealed tight. Safe.</p>
+
+                <p>"I should go," he said.</p>
+
+                <p>"Yeah. You should."</p>
+
+                <p>He gathered his tools. Put them in the truck. Drove home. Sat in his apartment looking at the cabinet door that closed straight. The one he'd finally fixed.</p>
+
+                <p>He didn't know what he'd done wrong. The fitting had needed replacing. He'd replaced it. The boat was safer now.</p>
+
+                <p>But Ana's face. The way she'd looked at him. Like he'd taken something he couldn't give back.</p>
+
+                <div class="section-break">***</div>
+
+                <p>He didn't go back. Three days passed. Then four. His phone stayed quiet.</p>
+
+                <p>On the fifth day he drove to her house. Brought coffee. Knocked.</p>
+
+                <p>Ana answered. Her eyes were red.</p>
+
+                <p>"Can I sand the transom?" he asked.</p>
+
+                <p>She looked at him. "Why?"</p>
+
+                <p>"Because it needs it. And I'm asking."</p>
+
+                <p>She was quiet for a long time. "Yeah. Okay."</p>
+
+                <p>He sanded the transom. Ana worked on the tiller. They didn't talk much. The work filled the silence.</p>
+
+                <p>When he was done he put his tools away. Started toward his truck.</p>
+
+                <p>"Raymond."</p>
+
+                <p>He turned.</p>
+
+                <p>"Don't do that again."</p>
+
+                <p>"Okay."</p>
+
+                <p>"I mean it. Don't touch the boat without asking. I don't care how urgent it seems. Ask first."</p>
+
+                <p>"I will."</p>
+
+                <p>She nodded. Went back inside.</p>
+
+                <p>He drove home. It wasn't forgiveness. It wasn't understanding. It was just what it was.</p>
+
+                <div class="section-break">***</div>
+
+                <p>April. They worked on the boat. Raymond asked before he did anything. Even small things. Ana said yes to most of it. No to some. He learned to wait for her answer.</p>
+
+                <p>They were re-bedding the cleats on deck. Raymond mixed the sealant. Ana pulled the old ones. They worked opposite sides of the cockpit.</p>
+
+                <p>"How long does this have to cure?" Ana asked.</p>
+
+                <p>"Twenty-four hours. Minimum."</p>
+
+                <p>"What if we launch before then?"</p>
+
+                <p>"It won't seal right. Could pull loose."</p>
+
+                <p>"Okay. So we wait."</p>
+
+                <p>They bedded the cleats. Torqued them down. The sealant oozed out around the edges. Raymond wiped it clean.</p>
+
+                <p>"We're close," Ana said.</p>
+
+                <p>"Yeah."</p>
+
+                <p>"Maybe another month."</p>
+
+                <p>"Maybe."</p>
+
+                <p>She looked at the boat. "I want Leo to be here. When we launch it. I want him to see it go in the water."</p>
+
+                <p>"He will."</p>
+
+                <p>"He's been talking about it at school. Telling his friends."</p>
+
+                <p>"That's good."</p>
+
+                <p>"Yeah." She paused. "He asked if you'd be there too."</p>
+
+                <p>"You want me there?"</p>
+
+                <p>"Yeah. I do."</p>
+
+                <p>They finished bedding the cleats. Let them cure. Raymond came back two days later to check them. They were solid. Set tight. He told Ana they were good.</p>
+
+                <p>She smiled. First real smile he'd seen since the fitting. "We're really going to do this."</p>
+
+                <p>"Yeah."</p>
+
+                <div class="section-break">***</div>
+
+                <p>May first. Launch day. Ana had insisted on the date. Same day her father always launched. Raymond rented the trailer. Borrowed the truck. Ana's mother came. Leo's friends from school. A small crowd.</p>
+
+                <p>They loaded the boat carefully. Drove to the marina. The launch ramp was busy. Other boats going in. The season starting.</p>
+
+                <p>Raymond backed the trailer down. Ana guided him. Leo watched from the dock. Excited. Nervous.</p>
+
+                <p>The boat slid off clean. Floated. Ana climbed aboard. Checked the bilge. Dry.</p>
+
+                <p>"We're good," she called.</p>
+
+                <p>Raymond parked the trailer. Walked down to the dock. Ana was securing lines. Leo wanted to climb aboard but Ana made him wait.</p>
+
+                <p>"Let me check everything first," she said.</p>
+
+                <p>She went below. Came back up. "We're dry. No leaks."</p>
+
+                <p>Leo climbed on. Careful. Ana showed him where to step. Where not to step.</p>
+
+                <p>Raymond stayed on the dock. Watching.</p>
+
+                <p>Ana looked at him. "You coming?"</p>
+
+                <p>"You want me to?"</p>
+
+                <p>"Yeah."</p>
+
+                <p>He climbed aboard. The boat rocked slightly. Settled. Ana started the engine. It coughed. Caught. Ran rough but steady.</p>
+
+                <p>They motored out slow. Into the bay. The wind was light. Ana unfurled the jib. Raymond helped Leo raise the main. The sails filled. The boat heeled slightly.</p>
+
+                <p>Ana killed the engine. They sailed.</p>
+
+                <p>Leo sat in the cockpit grinning. Ana's hands were light on the tiller. Her face was calm. Focused. Raymond sat on the rail and watched her sail her father's boat.</p>
+
+                <p>They were out for two hours. Ana let Leo steer. Showed him how to feel the wind. How to keep the sails full. The kid was a natural. Careful. Attentive.</p>
+
+                <p>When they came back in Ana docked it herself. One try. Clean. Her father's training showing through.</p>
+
+                <p>They secured the boat. Leo helped with the lines. Ana checked the bilge again. Still dry.</p>
+
+                <p>They stood on the dock looking at it. White hull. Blue stripe. Teak gleaming. Sails furled. Floating.</p>
+
+                <p>"We did it," Leo said.</p>
+
+                <p>"Yeah," Ana said. "We did."</p>
+
+                <p>Raymond stood there. Looking at the boat. At Ana. At Leo. Thinking about everything it had taken to get here. All the work. All the mistakes. All the asking and waiting and trying again.</p>
+
+                <p>It wasn't perfect. But it was done.</p>
+
+                <div class="section-break">***</div>
+
+                <p>May became June. They sailed most weekends. Ana was getting confident. Raymond helped with the lines but mostly stayed quiet. Let her and Leo figure it out.</p>
+
+                <p>One Saturday they took the boat out alone. Just the three of them. The wind was good. Steady. Ana sailed them out past the point.</p>
+
+                <p>"I'm going to tack," she called.</p>
+
+                <p>Leo and Raymond handled the jib sheets. The boat came about smooth. They settled on the new tack.</p>
+
+                <p>That's when Leo moved aft. Stepped on the portside cleat to get around the traveler.</p>
+
+                <p>The cleat pulled loose.</p>
+
+                <p>Leo fell. Caught his shin on the traveler. Blood. Lots of it. He screamed.</p>
+
+                <p>Ana dropped the tiller. Raymond grabbed Leo. The boat rounded up into the wind. Sails luffing.</p>
+
+                <p>"What happened?" Ana was next to them. Her face white.</p>
+
+                <p>"The cleat," Raymond said. "It pulled out."</p>
+
+                <p>She looked at it. The holes in the deck. The sealant still soft underneath.</p>
+
+                <p>"You said it cured."</p>
+
+                <p>"It did. I checked it two days after—"</p>
+
+                <p>"It's not cured. Look at it."</p>
+
+                <p>Raymond looked. The sealant was tacky. Not set. He'd checked it wrong. Too soon.</p>
+
+                <p>"Leo, let me see." Ana pulled the kid's hands away from his shin. The cut was deep. Bone showing.</p>
+
+                <p>"We need to get back," Raymond said.</p>
+
+                <p>Ana took the tiller. Her hands were shaking. "Get the sails down."</p>
+
+                <p>Raymond dropped the main. Furled the jib. Ana started the engine. They motored back hard. Leo crying in Raymond's lap. Blood soaking through the rag they'd pressed to his leg.</p>
+
+                <p>At the dock Ana's mother was waiting. She took one look at Leo and called 911.</p>
+
+                <p>The ambulance came. They loaded Leo in. Ana went with him. Looked at Raymond once before the doors closed. He couldn't read her face.</p>
+
+                <p>He stayed with the boat. Secured it. Hosed the blood off the deck. Looked at the cleat. The holes. The sealant that should have been hard.</p>
+
+                <p>He'd rushed it. Told Ana it was ready when it wasn't. He'd been so careful to ask permission. But he hadn't been careful enough with the work.</p>
+
+                <div class="section-break">***</div>
+
+                <p>The hospital took eleven stitches. No nerve damage. No infection. Lucky.</p>
+
+                <p>Raymond came that evening. Ana was in the waiting room. Alone.</p>
+
+                <p>"How is he?"</p>
+
+                <p>"Sleeping."</p>
+
+                <p>"Can I see him?"</p>
+
+                <p>"No."</p>
+
+                <p>Raymond sat down. Ana didn't look at him.</p>
+
+                <p>"I'm sorry," he said.</p>
+
+                <p>"You said it was cured."</p>
+
+                <p>"I thought it was."</p>
+
+                <p>"But it wasn't."</p>
+
+                <p>"No."</p>
+
+                <p>She was quiet. "My father's boat failed him."</p>
+
+                <p>"I failed him. Not the boat."</p>
+
+                <p>"Same thing." She looked at him then. Her eyes were hollow. Tired. "You re-bedded that cleat. You told me it was safe. And my son got hurt."</p>
+
+                <p>"I know."</p>
+
+                <p>"On my father's boat. The one thing I have left of him. And now every time I look at it I'll see Leo bleeding."</p>
+
+                <p>Raymond didn't know what to say.</p>
+
+                <p>"I asked you not to touch the boat without permission," Ana said. "And you didn't. You asked. Every time. But you still—" She stopped. Shook her head. "You still hurt him."</p>
+
+                <p>"I didn't mean to."</p>
+
+                <p>"I know. But you did." She stood up. "Don't come back for a while."</p>
+
+                <p>"How long?"</p>
+
+                <p>"I don't know."</p>
+
+                <p>She walked away. Down the hall to Leo's room. The door closed behind her.</p>
+
+                <p>Raymond sat there. The fluorescent lights hummed. Someone coughed down the hall. A phone rang at the nurse's station.</p>
+
+                <p>He drove home. Didn't sleep. Lay in bed thinking about the cleat. The sealant. The timing. Where he'd fucked up.</p>
+
+                <p>He'd checked it at forty-eight hours. The surface had been hard. But underneath—underneath it was still soft. He should have waited longer. Should have been sure.</p>
+
+                <p>He'd been so focused on asking permission. On respecting Ana's timeline. That he'd forgotten to respect the work itself.</p>
+
+                <div class="section-break">***</div>
+
+                <p>Three weeks passed. Raymond didn't call. Didn't text. Gave Ana the space she'd asked for.</p>
+
+                <p>He went to work. Came home. Fixed things in his apartment. The leaky faucet. The loose doorknob. Small things he'd been putting off.</p>
+
+                <p>He didn't drive past Ana's house. Didn't check if the boat was still at the marina. Just waited.</p>
+
+                <p>On the twenty-second day his phone rang. Ana.</p>
+
+                <p>"Leo wants to see you," she said.</p>
+
+                <p>"Okay."</p>
+
+                <p>"Saturday. Two o'clock."</p>
+
+                <p>"I'll be there."</p>
+
+                <p>She hung up.</p>
+
+                <p>Raymond showed up at two. Knocked. Leo answered. His leg was still bandaged but he was walking okay.</p>
+
+                <p>"Hi," Leo said.</p>
+
+                <p>"Hi."</p>
+
+                <p>"Want to see my stitches?"</p>
+
+                <p>"If you want to show me."</p>
+
+                <p>Leo pulled up his pant leg. The wound was healing. Angry red but closed. "Eleven of them."</p>
+
+                <p>"That's a lot."</p>
+
+                <p>"Yeah." Leo looked up at him. "Mom said it wasn't your fault."</p>
+
+                <p>"It was."</p>
+
+                <p>"She said accidents happen."</p>
+
+                <p>"They do. But I should've been more careful."</p>
+
+                <p>Leo nodded. Serious. "Are you going to come back? To work on the boat?"</p>
+
+                <p>"I don't know. That's up to your mom."</p>
+
+                <p>"She misses you."</p>
+
+                <p>"She tell you that?"</p>
+
+                <p>"No. But she looks sad. Like when Dad left."</p>
+
+                <p>Raymond didn't know what to say to that.</p>
+
+                <p>Ana came out from the kitchen. "Leo, go watch TV."</p>
+
+                <p>"But—"</p>
+
+                <p>"Go."</p>
+
+                <p>Leo went. Ana stood there. Arms crossed.</p>
+
+                <p>"How are you?" Raymond asked.</p>
+
+                <p>"Tired."</p>
+
+                <p>"Yeah."</p>
+
+                <p>They stood there. The silence felt heavy.</p>
+
+                <p>"I pulled the boat out of the water," Ana said.</p>
+
+                <p>"Okay."</p>
+
+                <p>"It's back on blocks. In the yard."</p>
+
+                <p>"You want me to help put it back?"</p>
+
+                <p>"No. I want—" She stopped. Looked at him. "I want you to tell me the truth."</p>
+
+                <p>"About what?"</p>
+
+                <p>"About why you're here. Why you keep coming back. Because I need to know if this is just—if you're just fixing things because that's what you do. Or if it's something else."</p>
+
+                <p>Raymond thought about that. About the boat. About Ana. About Leo's drawing of the three of them standing together.</p>
+
+                <p>"I don't know how to be in someone's life," he said. "I never learned. So yeah, I fix things. Because that's what I know how to do. That's how I know how to stay."</p>
+
+                <p>"By fixing things."</p>
+
+                <p>"Yeah."</p>
+
+                <p>"What if there's nothing left to fix?"</p>
+
+                <p>"I don't know."</p>
+
+                <p>"Would you leave?"</p>
+
+                <p>He looked at her. "No."</p>
+
+                <p>"How do you know?"</p>
+
+                <p>"Because I don't want to." He paused. "I know that's not enough. I know you need more than that. But it's the truth."</p>
+
+                <p>Ana was quiet. "Leo's been asking about you every day."</p>
+
+                <p>"What do you tell him?"</p>
+
+                <p>"That you needed space. That we all did."</p>
+
+                <p>"Did we?"</p>
+
+                <p>"I don't know. Maybe." She unfolded her arms. "The boat's yours too now. You know that, right?"</p>
+
+                <p>"It's your father's."</p>
+
+                <p>"It was. But you put a year of your life into it. You bled on it. You made it float." She looked out the window at the boat in the yard. "So it's ours. If you want it to be."</p>
+
+                <p>Raymond followed her gaze. The boat sat on blocks. White hull. Blue stripe. Teak gleaming in the sun.</p>
+
+                <p>"Yeah," he said. "I want it to be."</p>
+
+                <p>"Okay." She turned back to him. "But I need you to understand something."</p>
+
+                <p>"What?"</p>
+
+                <p>"This is hard for me. Letting someone in. Trusting that you'll stay. And I'm going to fuck it up sometimes. I'm going to push you away when I shouldn't. I'm going to be scared when there's no reason to be."</p>
+
+                <p>"Okay."</p>
+
+                <p>"And you're going to fuck it up too. You're going to fix things without asking. You're going to think you know better when you don't."</p>
+
+                <p>"I know."</p>
+
+                <p>"So we're both going to be bad at this."</p>
+
+                <p>"Yeah."</p>
+
+                <p>She almost smiled. "That's not very encouraging."</p>
+
+                <p>"No."</p>
+
+                <p>"But you're still here."</p>
+
+                <p>"Yeah."</p>
+
+                <p>"Why?"</p>
+
+                <p>Because he'd spent his whole life walking away before anyone could leave him. Because Ana and Leo felt like something worth staying for. Because the boat in the backyard wasn't just wood and fiberglass anymore—it was proof that broken things could be made whole if you were patient enough. If you were willing to do the work.</p>
+
+                <p>"Because I want to be," he said.</p>
+
+                <p>Ana nodded. "Okay."</p>
+
+                <p>"Okay?"</p>
+
+                <p>"Yeah. Okay."</p>
+
+                <div class="section-break">***</div>
+
+                <p>They fixed the cleat. Pulled it out completely. Filled the holes with epoxy. Drilled new ones. Let it cure for five days. Raymond checked it every day. Ana checked it too. When they were sure, they bedded it properly. Torqued it down. Let it cure for a week.</p>
+
+                <p>The boat went back in the water in July. They were more careful this time. Checked everything twice. Tested the cleats before they raised the sails.</p>
+
+                <p>Ana sailed them out. Leo helped with the lines. Raymond sat on the rail and watched them work together. Mother and son. Learning the boat. Making it theirs.</p>
+
+                <p>They sailed past the point. Out into open water. The wind picked up. The boat heeled. Ana smiled. Leo whooped. Raymond felt the spray on his face and thought about how far they'd come.</p>
+
+                <p>Not perfect. Not fixed. Just here.</p>
+
+                <p>When they came back Ana let him take the tiller for the approach. Talked him through it. Where to aim. When to turn. He brought them in too fast. Had to reverse hard to stop. The dock bumped the hull.</p>
+
+                <p>"Everyone hits the dock sometimes," Ana said.</p>
+
+                <p>Leo laughed. "Grandpa said that."</p>
+
+                <p>"He did."</p>
+
+                <p>They secured the boat. Cleaned up. Walked to the parking lot together. Ana's hand found his. Held it. Leo ran ahead. Turned around. Grinned.</p>
+
+                <p>"Can we go again next week?"</p>
+
+                <p>"Yeah," Ana said. "We can go again next week."</p>
+
+                <p>Raymond drove home that evening. The apartment was quiet. The cabinet door closed straight. The faucet didn't leak. Everything worked.</p>
+
+                <p>He made dinner. Ate at the table instead of standing at the counter. Washed his plate. Looked out the window at the street below.</p>
+
+                <p>His phone buzzed. Ana. <em>Leo wants to know if you're coming for dinner Tuesday.</em></p>
+
+                <p>He texted back. <em>If that's okay.</em></p>
+
+                <p><em>It's okay.</em></p>
+
+                <p>He set the phone down. Sat there in the quiet. Thought about the boat. About Ana's hand in his. About Leo running ahead and turning back to make sure they were still following.</p>
+
+                <p>Witness is metabolically expensive. To see another person's terror and not look away costs something real. It burns you down to the marrow.</p>
+
+                <p>But chosen love is a different tax. It costs you the story you told yourself about being disposable. It costs you the right to leave when things get hard. It costs you the protection of not caring whether you hurt someone.</p>
+
+                <p>Raymond paid that tax now. Not heroically. Not perfectly. By showing up on Tuesday for dinner. By asking before he fixed things. By staying in the room when Ana was angry. By learning—slowly, imperfectly—that being seen was scarier than being alone, but it was also the only way forward.</p>
+
+                <p>The loneliness was still there sometimes. A shadow at the edge of the room. But it didn't live inside him anymore. It lived outside—and he had built something with Ana that kept it at bay. Not walls. Something more fragile than that. Something that required constant attention. Constant repair.</p>
+
+                <p>The boat would need work again. Things would break. Seams would open. That was the nature of boats. The nature of love too, probably.</p>
+
+                <p>But for now it floated. For now they sailed it together. For now Raymond had a place to go on Tuesday evenings. A hand to hold. A kid who smiled when he showed up.</p>
+
+                <p>That wasn't redemption. It wasn't a happy ending. It was just what was.</p>
+
+                <p>And for now, it was enough.</p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

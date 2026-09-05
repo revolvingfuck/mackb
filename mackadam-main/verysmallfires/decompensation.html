@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decompensation | Very Small Fires</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Source+Sans+Pro:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1c1c1c;
+            --text: #e5e0d5;
+            --text-muted: #7a756d;
+            --excerpt-bg: #262626;
+            --excerpt-border: #5a5650;
+            --serif: 'Playfair Display', Georgia, serif;
+            --sans: 'Source Sans Pro', -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 17px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--serif);
+            line-height: 1.75;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 44rem;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 6rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        h1 {
+            font-family: var(--serif);
+            font-size: 2.75rem;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.01em;
+        }
+
+        .subtitle {
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .metadata {
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+
+        .metadata span {
+            display: block;
+        }
+
+        .metadata .dot {
+            margin: 0.4rem 0;
+            font-size: 0.4rem;
+            line-height: 1;
+        }
+
+        /* Excerpt block */
+        .excerpt {
+            background: var(--excerpt-bg);
+            border-left: 4px solid var(--excerpt-border);
+            padding: 1.75rem 1.75rem 1.75rem 1.5rem;
+            margin: 2.5rem 0 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .excerpt p {
+            font-family: var(--serif);
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin: 0;
+        }
+
+        /* Body text */
+        article {
+            margin-top: 1.5rem;
+        }
+
+        article p {
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+        }
+
+        article em {
+            font-style: italic;
+        }
+
+        /* Section breaks */
+        .break {
+            text-align: center;
+            margin: 2.25rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 0.4em;
+        }
+
+        .break::before {
+            content: '• • •';
+        }
+
+        /* Lyrics block */
+        .lyrics {
+            font-style: italic;
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--excerpt-border);
+            color: var(--text);
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            font-family: var(--sans);
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            html {
+                font-size: 16px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                padding: 2.5rem 1.25rem 4rem;
+            }
+
+            .excerpt {
+                padding: 1.5rem 1.5rem 1.5rem 1.25rem;
+            }
+
+            .excerpt p {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Decompensation</h1>
+            <p class="subtitle">A story of spiral, survival, and the long way home</p>
+            <div class="metadata">
+                <span>Literary Fiction</span>
+                <span class="dot">•</span>
+                <span>Prince Edward Island</span>
+                <span class="dot">•</span>
+                <span>2,847 words</span>
+            </div>
+        </header>
+
+        <div class="excerpt">
+            <p>The thing about falling apart is that you're the last one to know. Everyone else has already made their assessments. They're just waiting for you to catch up.</p>
+        </div>
+
+        <article>
+            <p>I'm in a bathroom that isn't mine. This is a recurring theme. The tile is that fake marble laminate they put in buildings from the nineties, when everyone thought the future would be slightly nicer than it turned out to be. I'm looking at my hands under fluorescent light and thinking about how my grandmother used to say <em>my poor shattered nerves</em> when anything went wrong—burnt toast, a phone call from my uncle, the news. She'd press her hand to her chest and say it like a joke, but also not like a joke. I didn't understand then that she was telling us something true.</p>
+
+            <p>The face in the mirror belongs to someone who made a series of decisions. Each one logical at the time. That's the thing they don't tell you. You don't jump off the cliff. You walk down a gentle slope and at some point the ground isn't there anymore and you're already falling and have been for a while.</p>
+
+            <div class="break"></div>
+
+            <p>Three days ago or four. Time has become theoretical.</p>
+
+            <p>I was at the grocery store buying the specific brand of frozen pizza that costs $4.99 because the $3.99 kind tastes like cardboard and the $6.99 kind feels like giving up in a different direction. A woman was blocking the freezer aisle with her cart positioned diagonally, talking on her phone about someone named Derek and his <em>bullshit</em>, and I stood there for what must have been two minutes waiting for her to move because I couldn't figure out how to say <em>excuse me</em>. The words were in my head. They wouldn't come out. So I left.</p>
+
+            <p>No pizza. Just left.</p>
+
+            <p>Walked seventeen blocks in the wrong direction because my feet were moving and stopping them seemed complicated. Ended up at a bus stop where a guy was yelling at a newspaper box. Not at the newspapers inside it. At the box itself. He was calling it a liar. I sat down next to him and we didn't talk and after a while he stopped yelling and we just sat there together, two people who had ended up at the same bus stop for reasons that made sense to no one.</p>
+
+            <p>The bus came. Neither of us got on.</p>
+
+            <div class="break"></div>
+
+            <p>The clinical term is <em>decompensation</em>. I looked it up. It means the failure to generate effective psychological coping mechanisms in response to stress. Which is a very long way of saying: the machine that runs you has started eating its own parts.</p>
+
+            <div class="break"></div>
+
+            <p>When I was nineteen I worked at a mussel processing plant in Morell. Twelve hour shifts in rubber boots standing in an inch of salt water, sorting the live ones from the dead ones. You could tell by weight mostly. The dead ones felt like nothing. The live ones had a heft to them, a resistance.</p>
+
+            <p>There was a guy on my line named Donnie who'd been doing it for thirty years. His hands were like wood. He could sort four hundred pounds an hour without looking, just by feel, and he'd tell me about his ex-wife and his dog and his truck that needed a new transmission and none of it was a complaint, just information, just the way things were.</p>
+
+            <p>One day I asked him how he did it. Thirty years of the same motion.</p>
+
+            <p>He said: <em>You just keep your hands moving. Everything else sorts itself out.</em></p>
+
+            <p>I think about Donnie a lot lately. I don't think he was right, but I think about him.</p>
+
+            <div class="break"></div>
+
+            <p>There's a guy I know. Knew. Craig. He told me once that the trick to being fucked up is to stay in motion. <em>A moving target</em>, he said, <em>is harder to hit</em>. He was talking about cops, but also about everything else. About how if you stop moving then the thing behind you catches up.</p>
+
+            <p>I met Craig at a show in Gastown. Some noise band from Seattle, six people in a room that smelled like mold and beer. He had a face like a young Willem Dafoe if Willem Dafoe had been raised by wolves and then abandoned by the wolves for being too feral. We talked about Bukowski. He said Bukowski was a fraud. I said that was the point. He bought me a drink.</p>
+
+            <p>For about three months we were inseparable. Crashing at his place in Strathcona, a basement suite with no windows and a landlord who'd show up at random hours to check on <em>the pipes</em>. Craig had theories about everything. Chemtrails, no. Government surveillance, yes but not in the ways people think. He believed that late capitalism was a memetic virus that would eventually consume itself and something better would grow in the ruins. I didn't believe this but I liked listening to him talk.</p>
+
+            <p>Then one day he wasn't there. Just gone. Someone said he'd gone back to Saskatoon. Someone else said Portland. I didn't have his number because he didn't have a phone because <em>they can track you</em>, which, fair.</p>
+
+            <p>Eight months later someone told me he was dead. Fentanyl. Which doesn't prove anything about his philosophy one way or the other. He was moving right up until he wasn't.</p>
+
+            <div class="break"></div>
+
+            <p>My daughter is three thousand miles away. She's eleven. She has my nose and her mother's practicality. The last time we talked she asked me if I was okay and I said <em>yeah, buddy, I'm good</em> and she said <em>okay</em> in that way kids do when they know you're lying but haven't figured out yet that they're allowed to call you on it.</p>
+
+            <p>I keep meaning to call her. Every day I keep meaning to call her. The phone weighs nine thousand pounds.</p>
+
+            <p>When she was three she used to make me tea. Fake tea, obviously—water and leaves from the backyard, served in a plastic cup with great ceremony. I had to drink the whole thing. Those were the rules. I'd pretend it was the best tea I'd ever had and she'd beam like she'd cured cancer.</p>
+
+            <p>I don't remember when I stopped being someone who could drink pretend tea. There wasn't a day. It just happened.</p>
+
+            <div class="break"></div>
+
+            <p>The bathroom I'm in belongs to someone named Terry or Tyler. I met him outside a place that used to be a different place—a venue that's now a condo development, which is the lifecycle of everything on this coast. He has a couch and said I could crash. This is how things work now. The economy of couches.</p>
+
+            <p>Terry-or-Tyler works at a warehouse in Richmond. He leaves at 5 AM and comes back at 7 PM and we barely see each other, which is ideal. He has a cat named Chairman Meow, which is the kind of joke that tells you everything about a person. The cat likes me. This feels meaningful in a way I can't articulate.</p>
+
+            <p>I should be grateful. I am grateful. Gratitude and despair can live in the same body. They're roommates. They don't talk much.</p>
+
+            <div class="break"></div>
+
+            <p>Here's what I remember from before:</p>
+
+            <p>The smell of salt water and diesel. Red mud that got into everything, stained your clothes, your shoes, the cuffs of your jeans. My mother's quiet, which was not peaceful but pressurized, a silence that contained multitudes. She could say more by not saying anything than most people could say in a paragraph. I learned to read rooms from her. I learned to feel the weather change before it changed.</p>
+
+            <p>The light coming through the kitchen window at 6 AM in winter, which was grey, which was always grey, but a specific grey that I have never found anywhere else. A grey that felt like wool. A grey that meant something.</p>
+
+            <p>The small jet out of Charlottetown. I took it to Montreal when I was twenty-two. Eight passengers, propellers, the pilot visible through the open cockpit door. It felt like being shot out of a cannon. Below me the island got smaller and smaller until it was just a shape, just geography, and I thought <em>I will become someone else now</em>. As if distance were alchemy. As if you could leave yourself behind like luggage.</p>
+
+            <p>In Montreal I lasted four months. I don't remember much of it. A girl named Sylvie who worked at a dep and taught me swear words in joual. A basement apartment near Jean-Talon where the ceiling leaked when it rained. The feeling of being very far from anything familiar and discovering that I was still myself, that the self travels with you, that there is no outrunning the thing behind you because the thing behind you is you.</p>
+
+            <div class="break"></div>
+
+            <p>The thing about Vancouver is that it's beautiful in a way that feels like a personal insult. Mountains. Water. Glass towers full of empty condos owned by money that lives somewhere else. It's like living inside an advertisement for something you can't afford. The seawall gleams. The mountains gleam. Everything gleams while people rot in doorways and everyone walks past like this is normal because it is normal now, normal is a moving target, normal will adjust to accommodate almost anything.</p>
+
+            <p>I came here to be an artist. Whatever that means. To make things. Games, music, words. I came here because the island was small and I was small on it and I thought if I went somewhere bigger I would expand to fit the space.</p>
+
+            <p>This is not what happened.</p>
+
+            <div class="break"></div>
+
+            <p>Last year I was living with a woman named Brianna. This is not a love story. She was someone I met through someone, and she needed a roommate, and I needed a room, and for a while it worked the way those things sometimes work. Parallel lives intersecting at the kitchen and the bathroom and nowhere else.</p>
+
+            <p>Then things went wrong the way things go wrong. I won't inventory it. What matters is that when I moved out, about two thousand dollars worth of my stuff moved out too, except not with me. Equipment. Instruments. Things that had taken years to accumulate.</p>
+
+            <p>I reported it. Nothing happened. Nothing ever happens. This is something you learn. The systems that are supposed to protect you are decorative, like the locks on bathroom doors, like the safety instructions on airplanes. They exist to make you feel like someone is in charge.</p>
+
+            <div class="break"></div>
+
+            <p>Two weeks ago I had a room. Then I didn't. The details are boring. Money is boring. The absence of money is boring in a different way—it's a constant low hum, like tinnitus, like a refrigerator in another room that you can't turn off and can't locate. What matters is the math: I had a thing and then subtraction occurred and now I'm in Terry-or-Tyler's bathroom at 3 AM writing in a notebook because if I stop moving the thing behind me catches up.</p>
+
+            <div class="break"></div>
+
+            <p>I called a number today. A health line. A nurse asked me questions from a script and I answered them and at the end she said <em>it sounds like you could benefit from some support</em> which is the healthcare version of <em>holy shit, dude</em>.</p>
+
+            <p>She gave me another number. Vancouver Coastal Health, Access and Assessment. I wrote it on my hand. It's still there, smudged but legible. I keep looking at it. The digits. The idea of something.</p>
+
+            <p>I haven't called it yet.</p>
+
+            <div class="break"></div>
+
+            <p>The summer I was sixteen I worked construction with my mother's brother, Uncle Danny. He was not a kind man but he was fair, which is different and sometimes better. He paid me twelve dollars an hour under the table and worked me until I couldn't lift my arms.</p>
+
+            <p>One day we were tearing the roof off a house in Summerside. July, thirty-two degrees, the shingles soft with heat. I was hauling debris to the truck and I stopped. Just stopped. Stood there with a piece of plywood in my hands and couldn't remember what I was supposed to do with it.</p>
+
+            <p>Danny came over. He didn't yell. He took the plywood out of my hands and said: <em>Go sit in the truck. Drink some water. Don't come back until you know where you are.</em></p>
+
+            <p>I sat in the truck for an hour. The radio was playing something by Tom Petty. I drank a bottle of water that was so hot it was almost tea. Eventually I knew where I was again and I went back to work and Danny never mentioned it.</p>
+
+            <p>I think about that a lot. <em>Don't come back until you know where you are.</em> Like it's a place you can locate. Like there's a map.</p>
+
+            <div class="break"></div>
+
+            <p>There's a song I wrote once. This was years ago, back when I still played shows. It was called <em>Room 175</em> and it was about a motel in Borden where I spent a week when I was twenty, for reasons I won't get into. The song wasn't good. None of my songs were good in the way that means people want to hear them. They were good in the way that means they were true, which is a different currency, which does not spend.</p>
+
+            <p>The chorus went:</p>
+
+            <div class="lyrics">
+                I've got thirty bucks but I don't know what to do<br>
+                I'm hungry but I want to get high<br>
+                I've got imbalances I suppose. Who actually knows?<br>
+                I want to enjoy life but I also want to fucking die<br>
+            </div>
+
+            <p>I played it once at an open mic and afterward a woman came up to me and said: <em>That was really sad</em>. Not as a compliment. As a diagnosis.</p>
+
+            <p>I stopped playing shows after that. Not because of her. She was just the last thing.</p>
+
+            <div class="break"></div>
+
+            <p>Here's what I know:</p>
+
+            <p>The body wants to live. Even when the mind is tired. Even when the math doesn't work. There's something stubborn in the meat of you, some dumb animal persistence that keeps breathing, keeps the blood moving, keeps waking you up in bathrooms that aren't yours at 3 AM with a pen in your hand and something to say.</p>
+
+            <p>I don't know if that's hope. It might just be biology. Mitochondria don't read the news. Cells divide because that's what cells do.</p>
+
+            <div class="break"></div>
+
+            <p>My grandmother died in 2003. Lung cancer, which was not a surprise to anyone because she smoked like it was a competitive sport. At the end she weighed about eighty pounds. I went to see her in the hospital and she looked at me and said: <em>My poor shattered nerves</em>, and then she laughed, and then she coughed for a long time, and then she said: <em>Get out of here. You've got things to do.</em></p>
+
+            <p>I didn't, really. But I left anyway. That was the last time I saw her.</p>
+
+            <div class="break"></div>
+
+            <p>The sun will come up in a few hours. I know this because the light is changing, going from black to that particular grey that means something is coming. The number is still on my hand. The phone is still heavy.</p>
+
+            <p>Chairman Meow is scratching at the bathroom door. He wants in or he wants me out. It's hard to know with cats. They don't explain themselves.</p>
+
+            <p>I'm going to open the door. That's the next thing. That's as far as I can see.</p>
+
+            <div class="break"></div>
+
+            <p>Somewhere a small jet is leaving Charlottetown. Eight passengers, propellers, the pilot visible through the open cockpit door. Some kid is looking out the window watching the island get smaller, thinking <em>I will become someone else now</em>.</p>
+
+            <p>They won't.</p>
+
+            <p>But they'll become something. That's what happens. You don't get to choose the shape. You just keep moving and the shape reveals itself, and one day you look down and there you are.</p>
+
+            <p>There you are.</p>
+
+        </article>
+
+        <footer>
+            Very Small Fires
+        </footer>
+    </div>
+</body>
+</html>w

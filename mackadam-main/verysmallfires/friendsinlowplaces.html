@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends in Low Places | Very Small Fires</title>
+    <meta name="description" content="Friends in Low Places, an autobiographical essay by Brian Mack about friendship, survival, and the people who show up.">
+    <meta name="author" content="Brian Mack">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#1a1a1a">
+    <link rel="icon" type="image/png" href="fires.png">
+    <link rel="apple-touch-icon" href="fires.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e8e8e8;
+            line-height: 1.8;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('fires.png');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            mix-blend-mode: luminosity;
+            opacity: 0.1;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+
+        .story-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #e8e8e8 25%, #cccccc 50%, #b8b8b8 75%, #999999 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .story-subtitle {
+            color: #aaaaaa;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        .story-content {
+            background: rgba(40, 40, 40, 0.6);
+            padding: 60px 40px;
+            border-radius: 15px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .story-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .story-text {
+            font-size: 1.1rem;
+        }
+
+        .story-text h2 {
+            color: #ffd580;
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin: 0 0 1.5rem;
+        }
+
+        .story-text h2:not(:first-child) {
+            margin-top: 3.5rem;
+        }
+
+        .story-text p {
+            margin-bottom: 1.5em;
+        }
+
+        .story-text p:last-child {
+            margin-bottom: 0;
+            font-style: italic;
+            font-size: 1.05rem;
+            text-align: center;
+            margin-top: 2em;
+            padding-top: 2em;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .navigation {
+            text-align: center;
+            padding: 10px 0 60px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin: 0 6px 10px;
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .story-content {
+                padding: 40px 25px;
+            }
+
+            .story-text {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="story-title">Friends in Low Places</h1>
+            <p class="story-subtitle">Two portraits of friendship, survival, and the people who show up</p>
+        </header>
+        <main class="story-content">
+            <div class="story-text">
+                <h2>I. The North Mountain</h2>
+                <p>I met him in the jail. Short, round, a goatee that didn't suit his face, reading glasses low on his nose. None of it should have worked. It worked anyway. He didn't wait to be given the room. He walked into it already owning it, and everybody else just quietly rearranged themselves around the fact.</p>
+                <p>He noticed me the first day. Started making fun of me right away, which was how you knew he'd decided I was worth keeping. Wednesday nights we went to the chapel together, folding chairs, bad fluorescent light, and that's where he told me what a pit praiser was. Somebody who only prays once they're already falling.</p>
+                <p>He had a machine for his sleep apnea, and I put it together for him every night because he couldn't be bothered to. The hose went from the machine to a mask that sat over his nose, and if he put it on backward or didn't fill the water chamber or just forgot to plug the thing in, he'd sleep right through it and wake up feeling like he'd been drowning all night and never once made the connection. He liked to eat the same way he liked everything else, more invention than sense. The virgin hot dog, he called it, just bread folded around ketchup and mustard with nothing between them. Peanut butter on white with a layer of ketchup under it, and he'd eat it slow, like it was something worth savoring. Doritos crushed straight into the ramen, not the broth watered down, the noodles still dry-ish, so you got crunch and salt in the same bite. He was proud of that one specifically. Called it his own invention, though I'd bet money on somebody's mother inventing it forty years before him.</p>
+                <p>He told me once, mid-story, no particular reason, about a man twice his age whose wife he'd taken, fresh out of college, young enough that he still thought it was a conquest instead of a cruelty. Told it laughing, the whole thing, like the man's face when he found out was the punchline rather than the injury. It was the only story he ever told me where I didn't laugh along, and he noticed, and he didn't tell it again.</p>
+                <p>Before any of it, he'd been headed somewhere real. Taekwondo, Olympic carded, the kind of talent that gets noticed young and gets protected by people who see money in it. He drank his way out of it instead, slowly at first and then all at once, missed the trials that would have put him on a plane to a stage most people never get near, and never once, in all the time I knew him, said it out loud as a loss. I only knew because somebody else told me. He talked about the sport like a hobby he'd tried once.</p>
+                <p>He grew up with none of it easy. Told me about getting off the school bus in the fall, still in his good clothes from the morning, and going straight into somebody's turnip field for five dollars a week, hands raw by October, the other kids from the bus already home by the time he'd finished a single row. He didn't tell that story for sympathy. He told it flat, like a fact you were supposed to already know, and changed the subject before I could say anything back.</p>
+                <p>Outside those walls, none of what I'm about to tell you had happened yet. In here, he was a tutor. A nurse. He taught me how to fight properly, taught me CrossFit before I knew what to call it. He was in and out three times over the four hundred and forty four days I did that stretch, and every time he came back through that door, I was glad, because I already understood this version of him wasn't the only one that existed.</p>
+                <p>I found out what the other version looked like later. Drinking became the whole shape of him. I hid upstairs in a shelter once when he came looking, because I couldn't watch him help himself to somebody else's kitchen, soup straight from the can, another bowl warming in the microwave, four raw hot dogs shoved in his back pocket like he'd forgotten what a plate was for. I saw him suplex a man onto a picnic table in a park once, for no reason anybody could name.</p>
+                <p>He got an apartment in Summerside eventually. Asked me to come watch UFC with him in December. I never answered. I was still too ashamed of what I'd seen to sit in a room with him again.</p>
+                <p>He died alone, drunk, and it took him the ugly way. The last thing he ever told a cop, caught drinking on probation, was a name that wasn't his. Stephen Doherty. From the North Mountain.</p>
+
+                <h2>II. The Ones Who Show Up</h2>
+                <p>There was a stretch, years back, where I had nothing lined up and no way through the month, and I hadn't told him, because I don't ask. He found out anyway, the way he found out everything, without ever admitting how. He didn't call it help. He called it offloading. Said he had a spare key burning a hole in his pocket, said the truck needed emptying before he could get groceries, and by the time I understood what he was actually doing, I was already living in the room. He never brought it up again. Not once, not when I paid him back, not ever.</p>
+                <p>He taught me the rest of what I know the same way, sideways, like it was incidental to something else he was already doing. Scott taught with his fists, in a room the size of a closet. Anicet taught the same way, just with a keyboard instead of knuckles, patient about that and about nothing else in his life.</p>
+                <p>He had a bird, Percy, a green thing with an opinion about everyone who walked in the door. Percy liked me, which meant Percy would fly straight to my shoulder the second I sat down and work his way down into my shirt pocket like he owned it, and half the time he did, because half the time he'd already used it as a toilet before I noticed. I complained about that bird constantly. I still miss the weight of him.</p>
+                <p>Anicet could talk his way out of anything official-looking. Tenancy boards, parking tickets, a bylaw complaint from a neighbor who'd clearly never met him - he'd walk in with nothing but a folder of paper he'd assembled at the last minute and walk out having gotten exactly what he came for, some clerk on the other side of the desk laughing along with him by the end like they'd been friends for years. I watched him beat a landlord out of a full deposit once with nothing but a calm voice and a willingness to sit in that office until closing. He never once raised it as a threat. He just made staying difficult enough that people gave in to make him leave.</p>
+                <p>He had a health thing that started small, the kind of thing you're supposed to get looked at and don't, and he didn't, for a long time, longer than made any sense. I brought it up more than once. He waved it off every time, told me I worried like an old woman, told me he'd get to it, and never did, and there was a particular flash of something in his face whenever I pushed, not quite anger, more like the look of a man who'd rather lose a little time than admit a body could get the better of him.</p>
+                <p>The one thing that actually slowed him down, in the years I knew him, was Asher. Asher was patient in a way that made Anicet's angles look exhausting by comparison, Jewish, dutiful to a fault, the kind of person who showed up to things ten minutes early and stayed until everything was actually done. Something in Anicet went quieter once Asher was around. He stopped needing to work every room for what he could get out of it, because there was finally one room where somebody gave him things without being maneuvered into it first.</p>
+                <p>The call came on a Tuesday, close to two in the morning, and it was Asher's voice on the line, careful in the specific way people get trained to be careful, telling me an address. I don't remember choosing to drive. I remember the hallway lighting, that flat institutional white, and I remember standing under it thinking about another hallway, another call, years before, that had ended with a name that wasn't even his own.</p>
+                <p>He was sitting up when I found the room, mid-argument with a nurse over a tray of eggs he insisted had gone cold in the four minutes since they'd set them down, already negotiating for an early discharge like the whole night had been a scheduling inconvenience. Asher was in the chair beside the bed, hadn't left it, looked like he hadn't left it in hours. Anicet looked at me like he was surprised I'd come, then covered the surprise with a complaint about the coffee, because admitting he was glad wasn't a language he'd ever bothered learning either.</p>
+                <p>He finished the software eventually. Somebody else sat beside him for the last of it, wrote the final lines, stood there when it shipped. I wasn't in that room. I'd already given what I had to give, back at that kitchen table, back in that hallway, and I've made my peace with the fact that some things get finished without you and it doesn't mean what you gave stopped counting.</p>
+                <p>I think about the two of them sometimes, side by side, though they never met. Scott could get anybody to do anything for him and never once had to ask straight, and it looked effortless right up until the day it looked like a man alone with four hot dogs in his back pocket and no one left to charm. Anicet gets what he needs the same way, through angles, through everything but the direct ask, except somewhere along the way he found the one person he didn't have to work an angle on at all, and it changed the shape of him. Some nights I still don't know if I'm watching the same story again from a different seat, or if that difference is the only thing that matters - that one of them, when the floor gave out, had somebody already sitting in the chair.</p>
+            </div>
+        </main>
+        <nav class="navigation">
+            <a href="index.html" class="nav-link">&larr; Back to Stories</a>
+            <a href="otherwritings.html" class="nav-link">Other Writings</a>
+        </nav>
+    </div>
+</body>
+</html>

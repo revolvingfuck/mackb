@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinderblock Gospel | Very Small Fires</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('cinder.png');
+            background-position: left bottom;
+            background-repeat: no-repeat;
+            background-size: contain;
+            mix-blend-mode: luminosity;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Atmospheric background effects */
+        .background-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(70, 70, 70, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(50, 50, 50, 0.1) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+            z-index: 1;
+            animation: atmosphericShift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes atmosphericShift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-10px, -5px) scale(1.02); }
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0;
+            position: relative;
+        }
+
+        .story-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffffff, #cccccc, #999999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .story-subtitle {
+            font-size: 1.1rem;
+            color: #aaaaaa;
+            font-style: italic;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        .story-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 0.9rem;
+            color: #888888;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+
+        .story-content {
+            background: rgba(40, 40, 40, 0.6);
+            padding: 60px 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.2s forwards;
+        }
+
+        .story-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        .story-text p {
+            margin-bottom: 1.5em;
+            text-indent: 0;
+        }
+
+        .story-text p:first-child {
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-indent: 0;
+            margin-bottom: 2em;
+            padding-left: 20px;
+            border-left: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .story-text p:last-child {
+            margin-bottom: 0;
+            font-style: italic;
+            font-size: 1.05rem;
+            text-align: center;
+            text-indent: 0;
+            margin-top: 2em;
+            padding-top: 2em;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .navigation {
+            text-align: center;
+            padding: 30px 0 60px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.5s forwards;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Reading experience enhancements */
+        .story-text::selection {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .story-content {
+                padding: 40px 25px;
+                margin-bottom: 40px;
+            }
+            
+            .story-meta {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .story-text {
+                font-size: 1.05rem;
+            }
+            
+            .story-text p {
+                margin-bottom: 1.3em;
+            }
+        }
+
+        /* Subtle scroll animations */
+        @media (prefers-reduced-motion: no-preference) {
+            .story-content {
+                animation: fadeInUp 1s ease-out 1.2s forwards, breathe 8s ease-in-out infinite;
+            }
+
+            @keyframes breathe {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-2px); }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-texture"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="story-title">Cinderblock Gospel</h1>
+            <p class="story-subtitle">A story of institutional violence and willful blindness</p>
+            <div class="story-meta">
+                <span>Literary Fiction</span>
+                <span>•</span>
+                <span>Dorchester Penitentiary, 1994</span>
+                <span>•</span>
+                <span>957 words</span>
+            </div>
+        </header>
+
+        <main class="story-content">
+            <div class="story-text">
+                <p>They killed him in the showers. That's the whole story. The rest is the margins.</p>
+
+                <p>Dorchester, 1994. February. The cold came through the concrete and stayed in it — the pipes, the men, the walls, all of it brittle. We told ourselves we ran a prison. We ran a warehouse and kept the heat low.</p>
+
+                <p>The chaplain told me Tommy asked for last rites that morning. Morrison. Not a priest, just a man with a Bible and a provincial cheque. He was the only one who talked to Tommy, really talked, Thursdays in the chapel that was also a storage room.</p>
+
+                <p>Tommy Burneaux was forty-three. Acadian, from down around Yarmouth. Thin, grey before his time, with a cough you could hear across the block at night. He read paperback westerns off the library cart and kept to himself and never asked anyone for anything.</p>
+
+                <p>He was in for rape. Eighteen months of a five-year bid. The men knew what he was in for — word travels in there. He never asked for protection and Morrison asked for him.</p>
+
+                <p>Morrison went to the warden. Wallace had run three institutions before this one. He shrugged and said pedophiles have to learn to take care of themselves. Tommy's conviction was for a grown woman, not a child. I said so. Wallace shrugged again. To him it was one thing.</p>
+
+                <p>Morrison told me about the rest of it. Foster homes in three provinces. A grandfather sent to the Shubenacadie school as a boy. Nobody had touched Tommy that way, Morrison said. It was the other kind, the kind that teaches you what you're worth. By sixteen he was drinking and fighting. By twenty he was in and out for assault and theft, and every stretch made him surer the system had him right.</p>
+
+                <p>The woman was Sarah McKinnon. A waitress at a truck stop outside Moncton. Tommy had been drinking three days and sleeping in his car and he followed her to the lot after her shift. She fought and got away and called the police. He didn't run. He sat in the car and waited for them, and he pled guilty at the first chance and asked the judge to tell her he was sorry. Morrison said Tommy could give you every detail of that night. Not proud. Flat. The way you say a thing you've said to yourself a thousand times.</p>
+
+                <p>The threats got specific that winter. Names, dates, notes under his door with stick figures on them. Coffee knocked out of his hands. Soap gone from his cell. I saw it. We all saw it.</p>
+
+                <p>Morrison went to him again about custody. Tommy shook his head and said they'd get him anyway. He said it might as well be now. In their last session he talked about Sarah. He wondered if she still worked the truck stop. He hoped she slept better than he did. He said his dying wouldn't undo it, but maybe it closed something for her. That was all.</p>
+
+                <p>It was a Tuesday. Minus twenty. Three of them cornered him in the shower block on the morning rotation — Johnson, Leblanc, MacPherson, all in for violence, all looking to move up.</p>
+
+                <p>I was on that morning. I heard it start and told myself it was a scuffle and took my time.</p>
+
+                <p>By the time I got there he was on the floor. Blood in the soap scum and in the rust off the old pipes. He was still breathing. He looked up at me and didn't point at anyone and didn't ask for help. He looked at me the way a man looks when he's carried something a long way and is glad to set it down.</p>
+
+                <p>The ambulance took forty-five minutes. Winter roads. He died before Halifax and was probably gone before they had him in the truck.</p>
+
+                <p>The investigation ran a week. The three of them said they were nowhere near it. No one came forward. The cameras had been broken for months. Death by misadventure. Assailants unknown.</p>
+
+                <p>They sent his things to Yarmouth and the address came back. Nobody claimed him. The county put him in Fairview with the indigent graves. The marker was a metal plate. It said T. Burneaux and the date. I drove down on my day off, three hours through blowing snow. His grave was in the back where they put the ones nobody comes for, and the plate had already started to rust.</p>
+
+                <p>Morrison left six months later. He took work with the Salvation Army in Sydney, with the addicts. He said he couldn't keep pretending it was about justice.</p>
+
+                <p>I stayed eight more years. I walked past the showers every day, past the chapel, past the cells. I told myself I was doing my job and that you can't save everyone. But he wasn't beyond helping. Beyond saving, maybe. Not beyond helping.</p>
+
+                <p>He raped a woman named Sarah McKinnon. That's true. He was a boy nobody wanted first. That's true too. Both of them sat in the same man and nobody in that place could hold them at once. Neither could I.</p>
+
+                <p>I retired in 2002. I live outside Antigonish now, close enough to hear the water at night. I go down to it sometimes and think about the men I watched go through. Some earned what they got. Some didn't. Most were somewhere I couldn't name. I don't sleep the way I used to. Not since ninety-four.</p>
+
+                <p>I remember the westerns. The cough. The cold he never complained about. I remember he was somebody's grandson.</p>
+
+                <p>They killed him in the showers on a February morning in 1994. I helped. I stayed quiet and took my time and looked away.</p>
+
+                <p>That's the whole story. The rest is the margins.</p>
+            </div>
+        </main>
+
+        <nav class="navigation">
+            <a href="index.html" class="nav-link">← Back to Stories</a>
+        </nav>
+    </div>
+</body>
+</html>

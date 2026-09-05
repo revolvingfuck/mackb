@@ -1,0 +1,580 @@
+/* Brand faces, sitting alongside this file at the repo root. Served over HTTP;
+   loading the page from file:// blocks these as cross-origin and silently
+   falls back to the system stack. */
+@font-face {
+    font-family: 'Bastliga One';
+    src: url('bastliga-one.regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Interwoven HS';
+    src: url('interwoven-hs.regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Covers first paint until preloader.js has both brand fonts and the marble
+   statue. Same z-index family as the brand mark below, just on top of it —
+   see .content for why 10 is where this stack starts. */
+#preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000000;
+    transition: opacity 0.6s ease;
+}
+
+#preloader.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.preloader-ripple {
+    position: relative;
+    width: 56px;
+    height: 56px;
+}
+
+/* Three rings on a staggered delay read as one ripple expanding outward
+   rather than three separate pulses, the way a drop into still water does. */
+.preloader-ripple span {
+    position: absolute;
+    inset: 0;
+    border: 1px solid #ffffff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: preloader-ripple 2.4s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+
+.preloader-ripple span:nth-child(2) { animation-delay: 0.8s; }
+.preloader-ripple span:nth-child(3) { animation-delay: 1.6s; }
+
+@keyframes preloader-ripple {
+    0%   { transform: scale(0.15); opacity: 0; }
+    12%  { opacity: 0.85; }
+    100% { transform: scale(1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .preloader-ripple span {
+        animation: none;
+        opacity: 0.6;
+        transform: scale(0.6);
+    }
+}
+
+/* The sea sits behind everything. #three-container above it is alpha:true and
+   clears to transparent, so the site's own scene composites straight over. */
+#sea-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    /* The backdrop is scenery, never a target. Without this the canvas eats
+       clicks anywhere the nav and the panels above it do not cover. */
+    pointer-events: none;
+}
+
+#sea-container canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#three-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#three-container canvas {
+    display: block;
+}
+
+/* Full-viewport wrapper rather than a translateX(-50%) centring trick: the
+   slide keyframes below overwrite `transform`, so any resting transform here
+   would be dropped the instant an animation starts and the mark would jump.
+   Any resting offset therefore comes from padding instead. */
+.content {
+    --lockup-size: clamp(3rem, 8.5vw, 7rem);
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 16vh;   /* holds the block above the middle */
+    z-index: 10;
+    pointer-events: none;   /* the sea and its canvas stay untouched */
+}
+
+.brand-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--lockup-size) * 0.16);
+}
+
+.brand-lockup {
+    display: flex;
+    align-items: center;
+}
+
+/* Nav and social row. These are HTML rather than three.js billboards so they
+   line up exactly under the mark at any viewport size. */
+.brand-nav {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--lockup-size) * 0.26);
+    pointer-events: auto;
+}
+
+.nav-link {
+    background: none;
+    border: 0;
+    padding: 0.2em 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: calc(var(--lockup-size) * 0.17);
+    letter-spacing: 0.14em;
+    color: #ffffff;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+    opacity: 0.65;
+}
+
+.nav-social {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--lockup-size) * 0.14);
+    margin-left: calc(var(--lockup-size) * 0.20);
+}
+
+.social-dot {
+    width: calc(var(--lockup-size) * 0.28);
+    height: calc(var(--lockup-size) * 0.28);
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.social-dot:hover {
+    transform: scale(1.12);
+}
+
+.social-dot img {
+    width: 66%;
+    height: 66%;
+    display: block;
+}
+
+/* Interwoven HS ships an ampersand with a reserved advance but no outline at
+   all, so '&' comes out as a gap. Borrow one from a geometric fallback. */
+.amp {
+    font-family: 'Century Gothic', 'Futura', 'Avenir Next', 'Trebuchet MS', sans-serif;
+    font-size: 0.92em;
+}
+
+/* Bastliga One is a script face with a deep descender (-0.65em), so it needs
+   more line box than its cap height suggests or the tail of the 'B' clips. */
+.main-name {
+    font-family: 'Bastliga One', Georgia, serif;
+    font-size: var(--lockup-size);
+    font-weight: 400;
+    line-height: 1.25;
+    color: #ffffff;
+}
+
+/* The rule is this element's left border, so it spans exactly the two lines.
+   Both gaps are in the tagline's own em, so they track its size. */
+.tagline {
+    font-family: 'Interwoven HS', 'Calibri', sans-serif;
+    font-size: calc(var(--lockup-size) * 0.26);
+    font-weight: 400;
+    line-height: 1.15;
+    color: #ffffff;
+    text-align: left;
+    margin-left: 0.9em;
+    padding-left: 0.9em;
+    padding-block: 0.15em;
+    border-left: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+
+.footer-text {
+    font-family: Arial, sans-serif;
+    font-size: 0.8rem;
+    color: #ffffff;
+    margin-top: 2rem;
+}
+
+.header-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+}
+
+/* Resume Content Container */
+#resume-content-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    overflow-y: auto;
+}
+
+#resume-content-container.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Slide off left animation */
+@keyframes slideOffLeft {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-150vw);
+        opacity: 0;
+    }
+}
+
+.sliding-left {
+    animation: slideOffLeft 1s ease-in-out forwards;
+}
+
+/* Slide off right animation */
+@keyframes slideOffRight {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(150vw);
+        opacity: 0;
+    }
+}
+
+.sliding-right {
+    animation: slideOffRight 0.8s ease-in-out forwards;
+}
+
+/* Slide in from left animation */
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-150vw);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.sliding-in-left {
+    animation: slideInFromLeft 1s ease-in-out forwards;
+}
+
+/* The DEMOS transition: the whole brand block lifts straight up and off, then
+   settles back down from above on the way home. -140vh clears the viewport
+   wherever the block is sitting, and #center-logo is fixed/inset:0 so there is
+   no layout underneath to disturb. */
+@keyframes riseOffScreen {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-140vh);
+        opacity: 0;
+    }
+}
+
+.rising-up {
+    animation: riseOffScreen 0.9s cubic-bezier(0.6, 0.02, 0.9, 0.35) forwards;
+}
+
+@keyframes settleFromAbove {
+    0% {
+        transform: translateY(-140vh);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.settling-down {
+    animation: settleFromAbove 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+
+/* --- Works panel ---
+   works.html injected in place rather than navigated to, so the sea and the
+   rise/settle transition survive. Full-viewport and inset:0 on purpose: the
+   injected markup is full of position:fixed pieces (its nav, its content
+   viewer) and this element's transform makes it their containing block, so
+   the box has to match the viewport for them to land where works.css means. */
+#works-content-container {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-110vw);
+    /* set here rather than on body: works.css puts Inter on body, which this
+       page does not want, and the panel's own text must not inherit the
+       site's Courier New instead */
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+}
+
+#works-content-container.active {
+    visibility: visible;
+    pointer-events: auto;
+    animation: worksSlideIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+#works-content-container.leaving {
+    visibility: visible;
+    pointer-events: none;
+    animation: worksSlideOut 0.6s cubic-bezier(0.6, 0.02, 0.9, 0.35) forwards;
+}
+
+@keyframes worksSlideIn {
+    0% {
+        transform: translateX(-110vw);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes worksSlideOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-110vw);
+        opacity: 0;
+    }
+}
+
+
+/* --- Demos gallery --- */
+
+/* z-index 50 slots between .content (10) and #resume-content-container (100).
+   pointer-events only come alive with .active so the sea stays interactive
+   while the gallery is closed; the delayed visibility keeps the closed
+   gallery out of the tab order without cutting the fade short. */
+.demos-gallery {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6vh 4vw;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+    overflow-y: auto;       /* body is overflow:hidden */
+}
+
+.demos-gallery.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.5s ease, visibility 0s;
+}
+
+.demos-back {
+    position: absolute;
+    top: 4vh;
+    right: 5vw;
+    background: none;
+    border: 0;
+    padding: 0.2em 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.14em;
+    color: #ffffff;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.demos-back:hover,
+.demos-back:focus-visible {
+    opacity: 0.65;
+}
+
+.demos-rail {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(1rem, 2.5vw, 2.25rem);
+    max-width: 1400px;
+}
+
+/* The resting offset matters: without it every cover would paint at its final
+   spot for a frame before its staggered animation-delay elapses. */
+.demo-card {
+    width: clamp(150px, 19vw, 290px);
+    aspect-ratio: 1;
+    display: block;
+    text-decoration: none;
+    transform: translateX(115vw);
+    opacity: 0;
+}
+
+@keyframes coverSlideIn {
+    0% {
+        transform: translateX(115vw);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.demos-gallery.active .demo-card {
+    animation: coverSlideIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: calc(var(--i) * 0.13s);
+}
+
+/* Hover lives on the inner element on purpose. The slide above finishes with
+   animation-fill-mode:forwards, which pins `transform` on .demo-card, so a
+   hover transform on that same element would never apply. */
+.demo-shot {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.demo-card:hover .demo-shot,
+.demo-card:focus-visible .demo-shot {
+    transform: translateY(-10px) scale(1.04);
+    box-shadow: 0 20px 46px rgba(0, 0, 0, 0.7);
+}
+
+.demo-card:focus-visible {
+    outline: none;
+}
+
+.demo-card:focus-visible .demo-shot {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}
+
+/* The covers are square-ish but not uniform (1254x1254, 1324x1188, 607x555),
+   so cover-fit them into the square card. */
+.demo-shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .content {
+        --lockup-size: clamp(2.1rem, 11vw, 3.2rem);
+        padding-bottom: 12vh;
+    }
+
+    /* the nav row cannot hold one line at this width, so let it wrap */
+    .brand-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: calc(var(--lockup-size) * 0.22);
+    }
+
+    .nav-social {
+        margin-left: 0;
+    }
+
+    .header-line {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    /* four covers tile 2x2 rather than shrinking to a single unreadable row */
+    .demos-rail {
+        gap: 0.9rem;
+    }
+
+    .demo-card {
+        width: calc(50% - 0.75rem);
+    }
+
+    .demos-back {
+        top: 2.5vh;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rising-up,
+    .settling-down,
+    .demos-gallery.active .demo-card {
+        animation-duration: 0.01s;
+        animation-delay: 0s;
+    }
+}

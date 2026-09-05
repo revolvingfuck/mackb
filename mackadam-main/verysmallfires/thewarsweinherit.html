@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wars We Inherit | Very Small Fires</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('mountain.png');
+            background-position: left bottom;
+            background-repeat: no-repeat;
+            background-size: contain;
+            mix-blend-mode: luminosity;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .background-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(70, 70, 70, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(50, 50, 50, 0.1) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+            z-index: 1;
+            animation: atmosphericShift 20s ease-in-out infinite alternate;
+        }
+        @keyframes atmosphericShift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-10px, -5px) scale(1.02); }
+        }
+        header {
+            text-align: center;
+            padding: 60px 0;
+            position: relative;
+        }
+        .story-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffffff, #cccccc, #999999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+        .story-subtitle {
+            font-size: 1.1rem;
+            color: #aaaaaa;
+            font-style: italic;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+        .story-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 0.9rem;
+            color: #888888;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+        .story-content {
+            background: rgba(40, 40, 40, 0.6);
+            padding: 60px 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.2s forwards;
+        }
+        .story-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: left;
+        }
+        .story-text p {
+            margin-bottom: 1.5em;
+            text-indent: 0;
+        }
+        .story-text p:first-child {
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-indent: 0;
+            margin-bottom: 2em;
+            padding-left: 20px;
+            border-left: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        .story-text p:last-child {
+            margin-bottom: 0;
+            font-style: italic;
+            font-size: 1.05rem;
+            text-align: center;
+            text-indent: 0;
+            margin-top: 2em;
+            padding-top: 2em;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .navigation {
+            text-align: center;
+            padding: 30px 0 60px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.5s forwards;
+        }
+        .nav-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            .story-content {
+                padding: 40px 25px;
+                margin-bottom: 40px;
+            }
+            .story-meta {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .story-text {
+                font-size: 1.05rem;
+            }
+            .story-text p {
+                margin-bottom: 1.3em;
+            }
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .story-content {
+                animation: fadeInUp 1s ease-out 1.2s forwards, breathe 8s ease-in-out infinite;
+            }
+            @keyframes breathe {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-2px); }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-texture"></div>
+    <div class="container">
+        <header>
+            <h1 class="story-title">The Wars We Inherit</h1>
+            <p class="story-subtitle">An essay on Canadian identity and War.</p>
+            <div class="story-meta">
+                <span>Essay</span>
+                <span>•</span>
+                <span>Canadian Identity</span>
+                <span>•</span>
+                <span>1,951 words</span>
+            </div>
+        </header>
+        <main class="story-content">
+            <div class="story-text">
+                <h2>The Wars We Inherit</h2>
+                <p>I watched them die again last night. Canadians, barely old enough to shave, hurling themselves into the German wire at Passchendaele. The YouTube narrator spoke with that practiced enthusiasm about our "fierce reputation," how German intelligence warned their troops about the Canadians—<em>sturmabteilung</em> they called us, storm troops. Elite. Vicious. Men who took no prisoners because they couldn't afford to.</p>
+
+                <p>The tears came without permission. Watching those grainy films of the 43rd Battalion advancing through mud that had been men the day before, I felt something crack open. Pride, yes, but the kind that leaves you hollow after. Like grief for a country that might have been.</p>
+
+                <p>Who the hell are we now?</p>
+
+                <p>The question haunts me because I should know. I'm Canadian the way a tree is rooted—born on Prince Edward Island, raised on potato fields and fishing boats, schooled in the particular brand of stubborn that comes from scraping a living off hard ground and cold water. I worked those boats until my hands were leather and my back was a symphony of complaints. Honest work, the kind that builds character, or so they tell you.</p>
+
+                <p>But somewhere between then and now, something broke. Maybe it was always broken and we just told ourselves better stories. The Canada I thought I knew, the one that emerged from the trenches of Europe with blood under its fingernails and honor intact, feels like a fever dream now. A beautiful lie we told ourselves while the real country was being sold off piece by piece.</p>
+
+                <p>So when I watch those boys—and they were boys, eighteen and nineteen, farm kids like I was—charging machine gun nests with bayonets, I feel the weight of what we've lost. They believed in something worth dying for. Not just King and Empire, but the idea that there was honor in sacrifice, that their deaths would build something better. They bought us this country with their blood, and we've spent a century learning what it's really worth.</p>
+
+                <p>The Great War was the last honest war, if any war can be called honest. There was a terrible purity to it—empires grinding against each other like geological plates, reshaping the world through pure attrition. No pretense of surgical strikes or smart bombs or humanitarian intervention. Just men in trenches, measuring progress in yards purchased with battalions. The Canadians excelled because we understood that kind of mathematics. We were farmers and lumberjacks and fishermen. We knew what it cost to take ground and hold it.</p>
+
+                <p>But watching those films, I can't escape the knowledge of what came after. Twenty years later, their sons would fight a different kind of war—still brutal, still devastating, but calculated now. The Second World War was about intelligence and logistics and industrial capacity. The cunning evolution of warfare. We learned to be strategic about our killing, to use our brains as much as our bayonets. Canadian pilots dogfighting over London, Canadian engineers designing the equipment that broke the Atlantic Wall, Canadian spies infiltrating occupied Europe. We adapted, evolved, became sophisticated in our violence.</p>
+
+                <p>The boys at Passchendaele couldn't have imagined it. They fought with rifles and courage and the absolute certainty that this was the war to end all wars. Their children fought with radar and encrypted communications and the growing suspicion that the next war might end everything.</p>
+
+                <p>Now we wait for the third act. WWIII, whenever it comes, won't be about territory or ideology or even resources, not really. It'll be about the last gasps of a dying civilization, fought with weapons that can crack the planet like an egg. There won't be documentaries about the heroism of Canadian soldiers because there won't be anyone left to make them. Just apocalyptic chaos and paranoia, the final expression of everything we learned about efficiency in killing.</p>
+
+                <p>I think about the children we're leaving behind. What kind of world are we handing them? What kind of country?</p>
+
+                <p>Canada in 2025 is a beautiful corpse. We kept the symbols—the flag, the anthem, the polite self-image—while selling the substance to anyone with enough money to matter. We're a resource extraction operation masquerading as a nation, a money-laundering scheme with universal healthcare. The boys who died at Vimy Ridge thought they were building something permanent. Instead, they built a commodity.</p>
+
+                <p>But here's the thing that keeps me awake: maybe we never deserved to be anything more than this. Maybe the Canada I mourn never existed except in the propaganda posters and the carefully edited documentaries. Maybe those boys died for a lie as beautiful and empty as the lies we tell ourselves now.</p>
+
+                <p>The honest answer, the one that tastes like blood and sounds like artillery, is that we don't deserve to be anything. We had our chance. We squandered it. We took the sacrifice of those boys at Passchendaele and Vimy and turned it into real estate speculation and resource extraction and the quiet management of decline.</p>
+
+                <p>When I feel pride watching those Canadian soldiers storm German positions, I have to ask: pride in what, exactly? In our capacity for violence? In our willingness to die for other people's empires? In our talent for surviving when survival requires brutality?</p>
+
+                <p>Who are we? Who do we deserve to be? Do we deserve to be anything at all?</p>
+
+                <p>I think about Timothy Findley's Robert Ross, that broken boy soldier who saw too much and couldn't find his way back to the world he'd lost. There's something essentially Canadian about that story—the quiet kid who does what he's told, follows orders, kills when killing is required, and then discovers that the thing he was protecting never existed in the first place. We're all Robert Ross now, wandering through the wreckage of promises nobody intended to keep.</p>
+
+                <p>Maybe that's the wrong question. Maybe the question is: what do we become when we stop pretending we deserve anything? When we accept that the country is dead, the promises were lies, the systems are rigged, and the future is a weapon pointed at everyone we claim to love?</p>
+
+                <p>Maybe we become honest. Maybe we stop mourning the Canada that never was and start building something from the wreckage of what is. Maybe we learn from those boys in the trenches—not their willingness to die for lies, but their refusal to quit when everything was falling apart.</p>
+
+                <p>The boys at Passchendaele didn't get to choose their war. We don't get to choose ours either. But we get to choose how we fight it. Whether we fight for the lies we inherited or for the truth we might still discover. Whether we die for other people's empires or live for something worth building.</p>
+
+                <p>The documentary ends with the cenotaph in Ottawa, the eternal flame burning for the unknown soldier. I've stood there, trying to feel connected to something larger than our collective small disasters. But the flame doesn't burn for the Canada that is. It burns for the Canada that might have been, the one those boys thought they were dying for.</p>
+
+                <p>Maybe that's enough. Maybe the gap between what we promised and what we delivered is where the real country lives—not in the institutions or the symbols or the carefully managed mythology, but in the space between who we said we were and who we actually are. In the tension between the lies we tell and the truth we can't escape.</p>
+
+                <p>I am Canadian. Ashamed and proud, betrayed and betraying, lost and still looking. The wars we inherit aren't always the wars we want to fight, but they're the wars we get. The boys at Passchendaele understood that. They went over the top anyway.</p>
+
+                <p>Maybe that's who we are. Maybe that's who we deserve to be. The people who go over the top anyway, knowing the wire is waiting, knowing the promises are lies, knowing the country we're dying for might not be worth the sacrifice.</p>
+
+                <p>But going anyway. Because somebody has to. Because the alternative is surrendering before the fight even starts. Because maybe, in the going, we discover something worth the going for.</p>
+
+                <p>The questions remain, sharper than before. Who are we? Who do we deserve to be? Do we deserve to be anything?</p>
+
+                <p>I don't know. But I'm still here, still asking. That's something. Maybe not much, but something.</p>
+
+                <p>It's late now. The city sleeps the sleep of the purchased, dreaming dreams it can't afford. Tomorrow I'll wake up in this country that might be a country and try again to figure out what any of it means.</p>
+
+                <p>The boys at Passchendaele are still dead. The promises are still broken. The future is still a weapon.</p>
+
+                <p>But the sun will rise anyway, and I'll still be Canadian, whatever the hell that means now.</p>
+
+                <p>Maybe that's enough. Maybe that's all we get. Maybe that's more than we deserve.</p>
+
+                <p>Maybe that's everything.</p>
+            </div>
+            <div class="navigation">
+                <a href="index.html" class="nav-link">← Back to Stories</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html> 

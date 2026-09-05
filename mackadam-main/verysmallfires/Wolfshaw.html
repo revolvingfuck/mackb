@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>McKenzie and the Gulf | Very Small Fires</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('mussel.png');
+            background-position: left bottom;
+            background-repeat: no-repeat;
+            background-size: contain;
+            mix-blend-mode: luminosity;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .background-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(70, 70, 70, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(50, 50, 50, 0.1) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+            z-index: 1;
+            animation: atmosphericShift 20s ease-in-out infinite alternate;
+        }
+        @keyframes atmosphericShift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-10px, -5px) scale(1.02); }
+        }
+        header {
+            text-align: center;
+            padding: 60px 0;
+            position: relative;
+        }
+        .story-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffffff, #cccccc, #999999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+        .story-subtitle {
+            font-size: 1.1rem;
+            color: #aaaaaa;
+            font-style: italic;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+        .story-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 0.9rem;
+            color: #888888;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+        .story-content {
+            background: rgba(40, 40, 40, 0.6);
+            padding: 60px 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.2s forwards;
+        }
+        .story-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: left;
+        }
+        .story-text p {
+            margin-bottom: 1.5em;
+            text-indent: 0;
+        }
+        .story-text p:first-child {
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-indent: 0;
+            margin-bottom: 2em;
+            padding-left: 20px;
+            border-left: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        .story-text p:last-child {
+            margin-bottom: 0;
+            font-style: italic;
+            font-size: 1.05rem;
+            text-align: center;
+            text-indent: 0;
+            margin-top: 2em;
+            padding-top: 2em;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .navigation {
+            text-align: center;
+            padding: 30px 0 60px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.5s forwards;
+        }
+        .nav-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            .story-content {
+                padding: 40px 25px;
+                margin-bottom: 40px;
+            }
+            .story-meta {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .story-text {
+                font-size: 1.05rem;
+            }
+            .story-text p {
+                margin-bottom: 1.3em;
+            }
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .story-content {
+                animation: fadeInUp 1s ease-out 1.2s forwards, breathe 8s ease-in-out infinite;
+            }
+            @keyframes breathe {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-2px); }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-texture"></div>
+    <div class="container">
+        <header>
+            <h1 class="story-title">Wolfshaw</h1>
+            <p class="story-subtitle">A memory of storms, shark, and the town that watched</p>
+            <div class="story-meta">
+                <span>Fiction</span>
+                <span>•</span>
+                <span>Prince Edward Island</span>
+                <span>•</span>
+                <span>750 words</span>
+            </div>
+        </header>
+        <main class="story-content">
+            <div class="story-text">
+                <p>McKenzie was forty-six, but out on the Gulf he felt twenty. He'd been fishing these waters since he was a boy. Knew them the way you know an old friend.</p>
+                <p>Alberton had made its decision about him long before that. The drinking. The fights. The way trouble found him, or he found it. They tolerated him the way you tolerate weather. He brought fish to the market. He paid what he owed when he had it. He kept mostly to himself. That was enough for them to leave him alone, but not enough for anything more.</p>
+                <p>The Legion was the kind of place McKenzie understood. You didn't wear your hat inside. You bought your round. You didn't start anything that didn't need starting. He'd followed those rules his whole life, more or less, and the men in there still moved their coats off the barstool when he sat down, still let conversations die the way fires do when you stop feeding them.</p>
+                <p>He sat across from Gary Buote at the cribbage board and lost. Not close. Double skunked, which meant money he didn't have and the particular silence that follows a man counting another man's points for him. Buote didn't gloat. He didn't have to.</p>
+                <p>McKenzie pushed back from the table and went outside for a smoke. The night air came off the water. He lit a Player's filter and stood in it.</p>
+                <p>He heard the door behind him before it opened.</p>
+                <p>"You drive here tonight, McKenzie?"</p>
+                <p>The cop's kid. Réal Gallant's boy, nineteen years old and sure of himself in the way men are before someone teaches them not to be.</p>
+                <p>McKenzie didn't turn around. "Go back inside, Danny."</p>
+                <p>"Just asking."</p>
+                <p>"You're not just asking."</p>
+                <p>The boy came around to face him. Close enough that McKenzie could smell the beer on him. "My father says you shouldn't be driving. Says you been at it since four."</p>
+                <p>McKenzie took a drag. Looked at him. "Tell your father I said hello."</p>
+                <p>"Tell him yourself. You'll see him tonight."</p>
+                <p>That was the thing about Danny Gallant. He always went one further than he should have.</p>
+                <p>McKenzie felt it move through him the way weather moves. He dropped the cigarette. He hit Danny Gallant once, hard, in the mouth. The boy went down on the gravel and stayed there. McKenzie stood over him and felt nothing he hadn't felt before.</p>
+                <p>The drunk tank that night was four walls and his own breathing.</p>
+                <p>Morning came gray through a high window. He drove his GMC half-ton down the red dirt road toward the wharf. The radio was on. Merle Haggard. "Mama Tried." McKenzie didn't turn it off.</p>
+                <p>His head felt like something trying to escape his skull. The knuckles on the steering wheel were swollen and crusted dark. His stomach matched the ruts and corrugations of the road.</p>
+                <p>The song kept playing. His mother had tried. She had. And here he was.</p>
+                <p>Late today.</p>
+                <p>The other boats had gone out hours before. He could see them far off, small against the grey of the water. He didn't call out. Didn't wave. Just pushed past the breakwater and let the Gulf take him the way it always did. Quietly, without condition. Out here he wasn't what Alberton said he was. Out here he was just a man who knew what he was doing.</p>
+                <p>The polypropylene bit into his knuckles every time he pulled. He stopped noticing. The pain became part of the rhythm.</p>
+                <p>He worked the nets and didn't think about Danny Gallant. Didn't think about Buote and the cribbage and the money he didn't have. Didn't think about his mother, though Merle Haggard kept playing somewhere in the back of his skull whether he wanted it to or not. Out here there was only the work. The water. The way the swells ran underneath like something breathing. He had always loved this. Since he was a boy. He had always loved this more than anything.</p>
+                <p>He was a few kilometers off the North Shore when the net went heavy in a way he didn't recognize.</p>
+                <p>Not fish-heavy. Not debris. Something that had weight and also had will. A slow, tremendous resistance that ran up the lines and into his arms and settled in his chest like a held breath.</p>
+                <p>He pulled anyway. That was what you did.</p>
+                <p>It took a long time. His hands bled into the rope. The swells pushed the boat and he braced against them and kept pulling and didn't stop. When it finally broke the surface he stepped back without meaning to.</p>
+                <p>He'd seen sharks before. Small ones. The occasional blue. Nothing like this. The thing in his net was longer than his boat. Grey on top and white underneath, a body so massive it didn't seem possible that water had been holding it. The tail hung off the stern like something from another world. Its eye was open. Dark and still and older than anything McKenzie had ever looked at.</p>
+                <p>He stood there with the lines in his bleeding hands and looked at it for a long time.</p>
+                <p>It was dead. Had come up dead in the net, the way things sometimes did. He hadn't killed it. But it was his now, and he didn't know what to do with that. He'd pulled it out of the only place in the world that had ever asked nothing of him. That had taken him in without judgment. That had made him feel like a man worth something every single morning he'd gone out on it.</p>
+                <p>The eye looked at nothing. The Gulf moved underneath them both.</p>
+                <p>He brought it back to shore because there was nothing else to do.</p>
+                <p>They came down to the wharf the way people come when something impossible has happened. Word moved through Alberton the way it always did. Fast and sideways. By the time McKenzie had the boat tied up there were already men on the dock, and then more men, and then women, and then kids who had no business being there.</p>
+                <p>Someone measured it. Someone else took photographs. A fisheries officer arrived and asked questions McKenzie answered as briefly as he could manage. He kept his eyes off the shark.</p>
+                <p>Réal Gallant was there. He looked at McKenzie and McKenzie looked back at him and neither of them said anything. Danny Gallant was not there.</p>
+                <p>That night Gary Buote bought him a drink. Men who had never once made room for him at the bar made room now. McKenzie sat in the middle of it and the warmth of them was the strangest thing he'd ever felt. They touched his arm. They said his name like it meant something good. A woman he'd never spoken to said she'd always known he had something in him and he looked at her and didn't say anything because he didn't know what you said to that.</p>
+                <p>Someone called him the best fisherman on the Island.</p>
+                <p>He thought about the eye.</p>
+                <p>Open and dark and still, looking at nothing from the bed of a dump truck while men from the mainland crouched around it with their equipment and their notebooks. He'd watched them from a distance and felt something he didn't have a name for. Not pride. The opposite of pride, maybe, though that wasn't quite it either. More like the feeling of having broken something that belonged to someone else. Except it hadn't belonged to anyone. That was the thing. It had just been alive, and enormous, and old, and now it wasn't.</p>
+                <p>He drank what they put in front of him. Nodded when nodding was required. When the noise got to be too much he excused himself and went outside and stood in the dark with his hands in his pockets.</p>
+                <p>The Gulf was out there. He could hear it moving in the dark the way it always moved, patient and indifferent and unchanged.</p>
+                <p>He thought about the mornings. Every morning for as long as he could remember, going out before the town was awake. The water taking him without question. Giving him back something he couldn't find anywhere on land. He'd understood out there. He'd made sense. The Gulf had been the one place where what Alberton thought of him couldn't reach, and he'd gone out into it that morning hungover and bleeding and late and it had given him the one thing in his life that would make people want to be near him.</p>
+                <p>He didn't know what to do with that. He stood in the dark for a long time and didn't figure it out.</p>
+                <p>When he went back inside they were still there. Still warm, still talking, still saying his name. He sat down and picked up his drink and looked at nothing in particular and felt the distance between himself and every person in that room settle over him like something familiar. Like weather.</p>
+                <p>Outside, the Gulf kept moving the way it always had. The way it would long after Alberton was gone and McKenzie was gone and everything any of them had ever done had been forgotten.</p>
+                <p>It didn't hold anything against him.</p>
+                <p>That was the worst part.</p>
+            </div>
+        </main>
+        <nav class="navigation">
+            <a href="index.html" class="nav-link">&larr; Back to Stories</a>
+        </nav>
+    </div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.typekit.net/upa2mub.css">
+    <link rel="stylesheet" href="index.css">
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "./assets/three.js-master/build/three.module.min.js"
+        }
+    }
+    </script>
+
+</head>
+<body>
+    <!-- Covers first paint while the brand fonts and the marble statue land.
+         preloader.js fades and removes it; see that file for what it waits on
+         and why the ocean sim is deliberately not one of those things. -->
+    <div id="preloader" role="status" aria-live="polite" aria-label="Loading">
+        <div class="preloader-ripple"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- Backdrop: the night sea, behind everything -->
+    <div id="sea-container"></div>
+
+    <div id="three-container"></div>
+
+    <!-- Brand mark. #center-logo is what index.js slides in and out on
+         navigation, so the id matters as much as the markup. -->
+    <div class="content" id="center-logo">
+        <div class="brand-block">
+            <div class="brand-lockup">
+                <h1 class="main-name">Mack B</h1>
+                <p class="tagline">art <span class="amp">&amp;</span> design<br>portfolio</p>
+            </div>
+
+            <nav class="brand-nav" aria-label="Main">
+                <button type="button" class="nav-link" data-nav="resume">RESUME</button>
+                <button type="button" class="nav-link" data-nav="works">WORKS</button>
+                <button type="button" class="nav-link" data-nav="demos">DEMOS</button>
+
+                <span class="nav-social">
+                    <a class="social-dot" href="mailto:n0.0ne.and.poly@gmail.com" aria-label="Email">
+                        <img src="assets/email-svgrepo-com.svg" alt=""></a>
+                    <a class="social-dot" href="https://www.instagram.com/mac.b90/" target="_blank" rel="noopener" aria-label="Instagram">
+                        <img src="assets/instagram-svgrepo-com.svg" alt=""></a>
+                    <a class="social-dot" href="https://www.youtube.com/@no1s_channel" target="_blank" rel="noopener" aria-label="YouTube">
+                        <img src="assets/youtube-svgrepo-com.svg" alt=""></a>
+                    <a class="social-dot" href="https://www.linkedin.com/in/brian-macadam-48b5ab390/" target="_blank" rel="noopener" aria-label="LinkedIn">
+                        <img src="assets/linkedin-svgrepo-com.svg" alt=""></a>
+                </span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Demos gallery. Sits idle until the DEMOS nav lifts the brand block
+         away; index.js toggles .active, the CSS does the rest. The cards are
+         anchors so selection, focus and Enter come from the browser.
+         No caption element: every cover is jewel-case art with the game's
+         title already printed on it, so the name lives in aria-label for
+         screen readers and the art carries it for everyone else. -->
+    <div id="demos-gallery" class="demos-gallery" aria-hidden="true">
+        <button type="button" class="demos-back">&larr; HOME</button>
+
+        <div class="demos-rail">
+            <a class="demo-card" style="--i:0" href="demos/beatemup/index.html" aria-label="Convenient Fury">
+                <span class="demo-shot"><img src="demos/confury.png" alt=""></span>
+            </a>
+
+            <a class="demo-card" style="--i:1" href="demos/low-paper.html" aria-label="Paper-Low">
+                <span class="demo-shot"><img src="demos/Paper-low.png" alt=""></span>
+            </a>
+
+            <a class="demo-card" style="--i:2" href="demos/highfive-street.html" aria-label="Hi-Five Street">
+                <span class="demo-shot"><img src="demos/hi5.png" alt=""></span>
+            </a>
+
+            <a class="demo-card" style="--i:3" href="demos/maze/index.html" aria-label="Tomb Treasures">
+                <span class="demo-shot"><img src="demos/tombtreasurescover.png" alt=""></span>
+            </a>
+
+            <a class="demo-card" style="--i:4" href="demos/3dbungun.html" aria-label="Neon Warren 3D">
+                <span class="demo-shot"><img src="demos/3dbungun.png" alt=""></span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Works panel. Filled once from works.html on first use, then kept in
+         the DOM so works.js keeps its wired-up handlers on later visits. -->
+    <div id="works-content-container"></div>
+
+    <!-- Resume Content Container -->
+    <div id="resume-content-container"></div>
+
+    <!-- The backdrop. Exactly one of these two, never both — each builds its
+         own renderer and appends its own canvas to #sea-container.
+           sea.js         full scene: live sky and weather, marble hand, bloom
+           sea-simple.js  the lightweight Gerstner plane, for comparison -->
+    <script type="module" src="sea.js"></script>
+    <!-- <script type="module" src="sea-simple.js"></script> -->
+
+    <script type="module" src="preloader.js"></script>
+    <script type="module" src="index.js"></script>
+</body>
+</html>

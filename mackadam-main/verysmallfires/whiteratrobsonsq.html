@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The White Rat at Robson Sq, Vol. II | Very Small Fires</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e8e8e8;
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .background-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(70, 70, 70, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(50, 50, 50, 0.1) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
+            z-index: 1;
+            animation: atmosphericShift 20s ease-in-out infinite alternate;
+        }
+        @keyframes atmosphericShift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-10px, -5px) scale(1.02); }
+        }
+        header {
+            text-align: center;
+            padding: 60px 0;
+            position: relative;
+        }
+        .story-title {
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffffff, #cccccc, #999999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+        .story-subtitle {
+            font-size: 1.1rem;
+            color: #aaaaaa;
+            font-style: italic;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+        .story-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 0.9rem;
+            color: #888888;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+        .story-content {
+            background: rgba(40, 40, 40, 0.6);
+            padding: 60px 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.2s forwards;
+        }
+        .story-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: left;
+        }
+        .story-text p {
+            margin-bottom: 1.5em;
+            text-indent: 0;
+        }
+        .story-text p:first-child {
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-indent: 0;
+            margin-bottom: 2em;
+            padding-left: 20px;
+            border-left: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        .story-text p:last-child {
+            margin-bottom: 0;
+            font-style: italic;
+            font-size: 1.05rem;
+            text-align: center;
+            text-indent: 0;
+            margin-top: 2em;
+            padding-top: 2em;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .navigation {
+            text-align: center;
+            padding: 30px 0 60px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.5s forwards;
+        }
+        .nav-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            .story-content {
+                padding: 40px 25px;
+                margin-bottom: 40px;
+            }
+            .story-meta {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .story-text {
+                font-size: 1.05rem;
+            }
+            .story-text p {
+                margin-bottom: 1.3em;
+            }
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .story-content {
+                animation: fadeInUp 1s ease-out 1.2s forwards, breathe 8s ease-in-out infinite;
+            }
+            @keyframes breathe {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-2px); }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-texture"></div>
+    <div class="container">
+        <header>
+            <h1 class="story-title">The White Rat at Robson Sq</h1>
+            <p class="story-subtitle">Very Small Fires, Vol. II</p>
+            <div class="story-meta">
+                <span>Fiction</span>
+                <span>•</span>
+                <span>Vancouver</span>
+            </div>
+        </header>
+        <main class="story-content">
+            <div class="story-text">
+                <p>The festival had already moved on by the time I came down to Robson Square — all at once, the way these things go, leaving its litter behind to stand in for the joy. Somewhere up the hill a car was still leaning on its horn for a country that had won a game. Flags out windows. Strangers holding each other like it cost them nothing, because it didn't. By morning they would be strangers again, and not one of them would grieve it.</p>
+
+                <p>I went the other way. I always go the other way.</p>
+
+                <p>Past midnight the square belongs to its real tenants. They come up out of the grates once the crowds thin, and nobody looks down, because nobody ever looks down. The big ones move first — dark, slick, heavy, fat on everything the city throws away. They are afraid of nothing. The dark was built for them and they know it. They have their routes, their corners, each other.</p>
+
+                <p>And then there is the small white one.</p>
+
+                <p>Half the size of the rest. No corner of its own. It moves through the others and the others draw back from it, close their circle a little tighter, leave it the cold rim of everything. Same gutter. Same hunger. Only the colour is wrong — and the colour, it turns out, is the whole of the crime.</p>
+
+                <p>I crouched and watched it longer than a sane man would. It did nothing. It only ran, and stopped, and ran — the way a thing runs when running is no longer toward or away from anything, but simply the shape its body has learned.</p>
+
+                <p>I have spent a good portion of my life being asked to leave. Rarely in those words. More often it is a door that stays shut — a room kept empty rather than let me fill it, because an empty room leaves a man a saviour, and a full one makes him your equal, and few can stomach the equal. Sometimes it is a phone gone dark in the hand. Once it was a person begging me, in capital letters, to go away, while I stood there trying to say I was lonely — as though the loneliness itself were the trespass.</p>
+
+                <p>I used to believe other people wanted what I wanted. Some truth. Some nearness that asked something of them. I have put that belief down. What most people want is comfort: the normal and the warm, the circle that charges no dues. A man who comes asking for the realer thing is not a gift to them. He is a problem to be managed — and then, when the managing tires them, a story they tell to feel close to one another. Look how patient we were with him. We are not like him.</p>
+
+                <p>But I have been honest with myself out there, in the cold, and honesty cuts the way it ought to.</p>
+
+                <p>Maybe I have the whole thing backward. Maybe the white one is not driven out at all — maybe it is only easier to see when it is alone, and the truth is it could fold into the others any night it chose, and simply won't. Maybe some of us run because the running is all that is left to us, and we have mistaken it, all these years, for being chased.</p>
+
+                <p>And maybe the pale one is no innocent. Maybe it bites. Maybe I do. I have said unforgivable things to people who deserved better of me. I have spent down patience it took others years to lend. Maybe, after long enough alone, you forget there was ever another way to move through a room.</p>
+
+                <p>I don't know which is true. I have stopped expecting to find out.</p>
+
+                <p>What I know is that it was late, and a small white animal was crossing a square a whole city had filled with its joy and emptied again, and not one of those people would ever see it. It would run until it tired. Then it would find somewhere dark and narrow and wait out the hours for a morning that owed it nothing — the way it had waited out this one, and all the ones before.</p>
+
+                <p>I stood, eventually, and went home the way I had come.</p>
+
+                <p>The dark, at least, does not pretend to want you. There is a mercy in that I have never once found in a room where people gather.</p>
+            </div>
+        </main>
+        <div class="navigation">
+            <a href="index.html" class="nav-link">← Back to Stories</a>
+        </div>
+    </div>
+</body>
+</html>

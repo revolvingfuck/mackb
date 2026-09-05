@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Convient Fury</title>
+<style>
+  :root {
+    color-scheme: dark;
+  }
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #04050a;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+  .stage {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #000;
+  }
+  .bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+    filter: brightness(0.55) contrast(1.1);
+    transition: opacity 1.2s ease;
+  }
+  .bg-video.faded-in {
+    opacity: 0.55;
+  }
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.4) 100%);
+    z-index: 2;
+  }
+  .title {
+    font-size: clamp(3rem, 7vw, 7rem);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow:
+      0 0 10px rgba(255, 77, 166, 0.9),
+      0 0 24px rgba(77, 255, 224, 0.7),
+      0 8px 30px rgba(0,0,0,0.7);
+    transform: perspective(800px) rotateX(10deg) rotateY(-8deg);
+    margin-bottom: 1rem;
+    user-select: none;
+  }
+  .subtitle {
+    font-size: clamp(0.95rem, 2.2vw, 1.3rem);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.86);
+    text-shadow: 0 0 12px rgba(0,0,0,0.75);
+    margin-top: 0.25rem;
+  }
+  .hint {
+    margin-top: 1.5rem;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #ffe9a0;
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.75; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.03); }
+  }
+  /* Force landscape presentation on phones: rotate the whole stage
+     when the device is physically in portrait. */
+  @media (orientation: portrait) and (max-width: 900px) {
+    .stage {
+      transform: rotate(90deg);
+      transform-origin: center center;
+      width: 100vh;
+      height: 100vw;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -50vw;
+      margin-left: -50vh;
+    }
+  }
+  .rotate-hint {
+    display: none;
+  }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <video class="bg-video" id="bgVideo" src="d7b23ea2eb534d8884dc83bbe2f68125.mp4" autoplay muted loop playsinline webkit-playsinline></video>
+    <div class="overlay" id="overlay">
+      <div class="title">Convient Fury</div>
+      <div class="subtitle">Tap to play</div>
+      <div class="hint">Touch anywhere to enter</div>
+    </div>
+  </div>
+
+<script>
+  const AUDIO_SRC = "ElevenLabs_2026-08-06T23_59_58_Harv_gen_sp70_s100_sb24_se53_b_m2.mp3";
+
+  const stage = document.getElementById('stage');
+  const bgVideo = document.getElementById('bgVideo');
+  let entered = false;
+
+  function tryPlayVideo() {
+    const p = bgVideo.play();
+    if (p && p.catch) p.catch(() => {});
+  }
+
+  tryPlayVideo();
+  bgVideo.addEventListener('playing', () => bgVideo.classList.add('faded-in'), { once: true });
+  bgVideo.addEventListener('canplay', tryPlayVideo, { once: true });
+
+  function buildEchoChain(ctx) {
+    const delay = ctx.createDelay(2.0);
+    delay.delayTime.value = 0.24;
+
+    const feedback = ctx.createGain();
+    feedback.gain.value = 0.42;
+
+    const wet = ctx.createGain();
+    wet.gain.value = 0.55;
+
+    const dry = ctx.createGain();
+    dry.gain.value = 1.0;
+
+    const damp = ctx.createBiquadFilter();
+    damp.type = 'lowpass';
+    damp.frequency.value = 2600;
+
+    delay.connect(damp);
+    damp.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(wet);
+
+    return { delayInput: delay, dry, wet };
+  }
+
+  let audioCtx = null;
+
+  async function playVoiceWithEcho() {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+      const res = await fetch(AUDIO_SRC);
+      const buf = await res.arrayBuffer();
+      const audioBuffer = await audioCtx.decodeAudioData(buf);
+
+      const source = audioCtx.createBufferSource();
+      source.buffer = audioBuffer;
+
+      const { delayInput, dry, wet } = buildEchoChain(audioCtx);
+
+      source.connect(dry);
+      source.connect(delayInput);
+      dry.connect(audioCtx.destination);
+      wet.connect(audioCtx.destination);
+
+      source.start(0);
+    } catch (err) {
+      const el = new Audio(AUDIO_SRC);
+      el.play().catch(() => {});
+    }
+  }
+
+  function requestLandscapeLock() {
+    // Best-effort real orientation lock (Android Chrome only; iOS Safari
+    // has no Screen Orientation API and will silently no-op here).
+    const el = document.documentElement;
+    const reqFs = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (reqFs) {
+      try {
+        const result = reqFs.call(el);
+        if (result && result.then) {
+          result.then(() => lockOrientation()).catch(() => {});
+        } else {
+          lockOrientation();
+        }
+      } catch (e) {}
+    } else {
+      lockOrientation();
+    }
+  }
+
+  function lockOrientation() {
+    if (screen.orientation && screen.orientation.lock) {
+      screen.orientation.lock('landscape').catch(() => {});
+    }
+  }
+
+  function unlockAndPlay() {
+    if (entered) return;
+    entered = true;
+
+    // Unlock audio context synchronously within the gesture handler.
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    } catch (e) {}
+
+    requestLandscapeLock();
+    tryPlayVideo();
+
+    setTimeout(playVoiceWithEcho, 2000);
+
+    setTimeout(() => {
+      window.location.href = 'game.html';
+    }, 5000);
+  }
+
+  stage.addEventListener('pointerdown', unlockAndPlay, { once: true });
+  stage.addEventListener('touchstart', unlockAndPlay, { once: true });
+  document.addEventListener('keydown', unlockAndPlay, { once: true });
+</script>
+</body>
+</html>

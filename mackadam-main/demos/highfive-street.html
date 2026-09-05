@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HIGH FIVE STREET</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #000; overflow: hidden; font-family: 'Courier New', monospace; }
+#hud { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+#score { position: absolute; top: 22px; left: 24px; color: #fff; font-size: 28px; font-weight: 900; text-shadow: 0 0 12px rgba(0,0,0,0.9), 2px 2px 0 #000; letter-spacing: 1px; }
+#hp-bar { position: absolute; top: 22px; right: 24px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+#hp-label { color: #ff4444; font-size: 13px; font-weight: bold; letter-spacing: 2px; text-shadow: 0 0 8px #000; }
+#hp-track { width: 140px; height: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; overflow: hidden; }
+#hp-fill { height: 100%; background: #33cc55; border-radius: 5px; transition: width 0.15s, background 0.3s; box-shadow: 0 0 8px #33cc55; }
+#combo { position: absolute; top: 62px; left: 24px; color: #ffaa22; font-size: 20px; font-weight: 900; text-shadow: 0 0 10px rgba(255,170,0,0.6), 2px 2px 0 #000; opacity: 0; transition: opacity 0.3s; letter-spacing: 1px; }
+#crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: rgba(255,255,255,0.85); font-size: 20px; line-height: 1; text-shadow: 1px 1px 3px #000; user-select: none; }
+#msg { position: absolute; top: 37%; left: 50%; transform: translateX(-50%) scale(1); font-size: 50px; font-weight: 900; color: #fff; text-shadow: 3px 3px 0 rgba(0,0,0,0.7); opacity: 0; white-space: nowrap; letter-spacing: 3px; transition: opacity 0.5s, transform 0.5s; }
+#flash { position: absolute; inset: 0; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+#legend { position: absolute; bottom: 70px; right: 24px; color: #fff; font-size: 13px; line-height: 2.2; text-shadow: 1px 1px 4px #000; }
+.dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+#hood { position: absolute; bottom: 70px; left: 24px; color: rgba(255,255,255,0.6); font-size: 13px; letter-spacing: 2px; text-shadow: 1px 1px 4px #000; }
+#hint { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.55); font-size: 13px; background: rgba(0,0,0,0.45); padding: 6px 16px; border-radius: 20px; letter-spacing: 1px; white-space: nowrap; }
+.overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.88); pointer-events: auto; }
+.overlay h1 { color: #fff; font-size: 58px; font-weight: 900; margin-bottom: 10px; text-align: center; letter-spacing: 4px; text-shadow: 0 0 30px rgba(100,160,255,0.5); }
+.overlay .sub { color: #aaa; font-size: 17px; margin-bottom: 36px; text-align: center; line-height: 1.8; max-width: 440px; }
+.overlay button { padding: 14px 46px; font-size: 18px; font-weight: 900; background: #4488ff; color: #fff; border: none; border-radius: 4px; cursor: pointer; letter-spacing: 2px; font-family: 'Courier New', monospace; transition: background 0.2s, transform 0.1s; pointer-events: auto; }
+.overlay button:hover { background: #55aaff; transform: scale(1.04); }
+#game-over { display: none; }
+#final-score { color: #ffaa22; font-size: 36px; font-weight: 900; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div id="hud">
+  <div id="score">SCORE: 0</div>
+  <div id="hp-bar">
+    <div id="hp-label">HP</div>
+    <div id="hp-track"><div id="hp-fill" style="width:100%"></div></div>
+  </div>
+  <div id="combo">COMBO ×1</div>
+  <div id="crosshair">+</div>
+  <div id="flash"></div>
+  <div id="msg"></div>
+  <div id="hood"></div>
+  <div id="legend">
+    <div><span class="dot" style="background:#FFD700"></span>NORMAL — ignore</div>
+    <div><span class="dot" style="background:#4488FF"></span>SAD — high five!</div>
+    <div><span class="dot" style="background:#FF2211"></span>ANGRY — one hit KO!</div>
+  </div>
+  <div id="hint">CLICK someone to HIGH FIVE · must be close enough · A/D to strafe</div>
+  <div id="start-screen" class="overlay">
+    <h1>🖐 HIGH FIVE<br>STREET</h1>
+    <div class="sub">
+      High five the <span style="color:#4488FF;font-weight:bold">blue sad ones</span>.<br>
+      One touch of a <span style="color:#FF4422;font-weight:bold">red angry one</span> and you're DONE.<br>
+      <span style="color:#777;font-size:14px">Yellow people are just vibing. Leave them alone.</span>
+    </div>
+    <button id="start-btn">START WALKING</button>
+  </div>
+  <div id="game-over" class="overlay">
+    <div id="final-score">0</div>
+    <h1 style="font-size:46px;margin-bottom:10px">KNOCKED OUT 💀</h1>
+    <div class="sub" id="go-sub"></div>
+    <button onclick="startGame()">TRY AGAIN</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+'use strict';
+
+// ── DOM ──────────────────────────────────────────────────────────────────────
+const scoreEl   = document.getElementById('score');
+const hpFill    = document.getElementById('hp-fill');
+const hpLabel   = document.getElementById('hp-label');
+const comboEl   = document.getElementById('combo');
+const flashEl   = document.getElementById('flash');
+const msgEl     = document.getElementById('msg');
+const hoodEl    = document.getElementById('hood');
+const startScr  = document.getElementById('start-screen');
+const gameOverEl= document.getElementById('game-over');
+
+// ── Scene ────────────────────────────────────────────────────────────────────
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x9EC8E8);
+scene.fog = new THREE.Fog(0x9EC8E8, 28, 65);
+
+const camera = new THREE.PerspectiveCamera(72, innerWidth / innerHeight, 0.1, 200);
+camera.rotation.order = 'YXZ';
+camera.position.set(0, 1.7, 0);
+scene.add(camera);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.domElement.style.cssText = 'position:fixed;top:0;left:0;z-index:1;cursor:pointer;';
+document.body.prepend(renderer.domElement);
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+// ── Lighting ─────────────────────────────────────────────────────────────────
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const sun = new THREE.DirectionalLight(0xffe0c0, 1.2);
+sun.position.set(10, 22, 6);
+scene.add(sun);
+const fill = new THREE.DirectionalLight(0xc0d8ff, 0.35);
+fill.position.set(-8, 5, -3);
+scene.add(fill);
+
+// ── Themes ───────────────────────────────────────────────────────────────────
+const THEMES = [
+  { name: 'DOWNTOWN',   sky: 0x9EC8E8, fogN: 28, fogF: 65, road: 0x484848, sw: 0xC4B89A, pal: [0x776655,0x445566,0x556644,0x664455,0x887744,0x446677,0x775544] },
+  { name: 'EASTSIDE',   sky: 0xE8C090, fogN: 22, fogF: 58, road: 0x504030, sw: 0xD0B888, pal: [0xCC8855,0xAA6633,0xBB7744,0x998855,0x886633,0xAA7722] },
+  { name: 'MIDTOWN',    sky: 0xB0C8D8, fogN: 30, fogF: 70, road: 0x404550, sw: 0xBBB8C0, pal: [0x667788,0x446688,0x557799,0x335577,0x448899,0x336677] },
+  { name: 'THE STRIP',  sky: 0x1C2030, fogN: 14, fogF: 42, road: 0x282828, sw: 0x383830, pal: [0x334466,0x223355,0x112244,0x443366,0x224455,0x335544] },
+  { name: 'UPTOWN',     sky: 0xC8D8C0, fogN: 25, fogF: 60, road: 0x505848, sw: 0xC8C8A8, pal: [0x667755,0x556644,0x778855,0x665544,0x447766,0x556633] },
+  { name: 'THE PITS',   sky: 0x302028, fogN: 12, fogF: 38, road: 0x302020, sw: 0x403028, pal: [0x553344,0x442233,0x663344,0x552244,0x442255,0x553333] },
+];
+
+let themeIdx = 0;
+let nextThemeIdx = 1;
+let themeBlend = 0;
+const themeColor = new THREE.Color(THEMES[0].sky);
+
+function lerpTheme(a, b, t, prop) { return a[prop] + (b[prop] - a[prop]) * t; }
+
+function updateTheme(dist) {
+  const T = THEMES[themeIdx], N = THEMES[nextThemeIdx];
+  const CHANGE_DIST = 180;
+  themeBlend = (dist % CHANGE_DIST) / CHANGE_DIST;
+  if (themeBlend < 0.005 && dist > 10) {
+    themeIdx = nextThemeIdx;
+    nextThemeIdx = (nextThemeIdx + 1) % THEMES.length;
+    hoodEl.textContent = THEMES[themeIdx].name;
+  }
+  themeColor.setHex(T.sky).lerp(new THREE.Color(N.sky), themeBlend);
+  scene.background.copy(themeColor);
+  scene.fog.color.copy(themeColor);
+  scene.fog.near = lerpTheme(T, N, themeBlend, 'fogN');
+  scene.fog.far  = lerpTheme(T, N, themeBlend, 'fogF');
+}
+
+function currentPalette() {
+  const t = THEMES[themeIdx], n = THEMES[nextThemeIdx];
+  return themeBlend > 0.5 ? n.pal : t.pal;
+}
+
+// ── Road / Sidewalk (recycled segments) ──────────────────────────────────────
+const SEG_LEN = 200;
+const NUM_SEGS = 5;
+const roadMat = new THREE.MeshLambertMaterial({ color: 0x484848 });
+const swMat   = new THREE.MeshLambertMaterial({ color: 0xC4B89A });
+const lineMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+
+const roadSegs = [], swLSegs = [], swRSegs = [];
+
+for (let i = 0; i < NUM_SEGS; i++) {
+  const z = -i * SEG_LEN - SEG_LEN / 2;
+  const r = new THREE.Mesh(new THREE.PlaneGeometry(10, SEG_LEN), roadMat);
+  r.rotation.x = -Math.PI / 2; r.position.set(0, -0.01, z); scene.add(r); roadSegs.push(r);
+  const sl = new THREE.Mesh(new THREE.PlaneGeometry(6, SEG_LEN), swMat);
+  sl.rotation.x = -Math.PI / 2; sl.position.set(-8, 0, z); scene.add(sl); swLSegs.push(sl);
+  const sr = new THREE.Mesh(new THREE.PlaneGeometry(6, SEG_LEN), swMat);
+  sr.rotation.x = -Math.PI / 2; sr.position.set(8, 0, z); scene.add(sr); swRSegs.push(sr);
+}
+
+// ── Dashes (recycled) ─────────────────────────────────────────────────────────
+const DASH_POOL = 70, DASH_GAP = 9;
+const dashes = [];
+for (let i = 0; i < DASH_POOL; i++) {
+  const d = new THREE.Mesh(new THREE.PlaneGeometry(0.12, 5), lineMat);
+  d.rotation.x = -Math.PI / 2; d.position.set(0, 0.01, -i * DASH_GAP - 4); scene.add(d); dashes.push(d);
+}
+
+// ── Buildings (recycled pool) ─────────────────────────────────────────────────
+const NUM_BLD = 48;
+const BLD_GAP = 13;
+const bldPairs = [];
+
+function mkBldPair() {
+  const lM = new THREE.MeshLambertMaterial({ color: 0x776655 });
+  const rM = new THREE.MeshLambertMaterial({ color: 0x445566 });
+  const lB = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), lM);
+  const rB = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), rM);
+  scene.add(lB); scene.add(rB);
+  // window strip
+  const wM = new THREE.MeshLambertMaterial({ color: 0x88AABB, emissive: 0x112233 });
+  const lW = new THREE.Mesh(new THREE.BoxGeometry(1, 0.15, 0.08), wM);
+  const rW = new THREE.Mesh(new THREE.BoxGeometry(1, 0.15, 0.08), wM);
+  scene.add(lW); scene.add(rW);
+  return { lB, rB, lM, rM, lW, rW };
+}
+
+function placeBld(pair, z, pal) {
+  const lw = 7 + Math.random() * 13, lh = 5 + Math.random() * 30, ld = 9;
+  const rw = 7 + Math.random() * 13, rh = 5 + Math.random() * 30, rd = 9;
+  pair.lB.scale.set(lw, lh, ld); pair.lB.position.set(-(5 + lw/2 + 2.5), lh/2, z);
+  pair.rB.scale.set(rw, rh, rd); pair.rB.position.set( 5 + rw/2 + 2.5,  rh/2, z);
+  pair.lM.color.setHex(pal[Math.floor(Math.random() * pal.length)]);
+  pair.rM.color.setHex(pal[Math.floor(Math.random() * pal.length)]);
+  // window strips at ~60% height
+  pair.lW.scale.set(lw - 0.4, 1, 1); pair.lW.position.set(-(5 + lw/2 + 2.5), lh * 0.62, z - ld/2 + 0.05);
+  pair.rW.scale.set(rw - 0.4, 1, 1); pair.rW.position.set( 5 + rw/2 + 2.5,  rh * 0.62, z - rd/2 + 0.05);
+}
+
+for (let i = 0; i < NUM_BLD; i++) {
+  const pair = mkBldPair();
+  placeBld(pair, -i * BLD_GAP, THEMES[0].pal);
+  bldPairs.push(pair);
+}
+
+// ── Lamps (recycled pool) ─────────────────────────────────────────────────────
+const NUM_LAMPS = 30, LAMP_GAP = 18;
+const lampMat  = new THREE.MeshLambertMaterial({ color: 0x2A2A2A });
+const lampHMat = new THREE.MeshLambertMaterial({ color: 0xEEEEBB, emissive: 0x555500 });
+const lamps = [];
+
+function mkLampPair() {
+  const g = new THREE.Group(); scene.add(g);
+  [-1, 1].forEach(s => {
+    const pole = new THREE.Mesh(new THREE.BoxGeometry(0.09, 5, 0.09), lampMat);
+    pole.position.set(s * 5.6, 2.5, 0); g.add(pole);
+    const head = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.14, 0.14), lampHMat);
+    head.position.set(s * 5.6, 5.2, 0); g.add(head);
+  });
+  return g;
+}
+
+for (let i = 0; i < NUM_LAMPS; i++) {
+  const g = mkLampPair(); g.position.z = -i * LAMP_GAP; lamps.push(g);
+}
+
+// ── Environment recycling ─────────────────────────────────────────────────────
+let bldFrontZ = -(NUM_BLD * BLD_GAP);
+
+function recycleEnv() {
+  // Road segs
+  let minRoad = Math.min(...roadSegs.map(s => s.position.z));
+  for (let i = 0; i < NUM_SEGS; i++) {
+    if (roadSegs[i].position.z > playerZ + SEG_LEN) {
+      minRoad -= SEG_LEN;
+      roadSegs[i].position.z = minRoad;
+      swLSegs[i].position.z  = minRoad;
+      swRSegs[i].position.z  = minRoad;
+    }
+  }
+
+  // Dashes
+  let minDash = Math.min(...dashes.map(d => d.position.z));
+  for (const d of dashes) {
+    if (d.position.z > playerZ + DASH_GAP) {
+      minDash -= DASH_GAP;
+      d.position.z = minDash;
+    }
+  }
+
+  // Lamps
+  let minLamp = Math.min(...lamps.map(l => l.position.z));
+  for (const l of lamps) {
+    if (l.position.z > playerZ + LAMP_GAP) {
+      minLamp -= LAMP_GAP;
+      l.position.z = minLamp;
+    }
+  }
+
+  // Buildings
+  const pal = currentPalette();
+  for (const pair of bldPairs) {
+    if (pair.lB.position.z > playerZ + 20) {
+      bldFrontZ -= BLD_GAP + (Math.random() - 0.5) * 6;
+      placeBld(pair, bldFrontZ, pal);
+    }
+  }
+}
+
+// ── First-person Hand ─────────────────────────────────────────────────────────
+const handRoot = new THREE.Group();
+handRoot.position.set(0.28, -0.32, -0.56);
+camera.add(handRoot);
+const skinM = new THREE.MeshLambertMaterial({ color: 0xFFCCAA });
+function hbox(w, h, d, x, y, z) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), skinM);
+  m.position.set(x, y, z); handRoot.add(m);
+}
+hbox(0.14, 0.18, 0.07,  0, 0, 0);
+hbox(0.028, 0.09, 0.05, -0.045,  0.14, 0);
+hbox(0.028, 0.10, 0.05, -0.015,  0.145, 0);
+hbox(0.028, 0.10, 0.05,  0.015,  0.145, 0);
+hbox(0.028, 0.09, 0.05,  0.045,  0.14, 0);
+hbox(0.06, 0.028, 0.05, -0.095, 0.03, 0);
+let swingT = 0;
+
+// ── People ────────────────────────────────────────────────────────────────────
+const T_COL = { normal: 0xFFCC00, sad: 0x2277EE, angry: 0xFF2200 };
+const people = [];
+
+const HI5_MSGS = [
+  "BACK AT'CHA!", "BRO!!", "YEAAAH!", "THANKS DUDE!",
+  "MY GUY!!!", "FELT THAT!", "LFG!!", "FINALLY!!",
+  "U OK THX 🖐", "SLAY!!", "WE STAY WINNING",
+  "NO CAP!", "BASED!!", "REAL ONE 🤝", "VALID AF",
+  "KING!!", "👋💥 YES!", "NEEDED THAT", "MADE MY DAY",
+  "HELL YEAH!!!", "BIG W", "GANG!!!", "LETS GO!!!"
+];
+
+function mkPerson(type) {
+  const col = T_COL[type];
+  const bM = new THREE.MeshLambertMaterial({ color: col });
+  const lM = new THREE.MeshLambertMaterial({ color: 0x1A2233 });
+  const g = new THREE.Group();
+
+  function bx(mat, w, h, d, x, y, z) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+    m.position.set(x, y, z); g.add(m); return m;
+  }
+
+  bx(bM, 0.50, 0.78, 0.26, 0, 1.05, 0);
+  bx(bM, 0.37, 0.37, 0.37, 0, 1.63, 0);
+
+  const eyeCol = type === 'sad' ? 0x001166 : type === 'angry' ? 0x550000 : 0x222211;
+  const eM = new THREE.MeshLambertMaterial({ color: eyeCol });
+  bx(eM, 0.065, 0.055, 0.05, -0.09, 1.655, 0.185);
+  bx(eM, 0.065, 0.055, 0.05,  0.09, 1.655, 0.185);
+
+  if (type === 'sad') {
+    bx(new THREE.MeshLambertMaterial({ color: 0x001166 }), 0.14, 0.025, 0.04, 0, 1.57, 0.185);
+    bx(new THREE.MeshLambertMaterial({ color: 0x88CCFF }), 0.035, 0.08, 0.035, 0.07, 1.565, 0.185);
+  } else if (type === 'angry') {
+    const bwM = new THREE.MeshLambertMaterial({ color: 0x880000 });
+    const lb = bx(bwM, 0.12, 0.04, 0.05, -0.06, 1.72, 0.185); lb.rotation.z =  0.4;
+    const rb = bx(bwM, 0.12, 0.04, 0.05,  0.06, 1.72, 0.185); rb.rotation.z = -0.4;
+    bx(new THREE.MeshLambertMaterial({ color: 0xffffff }), 0.14, 0.03, 0.04, 0, 1.57, 0.185);
+  } else {
+    bx(new THREE.MeshLambertMaterial({ color: 0x222211 }), 0.14, 0.03, 0.04, 0, 1.57, 0.185);
+  }
+
+  function mkArm(x) {
+    const p = new THREE.Group(); p.position.set(x, 1.22, 0);
+    const a = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.60, 0.18), bM);
+    a.position.y = -0.30; p.add(a); g.add(p); return p;
+  }
+  const lAP = mkArm(-0.34), rAP = mkArm(0.34);
+
+  function mkLeg(x) {
+    const p = new THREE.Group(); p.position.set(x, 0.68, 0);
+    const l = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.60, 0.20), lM);
+    l.position.y = -0.30; p.add(l); g.add(p); return p;
+  }
+  const lLP = mkLeg(-0.14), rLP = mkLeg(0.14);
+
+  // Reach/hover outline — a clean edge-box around the whole body, shown only
+  // when the cursor is on this person AND they're close enough to high five.
+  const outlineGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(0.66, 1.9, 0.5));
+  const outlineMat = new THREE.LineBasicMaterial({ color: 0x66ffcc, transparent: true, opacity: 0.95 });
+  const outline = new THREE.LineSegments(outlineGeo, outlineMat);
+  outline.position.set(0, 0.95, 0);
+  outline.visible = false;
+  g.add(outline);
+
+  g.userData = {
+    type, lAP, rAP, lLP, rLP, bodyMat: bM, outline,
+    phase: Math.random() * Math.PI * 2,
+    highFived: false, dying: false, dyingT: 0, dyingDur: 0.7,
+    speed: type === 'angry' ? 0.09 + Math.random() * 0.05 : 0.038 + Math.random() * 0.042,
+    cutTimer: Math.random() * 0.5,
+    cutTargetX: null,
+  };
+  return g;
+}
+
+function spawnPerson() {
+  const pool = ['normal','normal','normal','sad','sad','angry'];
+  const type = pool[Math.floor(Math.random() * pool.length)];
+  const p = mkPerson(type);
+  p.position.set((Math.random() - 0.5) * 9.5, 0, playerZ - 32 - Math.random() * 20);
+  scene.add(p); people.push(p);
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let gameActive = false;
+let playerZ = 0, cameraYaw = 0;
+let score = 0, combo = 0, comboTimer = 0;
+let gameTime = 0, lastSpawn = 0, spawnMs = 700;
+let shakeT = 0;
+let mouseClientX = innerWidth / 2, mouseClientY = innerHeight / 2;
+
+// ── Input ─────────────────────────────────────────────────────────────────────
+const keys = {};
+
+document.addEventListener('keydown', e => {
+  keys[e.code] = true;
+  if (gameActive && (e.code === 'KeyF' || e.code === 'Space')) { e.preventDefault(); performHighFive(0, 0); }
+});
+document.addEventListener('keyup', e => { keys[e.code] = false; });
+document.addEventListener('mousemove', e => {
+  mouseClientX = e.clientX; mouseClientY = e.clientY;
+  if (!gameActive) return;
+  cameraYaw = -((e.clientX / innerWidth) - 0.5) * (Math.PI * 0.55);
+});
+renderer.domElement.addEventListener('click', e => {
+  if (!gameActive) return;
+  const rect = renderer.domElement.getBoundingClientRect();
+  const ndcX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  const ndcY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  performHighFive(ndcX, ndcY);
+});
+
+// ── High Five ─────────────────────────────────────────────────────────────────
+const MAX_REACH = 5.5;
+const raycaster = new THREE.Raycaster();
+
+// Raycast from NDC coords (-1..1) and return the person object hit, or null.
+function pickPerson(ndcX, ndcY) {
+  raycaster.setFromCamera({ x: ndcX, y: ndcY }, camera);
+  const candidates = people.filter(p => !p.userData.highFived && !p.userData.dying);
+  const hits = raycaster.intersectObjects(candidates, true);
+  if (!hits.length) return null;
+  let obj = hits[0].object;
+  while (obj.parent && !people.includes(obj)) obj = obj.parent;
+  return people.includes(obj) ? obj : null;
+}
+
+function inReach(p) {
+  const dx = p.position.x - camera.position.x;
+  const dz = p.position.z - camera.position.z;
+  return Math.sqrt(dx * dx + dz * dz) <= MAX_REACH;
+}
+
+// Raycast from the given NDC coords (-1..1) and try to high five whatever's hit.
+function performHighFive(ndcX, ndcY) {
+  swingT = 1.0;
+  const target = pickPerson(ndcX, ndcY);
+  if (!target) { pop('WHOOSH', 'rgba(255,255,255,0.45)'); return; }
+  if (!inReach(target)) { pop('TOO FAR — GET CLOSER', 'rgba(255,255,255,0.55)'); return; }
+  resolveHighFive(target);
+}
+
+function resolveHighFive(best) {
+  best.userData.highFived = true;
+
+  if (best.userData.type === 'sad') {
+    combo++;
+    comboTimer = 2.8;
+    const pts = 10 * combo;
+    score += pts;
+    updateScore();
+    // Turn yellow!
+    best.userData.bodyMat.color.setHex(0xFFD700);
+    best.userData.rAP.rotation.x = -Math.PI * 0.88;
+    die(best, 0.75);
+    pop(HI5_MSGS[Math.floor(Math.random() * HI5_MSGS.length)] + `  +${pts}`, '#44CCFF');
+    flash('#2255FF', 0.25);
+
+  } else if (best.userData.type === 'angry') {
+    combo = 0; comboTimer = 0;
+    die(best, 0.3);
+    pop('KNOCKED OUT! 💀', '#FF2200');
+    flash('#FF0000', 0.9);
+    shakeT = 1.2;
+    gameActive = false;
+    setTimeout(endGame, 1400);
+
+  } else {
+    pop('...awkward.', '#FFCC00');
+  }
+}
+
+function die(p, dur) { p.userData.dying = true; p.userData.dyingT = dur; p.userData.dyingDur = dur; }
+
+// ── UI ────────────────────────────────────────────────────────────────────────
+function updateScore() { scoreEl.textContent = `SCORE: ${score}`; }
+
+let flashTid, msgTid;
+function flash(col, str) {
+  flashEl.style.transition = 'none'; flashEl.style.background = col; flashEl.style.opacity = str;
+  clearTimeout(flashTid);
+  flashTid = setTimeout(() => { flashEl.style.transition = 'opacity 0.4s'; flashEl.style.opacity = 0; }, 90);
+}
+function pop(txt, col) {
+  msgEl.textContent = txt; msgEl.style.color = col;
+  msgEl.style.transition = 'none'; msgEl.style.opacity = 1; msgEl.style.transform = 'translateX(-50%) scale(1.18)';
+  clearTimeout(msgTid);
+  msgTid = setTimeout(() => {
+    msgEl.style.transition = 'opacity 0.5s, transform 0.5s';
+    msgEl.style.opacity = 0; msgEl.style.transform = 'translateX(-50%) scale(1)';
+  }, 900);
+}
+
+// ── Main Loop ─────────────────────────────────────────────────────────────────
+let lastT = 0;
+
+function animate(now) {
+  requestAnimationFrame(animate);
+  const dt = Math.min((now - lastT) / 1000, 0.05);
+  lastT = now;
+
+  // Shake (always, even after KO)
+  if (shakeT > 0) {
+    shakeT = Math.max(0, shakeT - dt);
+    camera.rotation.y += (Math.random() - 0.5) * shakeT * 0.28;
+    camera.rotation.x += (Math.random() - 0.5) * shakeT * 0.18;
+  }
+
+  renderer.render(scene, camera);
+  if (!gameActive) return;
+
+  gameTime += dt;
+  const dist = -playerZ;
+
+  // Player
+  playerZ -= 0.13;
+  let cx = camera.position.x;
+  if (keys['KeyA'] || keys['ArrowLeft'])  cx -= 0.09;
+  if (keys['KeyD'] || keys['ArrowRight']) cx += 0.09;
+  camera.position.x = Math.max(-4.5, Math.min(4.5, cx));
+  camera.position.y = 1.7 + Math.sin(gameTime * 4.8) * 0.04;
+  camera.position.z = playerZ;
+  camera.rotation.y = cameraYaw;
+  camera.rotation.x = 0;
+
+  // Hand swing
+  if (swingT > 0) {
+    swingT = Math.max(0, swingT - dt * 4.5);
+    const s = Math.sin(swingT * Math.PI);
+    handRoot.position.y = -0.32 + s * 0.44;
+    handRoot.rotation.x = -s * 0.8;
+  } else {
+    handRoot.position.y = -0.32; handRoot.rotation.x = 0;
+  }
+
+  // Theme
+  updateTheme(dist);
+
+  // Spawn
+  spawnMs = Math.max(180, 700 - gameTime * 5);
+  if (now - lastSpawn > spawnMs) {
+    spawnPerson();
+    if (Math.random() < 0.4) spawnPerson();
+    lastSpawn = now;
+  }
+
+  // People
+  for (let i = people.length - 1; i >= 0; i--) {
+    const p = people[i], u = p.userData;
+    if (u.dying) {
+      u.dyingT -= dt;
+      const t = 1 - (u.dyingT / u.dyingDur);
+      p.scale.setScalar(Math.max(0.01, 1 - t * 0.9));
+      p.position.y = t * 4.5;
+      p.rotation.y += dt * 3;
+      if (u.dyingT <= 0) { scene.remove(p); people.splice(i, 1); }
+      continue;
+    }
+    p.position.z += u.speed;
+
+    if (u.type === 'angry') {
+      // Hunt for a slower pedestrian just ahead and swerve to cut in front of them.
+      u.cutTimer -= dt;
+      if (u.cutTimer <= 0) {
+        u.cutTimer = 1.2 + Math.random() * 1.0;
+        let target = null, bestGap = 12;
+        for (const q of people) {
+          if (q === p || q.userData.dying || q.userData.type === 'angry') continue;
+          const gap = q.position.z - p.position.z;
+          if (gap > 0.4 && gap < bestGap) { bestGap = gap; target = q; }
+        }
+        u.cutTargetX = target ? target.position.x : (Math.random() - 0.5) * 8;
+      }
+      if (u.cutTargetX !== null) {
+        p.position.x += (u.cutTargetX - p.position.x) * Math.min(1, dt * 2.2);
+        p.position.x = Math.max(-4.6, Math.min(4.6, p.position.x));
+      }
+    }
+
+    u.phase += dt * 5;
+    const sw = Math.sin(u.phase) * 0.55;
+    u.lAP.rotation.x = sw; u.rAP.rotation.x = -sw;
+    u.lLP.rotation.x = -sw; u.rLP.rotation.x = sw;
+    if (p.position.z > playerZ + 5) { scene.remove(p); people.splice(i, 1); }
+  }
+
+  // Reach outline — highlight only the person under the cursor, and only if in range
+  {
+    const ndcX = (mouseClientX / innerWidth) * 2 - 1;
+    const ndcY = -(mouseClientY / innerHeight) * 2 + 1;
+    const hovered = pickPerson(ndcX, ndcY);
+    for (const p of people) {
+      p.userData.outline.visible = (p === hovered) && inReach(p);
+    }
+  }
+
+  // Combo decay
+  if (comboTimer > 0) {
+    comboTimer -= dt;
+    if (combo > 1) { comboEl.style.opacity = 1; comboEl.textContent = `COMBO ×${combo}`; }
+    if (comboTimer <= 0) { combo = 0; comboEl.style.opacity = 0; }
+  }
+
+  // Environment recycle
+  recycleEnv();
+}
+
+// ── Start / End ───────────────────────────────────────────────────────────────
+function startGame() {
+  playerZ = 0; cameraYaw = 0; score = 0; combo = 0;
+  comboTimer = 0; gameTime = 0; spawnMs = 700; swingT = 0; shakeT = 0;
+  themeIdx = 0; nextThemeIdx = 1; themeBlend = 0;
+  bldFrontZ = -(NUM_BLD * BLD_GAP);
+
+  people.forEach(p => scene.remove(p)); people.length = 0;
+  camera.position.set(0, 1.7, 0); camera.rotation.set(0, 0, 0);
+
+  updateScore();
+  hpFill.style.width = '100%'; hpFill.style.background = '#33cc55';
+  hpLabel.textContent = 'ONE HIT KO';
+  hoodEl.textContent = THEMES[0].name;
+
+  // Reset building positions
+  bldFrontZ = 0;
+  bldPairs.forEach((pair, i) => { placeBld(pair, -i * BLD_GAP, THEMES[0].pal); bldFrontZ = -i * BLD_GAP; });
+  roadSegs.forEach((s, i) => { const z = -i * SEG_LEN - SEG_LEN/2; s.position.z = z; swLSegs[i].position.z = z; swRSegs[i].position.z = z; });
+  dashes.forEach((d, i) => { d.position.z = -i * DASH_GAP - 4; });
+  lamps.forEach((l, i) => { l.position.z = -i * LAMP_GAP; });
+
+  startScr.style.display = 'none';
+  gameOverEl.style.display = 'none';
+  gameActive = true;
+}
+
+function endGame() {
+  document.getElementById('final-score').textContent = `SCORE: ${score}`;
+  document.getElementById('go-sub').textContent = combo > 2 ? `Peak combo: ×${combo}. You almost had it.` : `Better luck next time.`;
+  gameOverEl.style.display = 'flex';
+}
+
+document.getElementById('start-btn').addEventListener('click', startGame);
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>

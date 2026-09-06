@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m http.server:*)",
+      "Bash(dir \"C:\\Users\\brian\\001\\website\\assets\" /B)",
+      "Bash(dir \"C:\\Users\\brian\\001\\website\\PAGES\" /B)",
+      "Bash(dir C:Usersbrian001website /B)",
+      "Bash(dir \"C:\\Users\\brian\\001\\website\" /B)",
+      "Bash(move \"PAGES\\index.html\" \"index.html\")",
+      "Bash(move \"PAGES\\demos.html\" \"demos.html\")",
+      "Bash(move \"PAGES\\works.html\" \"works.html\")",
+      "Bash(move \"PAGES\\Resume.html\" \"Resume.html\")",
+      "Bash(move \"PAGES\\styles.css\" \"styles.css\")",
+      "Bash(move \"PAGES\\script.js\" \"script.js\")",
+      "Bash(mv:*)",
+      "Bash(sed:*)",
+      "Bash(index.css)",
+      "Bash(index.js)",
+      "Bash(demos.css)",
+      "Bash(demos.js)",
+      "Bash(works.css)",
+      "Bash(resume.css)",
+      "Bash(resume.js)",
+      "Bash(works.js)",
+      "Bash(timeout 3 python:*)",
+      "Bash(node -c:*)",
+      "Bash(dir:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

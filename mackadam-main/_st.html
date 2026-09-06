@@ -1,0 +1,10 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<script type="importmap">{"imports":{"three":"./assets/three.js-master/build/three.module.min.js"}}</script>
+<script>window.__log=[];['error','warn'].forEach(k=>{const o=console[k];console[k]=(...a)=>{window.__log.push(k.toUpperCase()+': '+a.map(String).join(' '));o(...a);};});</script>
+</head><body><div id="sea-container"></div><div id="three-container"></div><pre id="out">pending</pre>
+<script type="module">
+import('./sea.js').then(()=>{setTimeout(()=>{
+document.getElementById('out').textContent='===R===\nhand='+(window.__hand&&window.__hand.ready)
++'\nlog: '+(window.__log.join(' | ')||'(clean)')+'\n===E===';},2500);})
+.catch(e=>{document.getElementById('out').textContent='===R===\nFAIL: '+e+'\n===E===';});
+</script></body></html>

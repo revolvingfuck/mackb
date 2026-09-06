@@ -240,18 +240,30 @@ void main(){
   vec3  q     = vObj * uVein;
   float warp  = fbm3(q * 1.7 + 11.3);
   float v     = fbm3(q * 0.85 + vec3(warp) * 1.25);
-  float major = 1.0 - smoothstep(0.005, 0.062, abs(v - 0.5));
+  float vd    = abs(v - 0.5);
+  // The big cracks split into two nested bands: the whole channel (major, kept
+  // below for relief/polish), and a narrower core inside it that carries the
+  // gold. What's left between the two — channel but not core — is the dark
+  // rim that frames the leaf, which is the actual give-away of a gilded seam
+  // rather than a flat gold line painted over grey stone.
+  float major = 1.0 - smoothstep(0.006, 0.072, vd);
+  float gold  = 1.0 - smoothstep(0.006, 0.026, vd);
+  float rim   = clamp(major - gold, 0.0, 1.0);
   float w2    = fbm3(q * 3.3 + vec3(warp) * 0.55 + 5.9);
   float minor = 1.0 - smoothstep(0.008, 0.078, abs(w2 - 0.5));
   float grain = fbm3(q * 15.0 + 3.7);
 
-  // Carrara: a very white ground, near-black seams, and a soft grey drift
-  // through the body. The contrast between ground and seam is the whole read.
-  vec3 stone = pal(vec3(0.960, 0.955, 0.935));
-  stone = mix(stone, pal(vec3(0.245, 0.265, 0.335)), major * 0.94);
-  stone = mix(stone, pal(vec3(0.560, 0.580, 0.640)), minor * 0.50);
-  stone = mix(stone, pal(vec3(0.800, 0.805, 0.830)), smoothstep(0.56, 0.90, v) * 0.38);
-  stone *= 0.94 + 0.12 * grain;
+  // Calacatta gold: a white-to-grey ground with soft clouding, fine ordinary
+  // grey capillaries in the background, and a few broad fractures gilded —
+  // charcoal rim, gold leaf core. Only the MAJOR cracks carry gold; the
+  // minor network stays plain grey marble, which is what keeps the eye
+  // reading a handful of real gold seams instead of a gold cobweb.
+  vec3 stone = pal(vec3(0.955, 0.955, 0.948));
+  stone = mix(stone, pal(vec3(0.560, 0.575, 0.600)), minor * 0.42);
+  stone = mix(stone, pal(vec3(0.780, 0.790, 0.800)), smoothstep(0.56, 0.90, v) * 0.28);
+  stone = mix(stone, pal(vec3(0.150, 0.145, 0.140)), rim);
+  stone = mix(stone, pal(vec3(0.830, 0.660, 0.320)), gold);
+  stone *= 0.95 + 0.10 * grain;
 
   // Relief from the same field. The veins sit slightly proud and the grain is
   // crystalline, and perturbing the normal with them does real work here: it
@@ -286,9 +298,19 @@ void main(){
   // does NOT raise that much — a water film is IOR 1.333 over 1.486, which is
   // nearly index-matched. What actually reads as wet is the roughness
   // collapsing by an order of magnitude, and that is where the change goes.
-  vec3  F0    = vec3(0.0378);
+  // The gold is a real metal in the BRDF, not a tinted dielectric — gold's own
+  // reflectance at normal incidence, from Hoffman's measured tables, and it is
+  // what makes the leaf actually glint instead of just reading as a yellow
+  // stripe. A flat metal surface would still look too clean for foil, so its
+  // roughness is driven by its own much finer noise: many tiny facets at very
+  // different polish, so only some catch the light at any one view angle —
+  // that flicker, not the colour, is what sells hammered leaf over paint.
+  vec3  F0     = mix(vec3(0.0378), vec3(1.000, 0.766, 0.336), gold);
+  float fleck  = fbm3(q * 46.0 + 91.7);
   float polish = 0.52 - 0.16 * major - 0.10 * minor;   // seams take a duller cut
-  float rough  = mix(polish, 0.055, wet);
+  polish = mix(polish, mix(0.03, 0.60, fleck), gold);
+  float rough  = mix(polish, 0.055, wet * (1.0 - gold));  // the film beads on
+                                                           // metal rather than wetting it
 
   // Specular antialiasing. The vein relief above is high-frequency geometry
   // in a normal, and a tight lobe over a normal that swings within one pixel
@@ -321,8 +343,12 @@ void main(){
   vec3  spec = F * D * Vis * NdL;
   spec = min(spec, vec3(80.0));                 // firefly clamp on the wet film
 
-  // Energy conservation: what the interface reflects never reaches the body.
-  vec3 kD = vec3(1.0) - F;
+  // Energy conservation: what the interface reflects never reaches the body —
+  // and for the gold leaf that is EVERYTHING it reflects. A real metal has no
+  // diffuse term at all (there is no body beneath the surface for light to
+  // scatter out of), so kD is killed outright over the gold rather than just
+  // reduced by Fresnel the way the dielectric stone is.
+  vec3 kD = (vec3(1.0) - F) * (1.0 - gold);
   vec3 diffuse = albedo * (1.0 / PI_) * NdL;
 
   vec3 col = (kD * diffuse + spec * uSpec * 13.0) * keyRad;
@@ -334,9 +360,10 @@ void main(){
   // because they are actually thin, not because a rim term is faking it.
   //
   // The extinction is wavelength-dependent — red gets furthest through calcite —
-  // which is why lit marble edges go warm while the body stays cool.
+  // which is why lit marble edges go warm while the body stays cool. None of
+  // this reaches the gold: a metal has no far wall for light to come through.
   vec3  sigma = vec3(1.55, 3.30, 5.10);
-  vec3  trans = exp(-sigma * (vThick * 2.4 + 0.06));
+  vec3  trans = exp(-sigma * (vThick * 2.4 + 0.06)) * (1.0 - gold);
   float back  = pow(clamp(dot(V, -normalize(uKeyDir + N * 0.35)), 0.0, 1.0), 3.0);
   col += albedo * trans * keyRad * back * 1.45;
   // ...and a wrap term, so the terminator rolls off the way a scattering solid

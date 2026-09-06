@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm -rf C:/Users/brian/AppData/Local/Temp/claude/c--Users-brian-001-mackadam-main-mackadam-main/cf36e7cf-a696-4a09-91ad-d6137dff2a3b/scratchpad/cp8)",
+      "Bash('/c/Program Files/Google/Chrome/Application/chrome.exe' --headless=new --use-angle=swiftshader --enable-unsafe-swiftshader --hide-scrollbars --no-first-run --user-data-dir=C:/Users/brian/AppData/Local/Temp/claude/c--Users-brian-001-mackadam-main-mackadam-main/cf36e7cf-a696-4a09-91ad-d6137dff2a3b/scratchpad/cp8 --window-size=1280,800 --virtual-time-budget=20000 --enable-logging=stderr --log-level=0 --screenshot=C:/Users/brian/AppData/Local/Temp/claude/c--Users-brian-001-mackadam-main-mackadam-main/cf36e7cf-a696-4a09-91ad-d6137dff2a3b/scratchpad/live.png http://127.0.0.1:8000/index.html)",
+      "Bash(rm -rf C:/Users/brian/AppData/Local/Temp/claude/c--Users-brian-001-mackadam-main-mackadam-main/cf36e7cf-a696-4a09-91ad-d6137dff2a3b/scratchpad/cp9)",
+      "Bash('/c/Program Files/Google/Chrome/Application/chrome.exe' --headless=new --use-angle=swiftshader --enable-unsafe-swiftshader --hide-scrollbars --no-first-run --user-data-dir=C:/Users/brian/AppData/Local/Temp/claude/c--Users-brian-001-mackadam-main-mackadam-main/cf36e7cf-a696-4a09-91ad-d6137dff2a3b/scratchpad/cp9 --window-size=1280,800 --virtual-time-budget=25000 --screenshot=C:/Users/brian/AppData/Local/Temp/claude/c--Users-brian-001-mackadam-main-mackadam-main/cf36e7cf-a696-4a09-91ad-d6137dff2a3b/scratchpad/wind.png 'http://127.0.0.1:8000/index.html?hour=13&wind=1&fog=0.1&cloud=0.3')",
+      "Bash(node test-2.mjs .)",
+      "Bash(node test-worksfit.mjs . 1440 900)",
+      "Bash(node test-worksfit.mjs . 1366 768)",
+      "Bash(grep -n \"^\\\\s*h1\\\\s*{\\\\|^\\\\s*h2\\\\s*{\\\\|^\\\\s*h3\\\\s*{\\\\|^html, body\\\\|^body {\" resume.css)",
+      "Bash(node measure-sig.mjs .)",
+      "Bash(node test-final.mjs .)",
+      "Bash(node test-white.mjs .)",
+      "Bash(curl -s -o /dev/null -w \"index.html:%{http_code}  \" http://localhost:8765/index.html)",
+      "Bash(curl -s -o /dev/null -w \"sea-simple.js:%{http_code}  \" http://localhost:8765/sea-simple.js)",
+      "Bash(curl -s -o /dev/null -w \"hand-pose.bin:%{http_code}\\\\n\" http://localhost:8765/hand-pose.bin)",
+      "Bash(curl -s -o /dev/null -w \"server:%{http_code}\\\\n\" http://localhost:8765/index.html)",
+      "Read(//c/Program Files/**)",
+      "Bash(command -v blender)",
+      "Read(//c/Program Files \\\\\\(x86\\\\\\)/Steam/steamapps/common/**)",
+      "Bash(python -c \"import ast,io; ast.parse\\(io.open\\('tools/bake-hand.py',encoding='utf-8'\\).read\\(\\)\\); print\\('bake-hand.py parses'\\)\")",
+      "Bash(time python tools/bake-hand.py)",
+      "Bash(time python tools/bake-ocean.py)",
+      "Bash(command -v vercel)",
+      "Bash(vercel --version)",
+      "Bash(npx --yes vercel --version)",
+      "Bash(npx --yes vercel whoami)"
+    ]
+  }
+}

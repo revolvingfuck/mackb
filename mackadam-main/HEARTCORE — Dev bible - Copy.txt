@@ -1,0 +1,405 @@
+HEARTCORE — Design Document (Solo Dev, Godot, Claude Code)
+1. EXECUTIVE SUMMARY
+Item	Description
+Title	Heartcore Resonance
+Genre	Action-RPG
+Engine	Godot 4
+Team	Solo dev + Claude Code
+Target Playtime	40 hours
+Core Mechanic	Dual-layer combat + moral history as physical object
+One line: An action-RPG where your moral history is a physical object you carry, growing on your baby golem's body and in a cave, and the ending is read from the pattern, not chosen.
+
+2. DEVELOPMENT SPECS
+Item	Spec
+Total Dungeons	7
+Total Boss Fights	10
+Total Playable Characters	6 (models already done for main party)
+Total Cores	5
+Total Parts	4
+Total Districts	5 (Market, Slums, Depths, Financial, Casino)
+Target Playtime	40 hours
+Engine	Godot 4
+AI Assistant	Claude Code (Fable 5)
+3. SCOPE MANAGEMENT (SOLO DEV)
+3.1 What Ships
+Priority	Systems	Status
+Critical	Core combat loop (Luto direct-control)	Needs implementation
+Critical	Evasion systems (crowd cover, verticality)	Needs implementation
+Critical	Party system (2 of 5 in battle)	Models done
+Critical	Core system (tints, delivery, ending)	Needs implementation
+Critical	Heartilith Cavern (atmospheric read-out)	Needs implementation
+High	Trust-based combat (ATB, interiority)	Needs implementation
+High	Part 1 story (all beats)	Needs implementation
+High	Myc (birth, HUD, progression)	Needs implementation
+Medium	Part 2 story (Depths + Tribe split)	Needs implementation
+Medium	Crafting system	Needs implementation
+Medium	Casino gambling	One minigame
+Low	Part 3 story	Needs implementation
+Low	Part 4 story	Needs implementation
+Low	All 3 nuclear fauna species	Needs implementation
+Stretch	Full city district healing	Prototype first
+3.2 40-Hour Content Breakdown
+Part	Main Story	Side Content	Total
+Part 1	8 hours	2 hours	10 hours
+Part 2	8 hours	2 hours	10 hours
+Part 3	7 hours	3 hours	10 hours
+Part 4	6 hours	4 hours	10 hours
+Total	29 hours	11 hours	40 hours
+3.3 Dungeon Hour Breakdown
+Dungeon	Main	Exploration	Total
+Casino (Part 1)	2 hrs	0.5 hrs	2.5 hrs
+Industrial Depths (Part 2)	2 hrs	1 hr	3 hrs
+Mountain Tribe (Part 2)	1.5 hrs	0.5 hrs	2 hrs
+Glass Tower (Part 3)	2 hrs	1 hr	3 hrs
+Castle Ruins (Part 3)	2 hrs	1 hr	3 hrs
+Alba's Castle (Part 4)	2.5 hrs	1.5 hrs	4 hrs
+Total	12 hrs	5.5 hrs	17.5 hrs
+3.4 Development Priority Order
+Phase	Focus	Estimated Output
+Phase 1 (Month 1-2)	Core combat + evasion prototype. One district (Market). Luto + Aya playable.	Vertical slice: Market district, fight + evade, one Core
+Phase 2 (Month 3-4)	Party system + Myc. ATB for trust-based. Interiority system.	All 6 characters combat-ready. Myc birth scene.
+Phase 3 (Month 5-6)	Part 1 complete. Casino dungeon. Gannet boss. Core 1 delivery. Side content: 2 street punk quests.	Full Part 1 playable. Core system working.
+Phase 4 (Month 7-8)	Part 2 structure. Depths dungeon + Tribe split. Cormorant boss. Core 2. Side content: 2 street punk quests, 1 fauna hunt.	Split-party switching. Both paths complete.
+Phase 5 (Month 9-10)	Part 3. Glass Tower, Poliphibious, Castle Ruins. Heron boss. Core 3 + 4. Side content: 3 street punk quests, Cyclops intro.	Full Part 3 playable.
+Phase 6 (Month 11-12)	Part 4. Alba's Castle. All Sons together. Alba final boss. Myc communion. Endings. Side content: 4 street punk quests, Cyclops resolution.	Full story complete. All endings reachable.
+Phase 7 (Month 13-14)	Polish. Balance. Optimization. Audio. Full side content pass.	Release candidate.
+4. COMBAT SYSTEM
+4.1 Control Types
+Tier	Characters	Control Type	Implementation
+Direct-control	Luto, Corrine	Real-time action. Move, dodge, attack.	Godot CharacterBody3D
+Trust-based	Aya, Eli, Gurtohli, Myc	ATB commands. Ally executes.	Godot Timer + state machine
+4.2 ATB Mechanics (Trust-Based Characters)
+Stat	Value
+Base ATB Fill Time	3.0 seconds
+Fastest ATB (max interiority)	1.5 seconds
+Slowest ATB (min interiority)	5.0 seconds
+Command Response Delay (min interiority)	1.0 second
+Command Refusal Threshold (min interiority)	10% chance
+4.3 Interiority Stat Impact
+Interiority Level	ABS	Effectiveness	Critical	Mana Cost	Responsiveness
+0 (Closed)	50%	50%	50%	150%	50%
+1	65%	65%	65%	130%	65%
+2	80%	80%	80%	110%	80%
+3 (Open)	100%	100%	100%	100%	100%
+4.4 Luto's Balance System
+Balance Value	Paladin Effectiveness	Berserker Effectiveness	Berserker Cost
+0 (Alone)	50%	150%	50 Remorse/sec
+1	70%	130%	40 Remorse/sec
+2	85%	115%	30 Remorse/sec
+3 (Held)	100%	100%	20 Remorse/sec
+Balance Formula: Average party interiority ÷ 2 (rounded down)
+
+Avg 0-1 → Balance 0
+
+Avg 2-3 → Balance 1
+
+Avg 4-5 → Balance 2
+
+Avg 6 → Balance 3
+
+Berserker activation: 100 Remorse minimum. Drains 20-50 Remorse/sec.
+Paladin activation: Free. Available always.
+
+5. CHARACTER ABILITIES
+5.1 Luto — Berserker / Paladin
+Ability	Type	Effect	Cost	Implementation
+Berserker Rage	Berserker	+300% damage, HP drain 5%/sec	100 Remorse	Toggle state
+Shield Ally	Paladin	Absorb 100% damage for one ally, 5s	20 MP	Target ally
+Charm	Utility	Pacify one enemy for 10s	15 MP	Status effect
+Never Give Up	Paladin	Self-revive 25% HP, once/battle	Passive	Auto-trigger
+Inventory	Utility	Use any item on any character	0 MP	Menu
+Escape	Utility	Flee combat. Fails on bosses.	0 MP	Scene transition
+5.2 Aya — White Mage / Bard
+Ability	Type	Effect	Cost	Implementation
+Soothe	White Mage	Heal 100 + (Interiority × 20) HP	10 MP	Single target
+Poultice	White Mage	Heal 200 + (Interiority × 30) HP	20 MP	Single target
+Remedy	White Mage	Remove all status effects	15 MP	Single target
+Cheer	Bard	+20% ATK to all, 30s	15 MP	Party buff
+Chant	Bard	+20% DEF to all, 30s	15 MP	Party buff
+Rally	Bard	+30% ATB fill rate, 30s	20 MP	Party buff
+Stabilize	Bard	Reduce Luto's Remorse by 50	25 MP	Luto only
+5.3 Eli — Black Mage / Blue Mage
+Ability	Type	Effect	Cost	Implementation
+Zap	Black Mage	Lightning damage: 50 + (Int × 1.5)	10 MP	Elemental
+Burn	Black Mage	Fire damage: 50 + (Int × 1.5)	10 MP	Elemental
+Chill	Black Mage	Ice damage: 50 + (Int × 1.5)	10 MP	Elemental
+Manifest	Blue Mage	Copy last enemy attack × 0.8	20 MP	Enemy memory
+Shadow Form	Blue Mage	Manifest enemy from memory	30 MP	Enemy pattern
+Eclipse	Blue Mage	Shadow magic 50% cost, 30s	25 MP	Self buff
+5.4 Gurtohli — Thief / Security
+Ability	Type	Effect	Cost	Implementation
+Hack	Security	Disable enemy ability, 15s	15 MP	Enemy target
+Interrupt	Security	Interrupt action, 50% success	10 MP	Enemy target
+Sabotage	Security	-30% ATK, 30s	15 MP	Enemy debuff
+Disorient	Thief	-50% accuracy, 20s	10 MP	Enemy debuff
+Scramble	Thief	Randomize targeting, 10s	15 MP	Enemy debuff
+Steal	Thief	30% + (Interiority × 5%) success	5 MP	Enemy item
+5.5 Corrine — Mechanic / Knight
+Ability	Type	Effect	Cost	Implementation
+Block	Knight	-75% damage, 5s	10 MP	Self
+Endure	Knight	Take 50% damage, 10s	15 MP	Self
+Willpower	Knight	Self-revive 50% HP, once/battle	Passive	Auto-trigger
+Roar	Knight	Taunt all enemies, 10s	10 MP	AoE
+Deploy Turret	Mechanic	20 damage/sec, 30s	25 MP	Deployable
+Deploy Shield	Mechanic	Absorb 500 damage	20 MP	Deployable
+Deploy Scanner	Mechanic	Reveal weaknesses, 30s	15 MP	Deployable
+Repair	Mechanic	Heal all tech, 100 HP	10 MP	Deployable
+5.6 Myc — Golem / HUD-Enhancement
+Ability	Type	Effect	Cost	Implementation
+Smash	Golem	50 + (Core × 20) damage	5 MP	Melee
+Bulldoze	Golem	80 + (Core × 25) damage	10 MP	Melee
+Pulverize	Golem	120 + (Core × 30) damage	15 MP	Melee
+Myc Stats Scaling:
+
+HP: 100 + (Core × 50)
+
+ATK: 20 + (Core × 10)
+
+DEF: 10 + (Core × 5)
+
+6. CORE SYSTEM
+6.1 Core Locations
+Core	Location	Acquired By
+Core 1	Casino Headquarters	Defeat Gannet, rescue Eli
+Core 2	Mountain Tribe	Corrine passes tests, becomes honorary princess
+Core 3	Glass Tower	Defeat Heron
+Core 4	Glass Tower (return)	Defeat Alba clone
+Core 5	Alba's satellite machine	Myc replaces Alba
+6.2 Core Tints
+Heart Tint	Trigger Condition	Core Color
+Bright	Berserker used < 5 times, Remorse < 50	White/Gold
+Warm	Berserker used 5-15, Remorse 50-150	Orange
+Dark	Berserker used 15-30, Remorse 150-300	Red
+Void	Berserker used > 30, Remorse > 300	Black
+6.3 Core-Gated Unlocks
+Cores	Unlock
+1	Aya's trust visible, Enemy HP visible, Berserker-Remorse scale visible
+2	Eli's trauma visible, Enemy location visible, Light combos
+3	Gurtohli's psyche + Corrine's ego visible, Enemy next move visible, Heavy combos
+4	Community intuition, Heartilith telepathy, Finisher combos
+6.4 Ending Conditions
+Ending	Core Pattern Required
+A — Return to Search	2+ Dark/Void cores
+B — Citizen	3+ Bright cores
+C — Collapse	3+ Dark/Void cores
+Perfect	4 Bright cores + Cyclops alive + all personal demons defeated + all interiority at 3+
+7. DUNGEON DESIGN
+7.1 Part 1 — Casino (Core 1)
+Spec	Value
+Rooms	12
+Enemy Types	Cyborg grunts (3 variants), Gannet (boss)
+Puzzles	Tech dungeon—hacking terminals, security lasers, locked doors
+Boss	Gannet — Phase 1: melee; Phase 2: summons grunts; Phase 3: berserk
+Save Points	3
+Treasure	8 chests
+Playtime	2.5 hours
+7.2 Part 2 — Industrial Depths (Cormorant)
+Spec	Value
+Rooms	15
+Enemy Types	Cyborg grunts, aquatic cyborgs, nuclear fauna (aquatic)
+Puzzles	Water level management, steam vent timing, submarine navigation
+Boss	Cormorant — Phase 1: ranged; Phase 2: submerges; Phase 3: surface
+Save Points	4
+Treasure	10 chests
+Playtime	3 hours
+7.3 Part 2 — Mountain Tribe (Corrine solo)
+Spec	Value
+Rooms	8
+Enemy Types	Nuclear fauna (3 variants)
+Puzzles	3 character tests: courage, wisdom, compassion
+Boss	None (tests are non-combat)
+Save Points	2
+Treasure	4 chests
+Playtime	2 hours
+7.4 Part 3 — Glass Tower (Heron)
+Spec	Value
+Rooms	18
+Enemy Types	Cyborg grunts, elite cyborgs, Heron (boss)
+Puzzles	Elevator puzzles, glass floor traversal, security systems
+Boss	Heron — Phase 1: tech; Phase 2: clones; Phase 3: desperation
+Save Points	4
+Treasure	12 chests
+Playtime	3 hours
+7.5 Part 3 — Castle Ruins (Poliphibious + Cyclops)
+Spec	Value
+Rooms	20
+Enemy Types	Cyborg grunts, Poliphibious (boss), Cyclops (chase)
+Puzzles	Maze navigation, pressure plates, old-world tech
+Boss	Poliphibious — Phase 1: underwater; Phase 2: emerges; Phase 3: enraged
+Save Points	4
+Treasure	10 chests
+Special	Cyclops chase — timed escape, no combat
+Playtime	3 hours
+7.6 Part 4 — Alba's Castle
+Spec	Value
+Rooms	25
+Enemy Types	Alba clones, cyborg grunts, all three Sons (boss rush)
+Puzzles	Ability-specific: Eli shadow paths, Gurtohli hacks, Corrine bridges, Aya heals hazards
+Boss	All 3 Sons together — Gannet (tank), Cormorant (ranged), Heron (tech)
+Final Boss	Alba — Phase 1: clones; Phase 2: true form; Phase 3: satellite connection
+Save Points	5
+Treasure	15 chests
+Playtime	4 hours
+8. PROGRESSION SYSTEM
+8.1 Leveling Curve (40-Hour Pace)
+Level	XP Required	HP Gain	ATK Gain	DEF Gain
+1-10	150 per level	+20	+2	+2
+11-20	300 per level	+25	+3	+2
+21-30	600 per level	+30	+3	+3
+31-40	1000 per level	+35	+4	+3
+41-50	2000 per level	+40	+4	+4
+Level cap: 50
+
+8.2 Equipment Slots
+Slot	Description
+Weapon	Base attack damage
+Armor	Base defense
+Accessory 1	Passive effect
+Accessory 2	Passive effect
+Special	Character-specific (Aya's instrument, Eli's sketchbook, etc.)
+8.3 Special Items (Interiority Boost)
+Character	Special Item	Effect
+Aya	Music box	+1 interiority when given
+Eli	Family photo	+1 interiority when given
+Gurtohli	Old gang patch	+1 interiority when given
+Corrine	Tech prototype	+1 interiority when given
+9. ECONOMY
+9.1 Currency Sources (40-Hour Economy)
+Source	Credits
+Cyborg grunt	50-100
+Elite cyborg	150-250
+Nuclear fauna	30-80
+Boss	500-1000
+Casino (slots, blackjack)	Variable (50-500)
+Side quests	200-500
+9.2 Crafting Costs
+Item Category	Parts Required	Credits Required
+Stealth (camouflage, noise-bot)	3 parts	100
+Buff (potion, ether)	2 parts	50
+Weapons	8 parts	500
+Armor	6 parts	400
+Scanners	4 parts	200
+Hacking tools	4 parts	200
+9.3 Shop Prices
+Item	Price
+Potion (heal 50 HP)	50
+Hi-Potion (heal 150 HP)	150
+Mega-Potion (heal 300 HP)	400
+Ether (restore 50 MP)	100
+Hi-Ether (restore 150 MP)	300
+Mega-Ether (restore 300 MP)	800
+Camouflage Kit (1 use)	100
+Noise-Bot (1 use)	150
+Scanner Charge (1 use)	75
+Repair Kit (heal tech)	200
+10. BOSS FIGHTS
+10.1 Gannet (Part 1)
+Phase	HP	Attacks	Strategy
+1	100%	Melee combo, grab, throw	Dodge, wait for opening
+2	60%	Summons 2 grunts	Defeat grunts, Gannet staggers
+3	30%	Berserk mode, no grunts	Luto must use Paladin shield
+10.2 Cormorant (Part 2)
+Phase	HP	Attacks	Strategy
+1	100%	Torpedo, claw swipe	Stay mobile
+2	60%	Submerges, minions	Defeat minions to force surface
+3	30%	Surface phase, melee barrage	Block, counter
+10.3 Heron (Part 3)
+Phase	HP	Attacks	Strategy
+1	100%	Tech weapons, lasers	Use Gurtohli's hack to disable
+2	60%	Summons 3 clones	Find real Heron (different color)
+3	30%	Desperation, all weapons	Guard, heal, survive
+10.4 Poliphibious (Part 3)
+Phase	HP	Attacks	Strategy
+1	100%	Underwater: torpedo, tentacle	Use Corrine's scanners to reveal weak point
+2	60%	Emerges: melee, bite	Use Eli's ice magic (vulnerability)
+3	30%	Enraged: all attacks	Hit weak point on back (tribe knowledge)
+10.5 Alba Clone (Part 3)
+Phase	HP	Attacks	Strategy
+1	100%	Tech weapons	Standard fight
+2	50%	Summons 2 grunts	Defeat grunts first
+3	25%	Self-destruct countdown	Finish before timer
+10.6 Sons Together (Part 4)
+Character	Role	Strategy
+Gannet	Tank	High DEF, focus after others
+Cormorant	Ranged	Interrupt with Gurtohli
+Heron	Tech support	Disable with hack
+10.7 Alba (Part 4)
+Phase	HP	Attacks	Strategy
+1	100%	Clones stalk environment	Use unique abilities to navigate
+2	70%	True form: tech weapons, melee	Dodge, attack in openings
+3	40%	Satellite connection	Must use Myc combo to sever
+4	20%	Desperation mode	All attacks, no mercy
+11. UI/UX
+11.1 HUD Layout
+Element	Position	Display
+HP Bar	Bottom-left	Luto's health
+MP Bar	Bottom-left	Under HP
+Party HP	Bottom-right	2 party members
+ATB Meter	Bottom-right	Under party HP (trust-based)
+Remorse Scale	Top-right	Berserker/Remorse visible (Core 1+)
+Enemy HP	Top-center	Visible (Core 1+)
+Enemy Info	Top-center	Location (Core 2+), next move (Core 3+)
+11.2 Myc Enhancement Layer
+Core Count	Enhancement Added
+0	Base HUD only
+1	Aya's trust (heart icon), enemy HP, Remorse scale
+2	Eli's trauma (crack icon), enemy location on map
+3	Gurtohli's psyche + Corrine's ego (status icons), enemy next move
+4	District health visible, Heartilith whispers (text prompts)
+11.3 Menu Layout
+Tab	Content
+Party	Character stats, equipment, interiority
+Items	Consumables, key items
+Equipment	Weapons, armor, accessories
+Crafting	Recipe list, parts inventory
+Map	District map, current location
+Cores	Core collection, Heart pattern
+System	Save, load, settings
+12. SIDE CONTENT (11 Hours)
+12.1 Street Punk Quests
+Quest	Description	Rewards	Playtime
+Punk Faction Intro	Help punks in desperate situation	Credits, faction reputation	30 min
+Tech Pilfering 1	Steal tech parts from gang	Credits, crafting parts	30 min
+Tech Pilfering 2	Steal tech parts from gang	Credits, crafting parts	30 min
+Brother Search 1	Investigate cyborg recruitment	Clues, credits	45 min
+Brother Search 2	Track missing brother	Clues, credits	45 min
+Brother Search 3	Confront cyborg holding brother	Core 4 revelation	1 hour
+Final Punk Quest	Rescue/avenge brother	Ending condition	1 hour
+12.2 Nuclear Fauna Hunts
+Hunt	Description	Rewards	Playtime
+Fauna Hunt 1	Clear fauna from district	Parts, credits	30 min
+Fauna Hunt 2	Clear fauna from district	Parts, credits	30 min
+Fauna Hunt 3	Rare fauna boss	Rare parts, credits	45 min
+12.3 District Healing Side Content
+District	Healing Beats	Rewards	Playtime
+Market	Help 5 vendors, clear gang presence	Crowd cover, discounts	1.5 hours
+Slums	Help 5 residents, Eli's shaman quest	Verticality access	1.5 hours
+Depths	Help 5 workers, repair systems	Submarine shortcuts	1.5 hours
+Financial	Help 5 employees, expose corruption	Glass tower access	1.5 hours
+13. AUDIO DESIGN
+Category	Direction
+Overworld Theme	Mournful strings, distant percussion. Sus Corona's isolation.
+Battle Theme	Fast-paced brass, syncopated drums. Urgency.
+Boss Theme	Heavy orchestral, choir. Pressure.
+Heartilith Theme	Ambient, choral pads. Ethereal.
+Casino Theme	Jazz, brass, upbeat but corrupted.
+Depths Theme	Industrial, low percussion, water sounds.
+Tribe Theme	Organic drums, flutes. No electronics.
+Ending Theme	Reprise of Overworld Theme, warm strings.
+14. KILL TESTS
+Risk	Prototype
+District-relationship system	Build one district from broken to whole. Test crowd cover.
+Myc's legibility	Play with Myc in field. Can player tell their Heart state?
+Split-party switching	Build Depths + Tribe, test switching. Does it feel seamless?
+"100% correct" feedback	Test multiple playthroughs. Is the condition clear?
+40-hour pacing	Is there enough content? Does it drag?
+15. DEVELOPMENT TIMELINE (SOLO DEV + CLAUDE CODE)
+Phase	Focus	Timeline
+Phase 1	Core combat + evasion prototype. Market district. Luto + Aya playable.	Month 1-2
+Phase 2	Party system + Myc. ATB + interiority. All 6 characters.	Month 3-4
+Phase 3	Part 1 complete. Casino + Gannet. Core 1. 2 punk quests.	Month 5-6
+Phase 4	Part 2 complete. Depths + Tribe split. Cormorant. Core 2. 2 punk quests, 1 fauna hunt.	Month 7-8
+Phase 5	Part 3 complete. Glass Tower + Heron. Poliphibious. Core 3+4. 3 punk quests.	Month 9-10
+Phase 6	Part 4 complete. Alba's Castle. All endings. 4 punk quests. Cyclops resolution.	Month 11-12
+Phase 7	Polish. Balance. Optimization. Audio. Full side content.	Month 13-14
+Phase 8	Final testing. Bug fixes. Release.	Month 15

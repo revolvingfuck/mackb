@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><3CX - Resonance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+        }
+        
+        nav {
+            background: #0a0a1a;
+            border-bottom: 2px solid #00ff88;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0, 255, 136, 0.3);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-title {
+            color: #00ff88;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: #88ffbb;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover {
+            color: #00ff88;
+            border: 1px solid #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+        
+        .nav-link.active {
+            color: #00ff88;
+            border: 1px solid #00ff88;
+            background: rgba(0, 255, 136, 0.15);
+        }
+        
+        .content {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .page {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .map-container, .doc-container {
+            background: #0f0f1e;
+            border: 3px solid #00ff88;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+        }
+        
+        .doc-container {
+            color: #88ffbb;
+            line-height: 1.8;
+        }
+        
+        .doc-container h1 {
+            color: #00ff88;
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
+        .doc-container h2 {
+            color: #00ff88;
+            font-size: 20px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .doc-container h3 {
+            color: #66ddaa;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .doc-container p {
+            margin-bottom: 15px;
+        }
+        
+        .doc-container ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .doc-container li {
+            margin-bottom: 8px;
+        }
+        
+        .timeline-event {
+            background: #1a1a3e;
+            border-left: 4px solid #00ff88;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-event h3 {
+            color: #00ff88;
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            color: #00ff88;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
+        svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .district {
+            fill: #1a1a3e;
+            stroke: #00ff88;
+            stroke-width: 2;
+        }
+        
+        .water {
+            fill: #0a1628;
+            stroke: #2a5a7a;
+            stroke-width: 2;
+        }
+        
+        .forest {
+            fill: #1a3a1a;
+            stroke: #338855;
+            stroke-width: 2;
+        }
+        
+        .caves {
+            fill: #2a2a2a;
+            stroke: #666666;
+            stroke-width: 2;
+        }
+        
+        .slums {
+            fill: #3a2a1a;
+            stroke: #996633;
+            stroke-width: 2;
+        }
+        
+        .label {
+            fill: #00ff88;
+            font-size: 16px;
+            font-weight: bold;
+            text-anchor: middle;
+            pointer-events: none;
+        }
+        
+        .sublabel {
+            fill: #88ffbb;
+            font-size: 11px;
+            text-anchor: middle;
+            pointer-events: none;
+        }
+        
+        .poi {
+            fill: #ff4444;
+        }
+        
+        .poi-label {
+            fill: #ffaa44;
+            font-size: 10px;
+            text-anchor: middle;
+        }
+        
+        .path {
+            stroke: #444444;
+            stroke-width: 2;
+            stroke-dasharray: 5,5;
+            fill: none;
+        }
+        
+        .legend {
+            margin-top: 20px;
+            color: #00ff88;
+            font-size: 12px;
+        }
+        
+        .legend-item {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .legend-color {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #00ff88;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-title"><3CX - RESONANCE</div>
+            <ul class="nav-menu">
+                <li><span class="nav-link active" onclick="showPage('map')">City Map</span></li>
+                <li><span class="nav-link" onclick="showPage('timeline')">Timeline</span></li>
+                <li><span class="nav-link" onclick="showPage('gdd')">Game Design Doc</span></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <!-- MAP PAGE -->
+        <div id="map" class="page active">
+            <div class="map-container">
+                <div class="title"><3CX - RESONANCE: CITY MAP</div>
+                
+                <svg viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Forest Hills -->
+                    <rect class="forest" x="100" y="20" width="550" height="150"/>
+                    <text class="label" x="375" y="100">FOREST HILLS</text>
+                    
+                    <!-- Caves -->
+                    <ellipse class="caves" cx="480" cy="90" rx="70" ry="40"/>
+                    <text class="sublabel" x="480" y="95">Caves</text>
+                    
+                    <!-- Ruins -->
+                    <rect class="caves" x="220" y="50" width="50" height="60"/>
+                    <text class="sublabel" x="245" y="85">Ruins</text>
+                    
+                    <!-- Rail Bridge -->
+                    <rect class="district" x="10" y="140" width="140" height="25"/>
+                    <text class="sublabel" x="80" y="157">RAIL BRIDGE</text>
+                    
+                    <!-- The Castle -->
+                    <polygon class="caves" points="30,30 70,30 80,50 90,30 130,30 130,100 80,120 30,100"/>
+                    <text class="sublabel" x="80" y="75">The Castle</text>
+                    
+                    <!-- Beach -->
+                    <polygon class="water" points="650,30 750,30 750,200 680,150"/>
+                    <text class="label" x="710" y="110">BEACH</text>
+                    
+                    <!-- District C -->
+                    <rect class="district" x="200" y="170" width="450" height="130"/>
+                    <text class="label" x="425" y="235">DISTRICT C</text>
+                    
+                    <!-- District C POIs -->
+                    <circle class="poi" cx="280" cy="210" r="5"/>
+                    <text class="poi-label" x="280" y="228">Slums</text>
+                    
+                    <circle class="poi" cx="350" cy="210" r="5"/>
+                    <text class="poi-label" x="350" y="228">Junkyard</text>
+                    
+                    <!-- District B (Main Hub) -->
+                    <rect class="district" x="200" y="300" width="450" height="170"/>
+                    <text class="label" x="425" y="375">DISTRICT B</text>
+                    <text class="sublabel" x="425" y="395">(Main Hub)</text>
+                    
+                    <!-- District B POIs -->
+                    <circle class="poi" cx="300" cy="350" r="5"/>
+                    <text class="poi-label" x="300" y="370">Market</text>
+                    
+                    <circle class="poi" cx="480" cy="330" r="5"/>
+                    <text class="poi-label" x="480" y="320">Luto's Hideout</text>
+                    
+                    <circle class="poi" cx="380" cy="440" r="5"/>
+                    <text class="poi-label" x="380" y="458">Sewer Entrance</text>
+                    
+                    <!-- District A -->
+                    <rect class="district" x="200" y="470" width="450" height="150"/>
+                    <text class="label" x="425" y="540">DISTRICT A</text>
+                    
+                    <!-- District A POIs -->
+                    <circle class="poi" cx="480" cy="560" r="5"/>
+                    <text class="poi-label" x="480" y="578">Casino</text>
+                    
+                    <circle class="poi" cx="520" cy="560" r="5"/>
+                    <text class="poi-label" x="520" y="578">Gang HQ</text>
+                    
+                    <circle class="poi" cx="580" cy="600" r="5"/>
+                    <text class="poi-label" x="580" y="618">Pier</text>
+                    
+                    <!-- Waterfront -->
+                    <rect class="water" x="0" y="620" width="800" height="280"/>
+                    <text class="label" x="400" y="760">WATERFRONT</text>
+                    
+                    <!-- Connection paths -->
+                    <path class="path" d="M 80 120 L 80 140"/>
+                    <path class="path" d="M 425 170 L 480 120"/>
+                    <path class="path" d="M 480 90 L 245 80"/>
+                    <path class="path" d="M 520 90 L 680 110"/>
+                    <path class="path" d="M 580 600 L 600 650"/>
+                </svg>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #1a1a3e;"></span>
+                        <span>Districts</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #1a3a1a;"></span>
+                        <span>Forest</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #2a2a2a;"></span>
+                        <span>Caves/Ruins</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #0a1628;"></span>
+                        <span>Water</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #ff4444;"></span>
+                        <span>Key Locations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIMELINE PAGE -->
+        <div id="timeline" class="page">
+            <div class="doc-container">
+                <h1>Story Timeline</h1>
+                
+                <div class="timeline-event">
+                    <h3>Act I: First Contact</h3>
+                    <p>Luto navigates back alleys and rooftops, avoiding gang members on his way home to his rooftop hideout. Upon arrival, he discovers a message waiting for him from an unknown source asking him to go to the ruins in the mountain forest.</p>
+                </div>
+
+                <div class="timeline-event">
+                    <h3>Meeting Aya</h3>
+                    <p>Luto makes his way to the forest and discovers Aya, who runs from him. <strong>Player Choice:</strong> Chase her or wait around for her to return (first trust building moment). Aya chooses to return to the hideout with Luto, who promises to keep her safe.</p>
+                </div>
+
+                <div class="timeline-event">
+                    <h3>Recruiting Eli</h3>
+                    <p>The next day, Luto and Aya head back to the forest. On the way they pass through the slums/junkyard where Eli is in full tantrum. The first boss fight ensues and the player recruits Eli. They all return to the rooftop.</p>
+                </div>
+
+                <div class="timeline-event">
+                    <h3>First Cyborg Encounter</h3>
+                    <p>The next day, the trio attempts to seek the message source. The journey is interrupted by the first fight with the cyborg gang. Afterwards, the team is stuck at the pier hiding out.</p>
+                </div>
+
+                <div class="timeline-event">
+                    <h3>The Caves</h3>
+                    <p>A second message from the unknown source finds them at the pier. They take a boat to the beach on another side of the mountain and make their way through the caves to the forest. In the caves they discover a benevolent but pitiless mycelial entity—one that wants them to succeed but will test their mettle. Because of its primordial nature it cannot speak, and Eli has to recognize its intentions.</p>
+                </div>
+
+                <div class="timeline-event">
+                    <h3>Aya's Trial</h3>
+                    <p>Emerging from the caves to the forest, the player is unknowingly at the beginning of Aya's incarnate Trauma boss's "Dungeon." Navigating to the source of the message gets the party split up by accident and Aya is left alone. <strong>Permanent Choice:</strong> All dialog choices before hand prove to have equipped her to handle this or fail and get rescued. Only one outcome is possible and once it happens, it's permanent.</p>
+                </div>
+
+                <div class="timeline-event">
+                    <h3>The Heartolith</h3>
+                    <p>Aya rejoins the other two and they find the Heartolith—a conglomerate of ancient (from 2020) machines that form some type of omnipotent mind or AI, powered by mycelial networks. The Heartolith, with holographic images, shows them piece by piece the answers they've discovered through their efforts, ending with a hint of what to do next.</p>
+                </div>
+
+                <div class="timeline-event">
+                    <h3>Eli's Shadow</h3>
+                    <p>Eli, troubled with knowing somehow exactly what the Heartolith wants of them and unable to share this information, leaves the rooftop hideout one night and meets a shadow boy that looks just like him. The shadow boy and Eli engage in magical play, something like Eli's tantrum boss fight but fun. This will become his Trauma Incarnate, but not tonight—tonight he gains a piece of a new way to communicate.</p>
+                </div>
+
+                <div class="timeline-event">
+                    <h3>Eli's Capture</h3>
+                    <p>The cyborgs capture Eli. Luto and Aya infiltrate or frontally assault the gang HQ and are thwarted. <strong>Major Crossroads:</strong> Aya may or may not be captured as well depending on player action. Having the team split entirely up or having Luto and Aya together to rescue Eli will take some more thought and consideration.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME DESIGN DOC PAGE -->
+        <div id="gdd" class="page">
+            <div class="doc-container">
+                <h1>Game Design Document</h1>
+                <h2>Core Concept</h2>
+                <p><strong><3CX - Resonance</strong> (Heart-Core: Resonance) is a narrative-driven action RPG about recovery, resilience, and community healing. The story follows three protagonists—Luto, Aya, and Eli—whose intertwined struggles against a trauma-harvesting cyborg gang illuminate how exploitative systems feed on human suffering.</p>
+
+                <h2>Core Mechanics</h2>
+                <p>Each character embodies a hybridized RPG class whose mechanics directly mirror their psychological survival strategies:</p>
+
+                <h3>Eli (Black Mage / Blue Mage)</h3>
+                <ul>
+                    <li><strong>Backstory:</strong> A nonverbal survivor of a house fire that claimed his family and left him disfigured</li>
+                    <li><strong>Mechanic:</strong> Spells are painted into existence using his sketchbook; he can mimic enemy abilities</li>
+                    <li><strong>Unique Feature:</strong> Only character capable of reversing mycelial energy extraction, freeing the planet's healing systems from exploitation</li>
+                </ul>
+
+                <h3>Aya (White Mage / Bard)</h3>
+                <ul>
+                    <li><strong>Backstory:</strong> A former search-and-rescue trainee and athlete, permanently altered by a cyborg assault</li>
+                    <li><strong>Mechanic:</strong> Combines first aid, chants, and performance-based buffs to heal and inspire allies</li>
+                    <li><strong>Arc:</strong> Struggles with self-concealment and limited trust; recovery involves nurturing both others and herself</li>
+                </ul>
+
+                <h3>Luto (Paladin / Berserker)</h3>
+                <ul>
+                    <li><strong>Backstory:</strong> A homeless youth abandoned by his family, who survived through charm and optimism</li>
+                    <li><strong>Mechanic:</strong> Emotional volatility system—alternates between devastating rage attacks and immobilizing remorse</li>
+                    <li><strong>Arc:</strong> Multiple endings; optimal resolution requires Aya's and Eli's growth to be complete</li>
+                </ul>
+
+                <h2>Trust-Based Combat System</h2>
+                <p>The revolutionary ABS (Action Battle System) meter fills based on healing progression and current trust levels rather than arbitrary timers. When filled, Luto can call out commands to party members. Response time and effectiveness depend on:</p>
+                <ul>
+                    <li>Current trust level with that party member</li>
+                    <li>The party member's healing progression</li>
+                    <li>The type of ability being called upon</li>
+                    <li>The party member's current emotional state</li>
+                </ul>
+
+                <h2>Gameplay Evolution</h2>
+                <p>The game begins with stealth and exploration mechanics as isolated characters survive through avoidance. As the party bonds and heals together, gameplay shifts toward direct confrontation, mechanically reflecting the journey from individual survival to collective resistance.</p>
+
+                <h2>Antagonists</h2>
+                <p>The cyborg gang represents exploitation at both personal and systemic levels. Their leader—a woman sustained by harvested trauma energy—uses her children as enforcers. The trauma harvesting isn't the true power source; instead, it fuels her survival from a terminal illness while the gang unknowingly depends on the exploited mycelial entity.</p>
+
+                <h2>Themes</h2>
+                <ul>
+                    <li><strong>Community Healing:</strong> Individual arcs are incomplete without shared progress</li>
+                    <li><strong>Acceptance of Loss:</strong> Luto's best resolution involves embracing self-worth without external validation</li>
+                    <li><strong>Reclamation:</strong> Eli's power embodies not just resistance, but transformation</li>
+                    <li><strong>Planetary Recovery:</strong> The mycelial entity represents healing on a global scale</li>
+                </ul>
+
+                <h2>Equipment System</h2>
+                <p>Equipment follows street-appropriate aesthetics with clear mechanical benefits:</p>
+                <ul>
+                    <li>Leather jacket over plaid vest: +5 DEF</li>
+                    <li>Metal-reinforced high-tops and gloves: +5 ATK</li>
+                    <li>Basketball shoes: +5 AGI</li>
+                    <li>Kung Fu headband: ABS Speed+</li>
+                    <li>Elemental punk rock patches (subtle, grounded in reality)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Remove active from all nav links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Add active to clicked nav link
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

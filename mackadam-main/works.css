@@ -125,7 +125,7 @@ nav.viewing {
     position: absolute;
     top: calc(100% + 16px);
     left: 0;
-    width: 320px;
+    width: min(320px, calc(100vw - 32px));
     background: rgba(0, 0, 0, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 16px;
@@ -557,6 +557,9 @@ nav.viewing {
 
     .card-inner {
         flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
     }
 
     .card-content {
@@ -565,6 +568,7 @@ nav.viewing {
     }
 
     .project-thumbnail {
+        flex: none;
         padding: 20px;
     }
 

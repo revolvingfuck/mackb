@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEARTCORE - Game Design Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    body {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0f 50%, #0a0a1a 100%);
+        color: #e0e0e0;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 20px;
+    }
+
+    .hero {
+        text-align: center;
+        margin-bottom: 80px;
+        position: relative;
+    }
+
+    .hero h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        letter-spacing: -2px;
+        background: linear-gradient(135deg, #ff6b6b, #ee5a6f, #c44569);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+    }
+
+    .hero p {
+        font-size: 1.3rem;
+        color: #888;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .section {
+        margin-bottom: 100px;
+        position: relative;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60%;
+        height: 3px;
+        background: linear-gradient(90deg, #ff6b6b, transparent);
+    }
+
+    .overview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .info-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 2px solid rgba(255, 107, 107, 0.2);
+        border-radius: 20px;
+        padding: 30px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+        border-color: rgba(255, 107, 107, 0.5);
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(255, 107, 107, 0.1);
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.5), transparent);
+    }
+
+    .card-label {
+        font-size: 1rem;
+        color: #ff6b6b;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .card-value {
+        font-size: 1.3rem;
+        color: #e0e0e0;
+    }
+
+    .character-section {
+        margin-top: 60px;
+    }
+
+    .character-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+        margin-top: 40px;
+    }
+
+    .character-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 2px solid rgba(255, 107, 107, 0.2);
+        border-radius: 20px;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .character-card:hover {
+        border-color: rgba(255, 107, 107, 0.5);
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(255, 107, 107, 0.1);
+    }
+
+    .character-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.5), transparent);
+    }
+
+    .character-name {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #ff6b6b;
+    }
+
+    .character-role {
+        font-size: 1.2rem;
+        color: #888;
+        margin-bottom: 20px;
+        font-style: italic;
+    }
+
+    .character-subsection {
+        margin-top: 25px;
+    }
+
+    .subsection-title {
+        font-weight: 700;
+        color: #ff6b6b;
+        margin-bottom: 12px;
+        font-size: 1.1rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        margin-top: 15px;
+    }
+
+    .feature-list li {
+        padding: 10px 0 10px 25px;
+        position: relative;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .feature-list li::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: #ff6b6b;
+        font-size: 1.2rem;
+    }
+
+    .innovation-box {
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(196, 69, 105, 0.1));
+        border-left: 4px solid #ff6b6b;
+        padding: 30px;
+        margin: 40px 0;
+        border-radius: 10px;
+    }
+
+    .innovation-box h3 {
+        color: #ff6b6b;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+    }
+
+    .content-block {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+    }
+
+    .system-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .system-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 107, 107, 0.15);
+        padding: 30px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .system-card:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 107, 107, 0.3);
+    }
+
+    .system-title {
+        font-size: 1.4rem;
+        color: #ff6b6b;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    .timeline {
+        margin-top: 40px;
+    }
+
+    .timeline-item {
+        background: rgba(255, 255, 255, 0.02);
+        border-left: 4px solid #ff6b6b;
+        padding: 25px;
+        margin-bottom: 25px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .timeline-item:hover {
+        background: rgba(255, 107, 107, 0.05);
+        transform: translateX(10px);
+    }
+
+    .timeline-phase {
+        color: #ff6b6b;
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+
+    .story-beat {
+        background: rgba(255, 255, 255, 0.02);
+        border-left: 4px solid #ff6b6b;
+        padding: 25px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+
+    .beat-title {
+        color: #ff6b6b;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+
+    .highlight {
+        color: #ff6b6b;
+        font-weight: 600;
+    }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    .summary-card {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 25px;
+        border-radius: 12px;
+        border-left: 4px solid #ff6b6b;
+    }
+
+    .summary-card strong {
+        color: #ff6b6b;
+        display: block;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2.5rem;
+        }
+
+        .character-grid,
+        .overview-grid,
+        .system-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>HEARTCORE</h1>
+            <p>A narrative action RPG exploring trauma recovery through three protagonists fighting cyborg gangs that harvest human suffering as renewable energy</p>
+        </div>
+    <section class="section">
+        <h2 class="section-title">Core Concept</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 30px;">HEARTCORE literalizes how exploitative systems feed on human suffering, transforming abstract psychological damage into a tangible resource that can be fought, reclaimed, and converted back into healing. The game explores trauma recovery through the framework of community-based healing over individual recovery.</p>
+
+        <div class="overview-grid">
+            <div class="info-card">
+                <div class="card-label">Title</div>
+                <div class="card-value">Heartcore Resonance</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Genre</div>
+                <div class="card-value">Action-RPG</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Engine</div>
+                <div class="card-value">Godot 4</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Team</div>
+                <div class="card-value">Solo dev + Claude Code</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Target Playtime</div>
+                <div class="card-value">40 hours</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Scope</div>
+                <div class="card-value">7 dungeons · 10 boss fights · 6 playable characters · 5 Cores · 4 Parts · 5 districts</div>
+            </div>
+        </div>
+
+        <div class="innovation-box">
+            <h3>The Central Innovation</h3>
+            <p>Eli develops the capacity to reverse the cyborg energy harvesting process, converting stolen trauma back into healing energy for the party. This represents not merely defeating exploitative systems but actively reclaiming what they have stolen and repurposing it for restoration.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Main Characters</h2>
+        <p style="font-size: 1.05rem; color: #888; margin-bottom: 10px;">Luto, Aya, and Eli are the three protagonists driving the story below. The full playable roster is six: they're later joined by Gurtohli, Corrine, and Myc.</p>
+
+        <div class="character-grid">
+            <div class="character-card">
+                <div class="character-name">Luto</div>
+                <div class="character-role">Paladin / Berserker</div>
+                
+                <div class="character-subsection">
+                    <div class="subsection-title">Background</div>
+                    <p>A homeless youth who developed protective charm and optimism as survival mechanisms following abandonment trauma. His combat reflects unprocessed emotional volatility.</p>
+                </div>
+
+                <div class="character-subsection">
+                    <div class="subsection-title">Combat Mechanics</div>
+                    <p>Emotional volatility system that alternates between:</p>
+                    <ul class="feature-list">
+                        <li><strong>Berserker State:</strong> Uncontrollable rage sequences delivering massive damage</li>
+                        <li><strong>Paralysis State:</strong> Complete freezing caused by overwhelming remorse</li>
+                        <li><strong>Protective Instinct:</strong> Intervention-based defense mechanics</li>
+                    </ul>
+                </div>
+
+                <div class="character-subsection">
+                    <div class="subsection-title">Character Arc</div>
+                    <p>Multiple endings reflecting different approaches to unresolved trauma. His optimal resolution involves abandoning the search for parents who abandoned him and finding self-worth independent of external validation—acceptance of unresolvable loss rather than fairy-tale reunion.</p>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <div class="character-name">Aya</div>
+                <div class="character-role">White Mage / Bard</div>
+                
+                <div class="character-subsection">
+                    <div class="subsection-title">Background</div>
+                    <p>A survivor with training in search and rescue, music, and athletics. Following a cyborg assault that fundamentally altered her relationship with her body and abilities, she retreats into concealment and self-limitation.</p>
+                </div>
+
+                <div class="character-subsection">
+                    <div class="subsection-title">Combat Mechanics</div>
+                    <ul class="feature-list">
+                        <li><strong>First Aid Skills:</strong> Healing abilities drawn from rescue training</li>
+                        <li><strong>Performance Buffs:</strong> Support delivered through chants and songs</li>
+                        <li><strong>Emotional Management:</strong> Can stabilize Luto's volatility states</li>
+                    </ul>
+                </div>
+
+                <div class="character-subsection">
+                    <div class="subsection-title">Character Arc</div>
+                    <p>Recovery involves rediscovering her healing and support capabilities through caring for her companions. Learns to manage Luto's emotional volatility while he provides the warmth and persistence necessary for her re-engagement.</p>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <div class="character-name">Eli</div>
+                <div class="character-role">Black Mage / Blue Mage</div>
+                
+                <div class="character-subsection">
+                    <div class="subsection-title">Background</div>
+                    <p>A nonverbal survivor of a house fire that killed his family. Communicates through pastels and sketchbook illustrations that literally come to life as spells.</p>
+                </div>
+
+                <div class="character-subsection">
+                    <div class="subsection-title">Combat Mechanics</div>
+                    <ul class="feature-list">
+                        <li><strong>Emotional Painting:</strong> Creates destructive magic through artistic expression</li>
+                        <li><strong>Blue Magic Mimicry:</strong> Can copy and adapt enemy abilities</li>
+                        <li><strong>Trauma Reversal:</strong> Converts harvested trauma energy back into healing for the party</li>
+                    </ul>
+                </div>
+
+                <div class="character-subsection">
+                    <div class="subsection-title">Character Arc</div>
+                    <p>Develops new methods of communication throughout the journey. His connection to the Heartolith reveals deeper understanding that he struggles to convey, leading to encounters with his shadow self and eventual growth.</p>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <div class="character-name">Gurtohli</div>
+                <div class="character-role">Thief / Security</div>
+                <div class="character-subsection">
+                    <div class="subsection-title">Party Role</div>
+                    <p>Joins the party later as a trust-based ally, run through the same Interiority-gated command system as Aya and Eli rather than direct real-time control.</p>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <div class="character-name">Corrine</div>
+                <div class="character-role">Mechanic / Knight</div>
+                <div class="character-subsection">
+                    <div class="subsection-title">Party Role</div>
+                    <p>The second directly-controlled party member alongside Luto, fighting in real time rather than through the trust-based command menu.</p>
+                </div>
+            </div>
+
+            <div class="character-card">
+                <div class="character-name">Myc</div>
+                <div class="character-role">Golem</div>
+                <div class="character-subsection">
+                    <div class="subsection-title">Party Role</div>
+                    <p>The "baby golem" whose birth is a party milestone in its own right. Myc's body is where the player's accumulated moral history is literally, physically visible — the same pattern that, together with the Heartilith Cavern, determines how the game ends.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Story Progression</h2>
+
+        <div class="content-block">
+            <h3 class="subsection-title" style="font-size: 1.8rem; margin-bottom: 20px;">Formation of the Party</h3>
+            
+            <div class="story-beat">
+                <div class="beat-title">Luto and Aya's Meeting</div>
+                <p>Luto encounters Aya during a second assault attempt and earns her trust through intervention rather than heroic posturing. Their partnership develops as they learn to support each other's recovery.</p>
+            </div>
+
+            <div class="story-beat">
+                <div class="beat-title">Eli's Introduction</div>
+                <p>Eli enters through a traumatic episode manifesting as environmental destruction, requiring Luto and Aya to collaboratively reach him through waves of shadow magic and materialized trauma responses. This establishes the pattern where healing requires collective action.</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3 class="subsection-title" style="font-size: 1.8rem; margin-bottom: 20px;">The Journey Begins</h3>
+            
+            <div class="story-beat">
+                <div class="beat-title">Third Attempt</div>
+                <p>The team makes their third attempt to reach the message source. The journey is interrupted by the first fight with the cyborg gang.</p>
+            </div>
+
+            <div class="story-beat">
+                <div class="beat-title">The Pier</div>
+                <p>Stuck at the pier hiding out, a second message from the unknown source finds them. They take a boat to the beach on another side of the mountain.</p>
+            </div>
+
+            <div class="story-beat">
+                <div class="beat-title">Cave Encounter</div>
+                <p>Making their way through the caves to the forest, they discover a new opposing force: a <span class="highlight">benevolent but pitiless mycelial entity</span>. One that wants them to succeed but will test their mettle without mercy. Because of its primordial nature it cannot speak, and Eli has to recognize its intentions.</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3 class="subsection-title" style="font-size: 1.8rem; margin-bottom: 20px;">Aya's Trial</h3>
+            
+            <div class="story-beat">
+                <div class="beat-title">The Forest Dungeon</div>
+                <p>Emerging from the caves into the forest, the player is unknowingly at the beginning of Aya's incarnate Trauma boss's "Dungeon." Navigating to the source of the message, the party gets split up by accident and Aya is left alone.</p>
+            </div>
+
+            <div class="innovation-box">
+                <h3>Critical Choice Point</h3>
+                <p>All dialogue choices and actions beforehand prove to have equipped Aya to handle this—or fail and get rescued. <span class="highlight">Only one outcome can occur, and once it happens, it becomes permanent.</span> This is a major character defining moment.</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3 class="subsection-title" style="font-size: 1.8rem; margin-bottom: 20px;">The Heartolith</h3>
+            
+            <div class="story-beat">
+                <div class="beat-title">Discovery</div>
+                <p>Aya rejoins the others and they find the <span class="highlight">Heartolith</span>—a conglomerate of ancient machines (computers from 2020) that form an omnipotent mind or AI, powered by mycelial networks. Called so because of its monolith-like presentation but benevolent actions.</p>
+            </div>
+
+            <div class="story-beat">
+                <div class="beat-title">Revelations</div>
+                <p>The Heartolith shows them piece by piece, through holographic images, the answers they've discovered through their efforts—the payoff for the player's work delivered through cutscenes, ending with hints of what to do next.</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3 class="subsection-title" style="font-size: 1.8rem; margin-bottom: 20px;">Eli's Shadow</h3>
+            
+            <div class="story-beat">
+                <div class="beat-title">Night Encounter</div>
+                <p>Eli, troubled with knowing somehow exactly what the Heartolith wants but unable to share this information, leaves the rooftop hideout one night. He meets a shadow boy that looks just like him.</p>
+            </div>
+
+            <div class="story-beat">
+                <div class="beat-title">Magical Play</div>
+                <p>The shadow boy and Eli engage in magical play, something like Eli's tantrum boss fight but fun. This will become his Trauma Incarnate, but not tonight. Tonight he gains a piece of a new way to communicate.</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h3 class="subsection-title" style="font-size: 1.8rem; margin-bottom: 20px;">The Capture</h3>
+            
+            <div class="story-beat">
+                <div class="beat-title">Eli Taken</div>
+                <p>The cyborgs capture Eli.</p>
+            </div>
+
+            <div class="story-beat">
+                <div class="beat-title">Rescue Attempt</div>
+                <p>Luto and Aya infiltrate or frontally assault the gang HQ and are thwarted. Aya may or may not be captured as well depending on player action.</p>
+            </div>
+
+            <div class="innovation-box">
+                <h3>Major Crossroads</h3>
+                <p>This is a major branching point for the game. Having the team split entirely or having Luto and Aya together to rescue Eli will lead to significantly different gameplay and narrative experiences.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">World & Antagonists</h2>
+
+        <div class="system-grid">
+            <div class="system-card">
+                <div class="system-title">The Cyborg Gang</div>
+                <p>A family unit led by a mother figure. The trauma energy they harvest is supposedly a power source, but it's actually keeping the matriarch alive through a secret terminal illness.</p>
+                <p style="margin-top: 15px;">The actual power source comes from a mycelial entity that's been recycling old computers and radioactive waste from a past nuclear war.</p>
+            </div>
+
+            <div class="system-card">
+                <div class="system-title">The Mycelial Entity</div>
+                <p>Represents healing and rehabilitation on a planetary scale. After achieving sentience, it calculates that Luto, Aya, and Eli are the key to freeing it and suffering people from the gang's control and restoring the planet to harmony.</p>
+                <p style="margin-top: 15px; font-style: italic; color: #888;">It is benevolent but pitiless, testing the heroes without mercy because it understands that true strength comes from overcoming genuine challenges.</p>
+            </div>
+
+            <div class="system-card">
+                <div class="system-title">Trauma Incarnates</div>
+                <p>Each character faces a physical manifestation of their trauma as a boss encounter. These aren't simply enemies to defeat but representations of internal struggles made external.</p>
+                <ul class="feature-list" style="margin-top: 15px;">
+                    <li>Aya's forest dungeon trial</li>
+                    <li>Eli's shadow boy transformation</li>
+                    <li>Luto's ultimate confrontation with abandonment</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Core Themes</h2>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <strong>Systemic Exploitation</strong>
+                Suffering literally harvested as energy, representing how systems feed on human pain
+            </div>
+
+            <div class="summary-card">
+                <strong>Community Healing</strong>
+                Individual recovery occurs within community context, not in isolation
+            </div>
+
+            <div class="summary-card">
+                <strong>Reclamation</strong>
+                Converting stolen trauma back into healing—taking back what was taken
+            </div>
+
+            <div class="summary-card">
+                <strong>Unresolvable Loss</strong>
+                Accepting that some wounds don't have fairy-tale endings, but healing is still possible
+            </div>
+
+            <div class="summary-card">
+                <strong>Communication Beyond Words</strong>
+                Eli's journey shows that connection transcends verbal language
+            </div>
+
+            <div class="summary-card">
+                <strong>Planetary Rehabilitation</strong>
+                Personal healing mirrors ecological restoration—interconnected recovery
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Narrative Structure</h2>
+
+        <div class="innovation-box">
+            <h3>Interconnected Recovery</h3>
+            <p>The narrative requires completing Aya and Eli's recovery processes before unlocking Luto's optimal resolution, reinforcing the theme that individual healing occurs within community context.</p>
+            <p style="margin-top: 15px;">Player choices throughout the game determine not just endings, but whether characters have the tools they need to face their trauma incarnates. These choices create <span class="highlight">permanent consequences</span> that shape the rest of the experience.</p>
+        </div>
+
+        <div class="content-block">
+            <h3 class="subsection-title" style="font-size: 1.8rem; margin-bottom: 20px;">Multiple Ending Philosophy</h3>
+            <p style="margin-bottom: 15px;">Luto's character arc offers multiple endings that reflect different approaches to unresolved trauma:</p>
+            <ul class="feature-list">
+                <li>The "good" ending involves abandoning his search for the parents who abandoned him</li>
+                <li>Finding self-worth independent of external validation</li>
+                <li>Representing acceptance of unresolvable loss rather than closure</li>
+                <li>Other endings reflect different stages of processing abandonment trauma</li>
+            </ul>
+            <p style="margin-top: 20px;">Mechanically, nothing chooses these outright. Every Core collected through the run is tinted <span class="highlight">Bright</span>, <span class="highlight">Warm</span>, <span class="highlight">Dark</span>, or <span class="highlight">Void</span> by how it was earned, and that accumulated pattern — read out in the Heartilith Cavern and on Myc's own body — is what the ending is read from: <span class="highlight">Return to Search</span>, <span class="highlight">Citizen</span>, <span class="highlight">Collapse</span>, or <span class="highlight">Perfect</span>.</p>
+        </div>
+    </section>
+
+    <div style="text-align: center; padding: 40px 0; color: #666; border-top: 1px solid rgba(255, 107, 107, 0.2); margin-top: 60px;">
+        <p style="font-size: 0.9rem;">This game design document represents the current vision for HEARTCORE.</p>
+        <p style="font-size: 0.9rem; margin-top: 10px;">Story development is ongoing beyond the capture sequence.</p>
+        <p style="font-size: 0.9rem; margin-top: 20px;">Version: 1.0</p>
+    </div>
+</div>
+</body>
+</html>

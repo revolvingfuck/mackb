@@ -127,7 +127,7 @@ body {
    would be dropped the instant an animation starts and the mark would jump.
    Any resting offset therefore comes from padding instead. */
 .content {
-    --lockup-size: clamp(3rem, 8.5vw, 7rem);
+    --lockup-size: clamp(4.5rem, 12.75vw, 10.5rem);
     position: fixed;
     inset: 0;
     display: flex;
@@ -181,7 +181,7 @@ body {
     display: flex;
     align-items: center;
     gap: calc(var(--lockup-size) * 0.14);
-    margin-left: calc(var(--lockup-size) * 0.20);
+    margin-left: calc(var(--lockup-size) * 0.63);
 }
 
 .social-dot {
@@ -535,7 +535,7 @@ body {
 /* Responsive design */
 @media (max-width: 768px) {
     .content {
-        --lockup-size: clamp(2.1rem, 11vw, 3.2rem);
+        --lockup-size: clamp(3.15rem, 16.5vw, 4.8rem);
         padding-bottom: 12vh;
     }
 

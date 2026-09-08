@@ -40,9 +40,9 @@ const POSE_URL = 'hand-pose.bin';
 // statue is decided here rather than in the bake.
 export const HAND = {
   dist:      115,   // world units in front of the camera, along its own axis
-  height:     80,   // total height of the statue, base to fingertip
+  height:     92,   // total height of the statue, base to fingertip
   submerge: 0.42,   // fraction of that height below the mean waterline
-  yaw:      0.26,   // radians off square, for a less flat, more sculptural read
+  yaw:     -0.10,   // radians off square, for a less flat, more sculptural read
 
   // The statue holds the centre of the frame, behind the brand mark. It is
   // parked on the camera's forward axis every frame rather than pinned to a

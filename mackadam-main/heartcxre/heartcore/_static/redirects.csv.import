@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://g30pw48tdcu0"
+
+[deps]
+
+files=["res://_static/redirects.destination.translation"]
+
+source_file="res://_static/redirects.csv"
+dest_files=["res://_static/redirects.destination.translation"]
+
+[params]
+
+compress=true
+delimiter=0

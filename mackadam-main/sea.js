@@ -29,12 +29,12 @@ import { createMarbleHand } from './hand.js';
 // Every knob that trades frame time for fidelity lives here, so dialling
 // the scene back for weaker hardware is a one-place edit.
 const QUALITY = {
-  pixelRatio:     2,      // cap on devicePixelRatio
-  gridCols:       420,    // projected grid, in screen space
-  gridRows:       280,
-  msaaSamples:    4,      // MSAA on the HDR target
+  pixelRatio:     1.5,    // cap on devicePixelRatio
+  gridCols:       300,    // projected grid, in screen space
+  gridRows:       200,
+  msaaSamples:    2,      // MSAA on the HDR target
   bloomScale:     0.5,    // bloom chain resolution, as a fraction of full
-  bloomPasses:    5,      // Kawase iterations; each one widens the halo
+  bloomPasses:    3,      // Kawase iterations; each one widens the halo
   bloomStrength:  0.45,
   bloomThreshold: 1.00,   // linear; only real highlights, not the whole sky
   skyGain:        0.30,   // Preetham returns HDR radiance; bring it into range
@@ -117,6 +117,9 @@ const uTime        = { value: 0 };
 // surface uniformly without touching the sun, which runs off the visitor's
 // real clock in sunAngle(). 1.0 is real time; lower is calmer.
 const WAVE_SPEED   = 0.72;
+// Overall scale on the sun/moon glint highlight (col += ... * uKeyGain below).
+// Turn down if the light reflecting off the water reads as too intense.
+const GLINT_GAIN   = 0.55;
 const uSunDir      = { value: new THREE.Vector3(0, 0, -1) };
 const uDay         = { value: 0 };                              // 0 night .. 1 day
 const uAtmos       = { value: 0 };                              // scattering vs night palette
@@ -173,8 +176,10 @@ const uOceanAmp   = { value: 0 };          // world units of displacement
 const uOceanTile  = { value: 152.5 };      // world units per repeat
 const uOceanPhase = { value: 0 };          // 0..1 through the loop
 const uOceanOn    = { value: 0 };          // 0 until the cache lands
-const uOceanGain  = { value: 1.0 };        // live tuning handle
-let   uOceanBase  = 0;                     // amplitude as baked
+const uOceanGain     = { value: 0.5 };     // live tuning handle — amplitude scale (flatter < 1)
+const uOceanTileGain = { value: 1.6 };     // live tuning handle — repeat spacing scale (wider > 1)
+let   uOceanBase     = 0;                  // amplitude as baked
+let   uOceanTileBase = 152.5;              // repeat spacing as baked
 
 const uDeepCol    = { value: new THREE.Vector3() };
 const uShallowCol = { value: new THREE.Vector3() };
@@ -1149,7 +1154,8 @@ function sunAngle() {
     tex.needsUpdate = true;
 
     uOcean.value = tex;
-    uOceanTile.value = tile;
+    uOceanTileBase = tile;
+    uOceanTile.value = tile * uOceanTileGain.value;
     uOceanBase = amp;
     uOceanAmp.value = amp * uOceanGain.value;
     uOceanOn.value = 1;
@@ -1227,6 +1233,7 @@ function frame(now) {
   // churn keeps a real-world pace even when WAVE_SPEED slows the swell.
   uOceanPhase.value = (st / OCEAN_LOOP) % 1;
   uOceanAmp.value = uOceanBase * uOceanGain.value;
+  uOceanTile.value = uOceanTileBase * uOceanTileGain.value;
 
   // the water's own palette, crossfaded on the day/night blend
   mixWater(uDeepCol,    WATER.deep,    uDay.value);
@@ -1240,7 +1247,7 @@ function frame(now) {
   if (k > 0.5) uKeyDir.value.copy(uSunDir.value);
   else         uKeyDir.value.copy(uSunDir.value).negate();
   uKeyTint.value.set(lerp(0.80, 1.00, k), lerp(0.87, 0.93, k), lerp(1.00, 0.80, k));
-  uKeyGain.value = lerp(46, 95, k) * (0.20 + 0.80 * Math.abs(k * 2 - 1));
+  uKeyGain.value = lerp(46, 95, k) * (0.20 + 0.80 * Math.abs(k * 2 - 1)) * GLINT_GAIN;
 
   // fog sits at whatever the real visibility says, then banks roll through on
   // their own slow, non-repeating rhythm and thicken at either end of the day
@@ -1460,7 +1467,7 @@ document.addEventListener('visibilitychange', () => {
 const VERSION = 'ocean-sim-1';
 
 window.__sea = { VERSION, QUALITY, WAVE, WATER, COND, SOLAR, live, solar,
-                 ocean: uOceanGain, uniforms: SEA_UNIFORMS };
+                 ocean: uOceanGain, oceanTile: uOceanTileGain, uniforms: SEA_UNIFORMS };
 window.__hand = hand;                       // __hand.HAND.spec = 0.2, and so on
 
 requestAnimationFrame(frame);

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Control System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0f 50%, #0a0a1a 100%);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f, #c44569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #888;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 100px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, transparent);
+        }
+
+        .dual-control {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .control-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 107, 107, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .control-card:hover {
+            border-color: rgba(255, 107, 107, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.1);
+        }
+
+        .control-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.5), transparent);
+        }
+
+        .card-header {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ff6b6b;
+        }
+
+        .card-subheader {
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .feature-list li {
+            padding: 12px 0 12px 30px;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #ff6b6b;
+            font-size: 1.2rem;
+        }
+
+        .innovation-box {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(196, 69, 105, 0.1));
+            border-left: 4px solid #ff6b6b;
+            padding: 30px;
+            margin: 40px 0;
+            border-radius: 10px;
+        }
+
+        .innovation-box h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .mechanics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .mechanic-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 107, 107, 0.15);
+            padding: 30px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .mechanic-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+
+        .mechanic-title {
+            font-size: 1.4rem;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            border-left: 3px solid #ff6b6b;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .state-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            flex-wrap: wrap;
+        }
+
+        .state {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            padding: 25px 35px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 180px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .state:hover {
+            background: rgba(255, 107, 107, 0.2);
+            transform: scale(1.05);
+        }
+
+        .state-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #ff6b6b;
+        }
+
+        .arrow {
+            color: #666;
+            font-size: 2rem;
+            margin: 0 10px;
+        }
+
+        .progression-arc {
+            position: relative;
+            height: 300px;
+            margin: 60px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .arc-stage {
+            position: absolute;
+            padding: 20px;
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            border-radius: 12px;
+            min-width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .arc-stage:hover {
+            background: rgba(255, 107, 107, 0.2);
+            transform: translateY(-5px);
+            z-index: 10;
+        }
+
+        .arc-stage:nth-child(1) {
+            top: 20px;
+            left: 5%;
+        }
+
+        .arc-stage:nth-child(2) {
+            top: 80px;
+            left: 35%;
+        }
+
+        .arc-stage:nth-child(3) {
+            top: 20px;
+            right: 5%;
+        }
+
+        .stage-label {
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .critical-rule {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(139, 0, 0, 0.1));
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .critical-rule h3 {
+            color: #ff4444;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .critical-rule p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .summary-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .summary-card strong {
+            color: #ff6b6b;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .dual-control {
+                grid-template-columns: 1fr;
+            }
+
+            .mechanics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .arc-stage {
+                position: relative !important;
+                left: auto !important;
+                right: auto !important;
+                top: auto !important;
+                margin-bottom: 20px;
+            }
+
+            .progression-arc {
+                height: auto;
+            }
+        }
+
+        .highlight {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .subsection {
+            margin-top: 50px;
+        }
+
+        .character-state {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .state-header {
+            font-size: 1.5rem;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .state-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #ff6b6b;
+        }
+
+        .state-item strong {
+            color: #ff6b6b;
+            display: block;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Hybrid Control System</h1>
+            <p>A mechanical framework where trauma recovery becomes gameplay, and collective resistance emerges through synchronized action</p>
+        </div>
+
+        <section class="section">
+            <h2 class="section-title">The Dual-Layer Architecture</h2>
+            <div class="dual-control">
+                <div class="control-card">
+                    <div class="card-header">Luto & Corrine</div>
+                    <div class="card-subheader">Direct Control</div>
+                    <p>Real-time action RPG control with immediate responsiveness. You move, dodge, and attack with full agency over their moment-to-moment survival — Luto as Berserker/Paladin, Corrine as Mechanic/Knight.</p>
+                    <ul class="feature-list">
+                        <li>Handles combat survival directly</li>
+                        <li>Dynamic berserker/paralysis states</li>
+                        <li>Performance affected by Heart volatility</li>
+                        <li>The only characters with full immediacy</li>
+                    </ul>
+                </div>
+
+                <div class="control-card">
+                    <div class="card-header">Aya, Eli, Gurtohli & Myc</div>
+                    <div class="card-subheader">Trust-Based Commands (ATB)</div>
+                    <p>Traditional turn-based/ATB style commands through a menu system. Their responsiveness is driven by a hidden <span class="highlight">Interiority</span> stat — trust, emotional state, and healing progression all feed into it.</p>
+                    <ul class="feature-list">
+                        <li>ABS meter fills based on multiple factors</li>
+                        <li>Response time varies with Interiority/trust</li>
+                        <li>Emotional clarity affects performance</li>
+                        <li>Can hesitate, refuse, or misfire</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="innovation-box">
+                <h3>The Innovation</h3>
+                <p>Early game when trust is low, calling for Aya to heal might have a <span class="highlight">delay</span> — she hesitates, second-guesses. As your relationship builds through choices and shared experiences, she responds <span class="highlight">faster and more confidently</span>.</p>
+                <p style="margin-top: 15px;">Eli's art-based spells take longer when he's overwhelmed but flow quickly when he's in a creative state. His painting-into-spells mechanic works through the command menu where you select emotions/concepts to manifest.</p>
+                <p style="margin-top: 15px;">Gurtohli (Thief/Security) and Myc — the golem born partway through the story — run on the same Interiority-gated ATB, so a party that hasn't earned their trust can watch all four trust-based allies stall at once under pressure.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Hidden Systems: Heart & Core</h2>
+            
+            <div class="mechanics-grid">
+                <div class="mechanic-card">
+                    <div class="mechanic-title">Heart (Volatility)</div>
+                    <p>Not a global meter. A <span class="highlight">hidden volatility value</span> that modulates timing, reliability, and hesitation.</p>
+                    <ul class="feature-list" style="margin-top: 20px;">
+                        <li>Affects command delay</li>
+                        <li>Influences animation variance</li>
+                        <li>Modulates input forgiveness</li>
+                        <li>Controls ABS fill speed</li>
+                    </ul>
+                    <p style="margin-top: 20px; font-style: italic; color: #888;">You never "spend Heart." You lose composure, and the system shows it through friction.</p>
+                </div>
+
+                <div class="mechanic-card">
+                    <div class="mechanic-title">Core (Commitment)</div>
+                    <p>Not a resource bar. Represents <span class="highlight">which lines you have crossed</span> — and which you refuse to.</p>
+                    <ul class="feature-list" style="margin-top: 20px;">
+                        <li>Unlocks behavioral overrides</li>
+                        <li>Governs party synchronization</li>
+                        <li>Changes what system allows</li>
+                        <li>Gates collective resistance</li>
+                    </ul>
+                    <p style="margin-top: 20px; font-style: italic; color: #888;">Core changes what the system allows, not how fast it runs.</p>
+                </div>
+            </div>
+
+            <div class="formula">
+ABS Fill Rate = Base Recovery × Healing Progression × Trust × Emotional Clarity ÷ Heart Volatility
+
+Key Insight:
+→ Heart volatility is global
+→ Trust is per-character
+→ High stress + high trust = they push through
+→ High stress + low trust = they freeze
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Luto's Dynamic States</h2>
+
+            <div class="character-state">
+                <div class="state-header">⚔️ Berserker State</div>
+                <div class="state-grid">
+                    <div class="state-item">
+                        <strong>Triggered When:</strong>
+                        Heart volatility spikes (panic → rage conversion)<br>
+                        Player chains aggressive inputs under stress
+                    </div>
+                    <div class="state-item">
+                        <strong>Effects:</strong>
+                        Faster attacks, reduced recovery frames<br>
+                        Dodge becomes unsafe / commits further<br>
+                        Party responsiveness drops (desynchronization)
+                    </div>
+                </div>
+                <p style="margin-top: 20px; color: #888; font-style: italic;">Luto surges forward → party emotionally lags behind</p>
+            </div>
+
+            <div class="character-state">
+                <div class="state-header">🛡️ Paralysis State</div>
+                <div class="state-grid">
+                    <div class="state-item">
+                        <strong>Triggered By:</strong>
+                        Overexposure to threat<br>
+                        Failed dodges<br>
+                        Witnessing party harm
+                    </div>
+                    <div class="state-item">
+                        <strong>Effects:</strong>
+                        Input delay<br>
+                        Cancel windows shrink<br>
+                        Camera tightens<br>
+                        ABS meters stall or decay
+                    </div>
+                </div>
+                <p style="margin-top: 20px; color: #888; font-style: italic;">You are still in control — but control feels thick.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Party Members: Emotional Systems</h2>
+
+            <div class="subsection">
+                <h3 style="color: #ff6b6b; font-size: 1.8rem; margin-bottom: 25px;">Aya (Healing / Support)</h3>
+                
+                <div class="state-diagram">
+                    <div class="state">
+                        <div class="state-title">Low Trust<br>+ High Volatility</div>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Delays, interruptions,<br>weaker heals,<br>occasional refusals</p>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="state">
+                        <div class="state-title">High Trust</div>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Pre-buffered actions,<br>partial auto-casting,<br>interrupts fear responses</p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px; text-align: center; color: #888; font-style: italic;">She becomes a stabilizer of Heart, not a healer bot.</p>
+            </div>
+
+            <div class="subsection">
+                <h3 style="color: #ff6b6b; font-size: 1.8rem; margin-bottom: 25px;">Eli (Art / Concept Magic)</h3>
+                
+                <div class="state-diagram">
+                    <div class="state">
+                        <div class="state-title">Overwhelmed</div>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Concept selection fuzzes,<br>effects bleed/misfire,<br>increased casting time</p>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="state">
+                        <div class="state-title">Emotionally Aligned</div>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Concepts snap together,<br>reduced ABS cost,<br>emergent spell variants</p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px; text-align: center; color: #888; font-style: italic;">His creativity is literally a low-volatility channel.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Core as Party-Sync Mechanic</h2>
+
+            <div class="mechanic-card" style="max-width: none;">
+                <p style="font-size: 1.1rem; margin-bottom: 25px;">Core advances when you stand your ground together, protect rather than dominate, and choose confrontation with consent of the party.</p>
+
+                <div style="margin-top: 30px;">
+                    <strong style="display: block; color: #ff6b6b; margin-bottom: 15px; font-size: 1.2rem;">Each Core Milestone:</strong>
+                    <div class="state-grid">
+                        <div class="state-item">Reduces hesitation penalties</div>
+                        <div class="state-item">Allows simultaneous action windows</div>
+                        <div class="state-item">Enables combo moments</div>
+                        <div class="state-item">Suppresses volatility cascades</div>
+                    </div>
+                </div>
+
+                <p style="margin-top: 30px; text-align: center; font-size: 1.2rem; color: #ff6b6b;">Late game Core: The party stops asking "should we?" — The system stops inserting delay.</p>
+
+                <p style="margin-top: 30px;">Underneath the sync gating, every Core you carry is tinted <span class="highlight">Bright</span>, <span class="highlight">Warm</span>, <span class="highlight">Dark</span>, or <span class="highlight">Void</span> by how it was earned. Nothing reads that pattern back to you as a score — it is read out at the end, deciding which of the four endings (Return to Search, Citizen, Collapse, or Perfect) the run has actually earned.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Gameplay Progression Arc</h2>
+
+            <div class="progression-arc">
+                <div class="arc-stage">
+                    <div class="stage-label">Early Game</div>
+                    <p><strong>Stealth-focused</strong><br>Avoid confrontation<br>High Heart volatility<br>ABS sluggish<br>Party unreliable<br>Commands feel unsafe</p>
+                </div>
+
+                <div class="arc-stage">
+                    <div class="stage-label">Mid Game</div>
+                    <p><strong>Mixed approach</strong><br>Volatility spikes but recovers<br>Trust buffers hesitation<br>Party becoming responsive<br>Tactics flexible</p>
+                </div>
+
+                <div class="arc-stage">
+                    <div class="stage-label">Late Game</div>
+                    <p><strong>Direct confrontation</strong><br>Core suppresses cascades<br>ABS flows under pressure<br>Coordinated combat unit<br>Full confrontations earned</p>
+                </div>
+            </div>
+
+            <div class="innovation-box">
+                <h3>The Metaphor Made Mechanical</h3>
+                <p>The mechanical shift from "survive by hiding" to "stand and fight together" literally mirrors trauma recovery — from isolated hypervigilance to collective resistance.</p>
+            </div>
+        </section>
+
+
+
+        <section class="section">
+            <h2 class="section-title">Final Tight Summary</h2>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <strong>Heart</strong>
+                    Volatility that distorts timing, not a stat
+                </div>
+
+                <div class="summary-card">
+                    <strong>Core</strong>
+                    Shared commitment gates, not a resource
+                </div>
+
+                <div class="summary-card">
+                    <strong>Luto</strong>
+                    Expresses stress physically through states
+                </div>
+
+                <div class="summary-card">
+                    <strong>Aya & Eli</strong>
+                    Express stress procedurally through timing
+                </div>
+
+                <div class="summary-card">
+                    <strong>Trust</strong>
+                    Doesn't make them stronger — makes them present
+                </div>
+
+                <div class="summary-card">
+                    <strong>Late-Game Power</strong>
+                    Comes from synchronization, not damage
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

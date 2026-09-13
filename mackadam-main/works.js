@@ -215,6 +215,9 @@ const WorksApp = {
         // Dropdown menu
         this.initDropdown();
 
+        // Section sub-dropdowns (Writing, Video, Print Design, ...)
+        this.initSubDropdowns();
+
         // Project selection from dropdown
         this.initProjectSelection();
 
@@ -251,6 +254,36 @@ const WorksApp = {
             if (dropdown && !dropdown.contains(e.target)) {
                 dropdown.classList.remove('active');
             }
+        });
+    },
+
+    // Initialize each category (Writing, Video, ...) as its own collapsible
+    // sub-dropdown within the main Content Select panel
+    initSubDropdowns() {
+        const toggles = document.querySelectorAll('.dropdown-section-toggle');
+
+        toggles.forEach((toggle) => {
+            const section = toggle.closest('.dropdown-section');
+            const items = section ? section.querySelector('.dropdown-section-items') : null;
+
+            if (!section || !items) {
+                return;
+            }
+
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = section.classList.contains('active');
+
+                if (isOpen) {
+                    section.classList.remove('active');
+                    items.style.maxHeight = null;
+                    toggle.setAttribute('aria-expanded', 'false');
+                } else {
+                    section.classList.add('active');
+                    items.style.maxHeight = items.scrollHeight + 'px';
+                    toggle.setAttribute('aria-expanded', 'true');
+                }
+            });
         });
     },
 

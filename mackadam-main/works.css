@@ -129,7 +129,8 @@ nav.viewing {
     background: rgba(0, 0, 0, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 16px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     max-height: 0;
     opacity: 0;
@@ -137,17 +138,30 @@ nav.viewing {
 }
 
 .dropdown.active .dropdown-content {
-    max-height: 600px;
+    /* Tall enough for every section's full item list; scrolls instead of
+       clipping if a future addition ever outgrows it. */
+    max-height: min(80vh, 720px);
     opacity: 1;
 }
 
 .dropdown-section {
-    padding: 16px;
+    padding: 8px 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .dropdown-section:last-child {
     border-bottom: none;
+}
+
+.dropdown-section-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 .dropdown-section-title {
@@ -156,7 +170,22 @@ nav.viewing {
     color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 8px;
+}
+
+.dropdown-section-arrow {
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.dropdown-section.active .dropdown-section-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-section-items {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
 }
 
 .dropdown-item {

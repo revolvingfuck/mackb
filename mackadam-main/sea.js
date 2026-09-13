@@ -176,8 +176,8 @@ const uOceanAmp   = { value: 0 };          // world units of displacement
 const uOceanTile  = { value: 152.5 };      // world units per repeat
 const uOceanPhase = { value: 0 };          // 0..1 through the loop
 const uOceanOn    = { value: 0 };          // 0 until the cache lands
-const uOceanGain     = { value: 0.5 };     // live tuning handle — amplitude scale (flatter < 1)
-const uOceanTileGain = { value: 1.6 };     // live tuning handle — repeat spacing scale (wider > 1)
+const uOceanGain     = { value: 1.0 };     // live tuning handle — amplitude scale (flatter < 1)
+const uOceanTileGain = { value: 1.0 };     // live tuning handle — repeat spacing scale (wider > 1)
 let   uOceanBase     = 0;                  // amplitude as baked
 let   uOceanTileBase = 152.5;              // repeat spacing as baked
 

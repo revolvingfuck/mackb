@@ -4,7 +4,10 @@
       "Bash(cut -d/ -f1-2 /tmp/all_files.txt | sort | uniq -c | sort -rn | head -30)",
       "Read(//tmp/**)",
       "Bash(python3 -)",
-      "Bash(python3 \"/c/Users/brian/AppData/Local/Temp/claude/c--Users-brian-OneDrive-Documents-GitHub-mackb/d882b736-7dd8-444a-9866-10ab42c16016/scratchpad/trace_three.py\")"
+      "Bash(python3 \"/c/Users/brian/AppData/Local/Temp/claude/c--Users-brian-OneDrive-Documents-GitHub-mackb/d882b736-7dd8-444a-9866-10ab42c16016/scratchpad/trace_three.py\")",
+      "Bash(node check-demos.js)",
+      "Bash(node -e ' *)",
+      "Bash(node check-demos2.js)"
     ]
   }
 }

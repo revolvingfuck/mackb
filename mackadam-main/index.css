@@ -555,7 +555,7 @@ body {
         gap: 0.5rem;
     }
 
-    /* four covers tile 2x2 rather than shrinking to a single unreadable row */
+    /* covers tile two per row rather than shrinking to a single unreadable row */
     .demos-rail {
         gap: 0.9rem;
     }

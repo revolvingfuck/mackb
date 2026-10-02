@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Very Small Fires | Reader</title>
+    <meta name="description" content="Every Very Small Fires story by Brian Mack on one plain page.">
+    <meta name="author" content="Brian Mack">
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" type="image/png" href="fires.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 17px;
+        }
+
+        /* A dark shadow would vanish on pure black, so the drop shadow is a
+           light one: a hard offset plus a soft halo. */
+        body {
+            background: #000000;
+            color: #ffffff;
+            font-family: Georgia, 'Times New Roman', serif;
+            line-height: 1.75;
+            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.18),
+                         0 0 12px rgba(255, 255, 255, 0.22);
+            -webkit-font-smoothing: antialiased;
+            overflow-wrap: break-word;
+        }
+
+        a {
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 44rem;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 6rem;
+        }
+
+        .reader-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .reader-header h1,
+        .story h2 {
+            font-weight: 400;
+            line-height: 1.2;
+            text-shadow: 3px 3px 0 rgba(255, 255, 255, 0.22),
+                         0 0 18px rgba(255, 255, 255, 0.35);
+        }
+
+        .reader-header h1 {
+            font-size: 2.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .reader-header p {
+            font-style: italic;
+        }
+
+        .contents {
+            margin-bottom: 1rem;
+        }
+
+        .contents h2 {
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .contents ol {
+            list-style-position: inside;
+            text-align: center;
+        }
+
+        .contents li {
+            margin-bottom: 0.35rem;
+        }
+
+        .story {
+            margin-top: 4rem;
+            padding-top: 4rem;
+            border-top: 1px solid #ffffff;
+        }
+
+        .story-head {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .story h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .story-subtitle {
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .story-meta {
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+
+        .story-excerpt {
+            border-left: 4px solid #ffffff;
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .story-body p {
+            margin-bottom: 1.25rem;
+        }
+
+        /* Section headings inside a story (Saturday Night, Friends in Low Places) */
+        .story-body h2,
+        .story-body h3 {
+            font-size: 1.3rem;
+            font-weight: 400;
+            font-style: italic;
+            text-align: left;
+            margin: 2.5rem 0 1rem;
+            text-shadow: inherit;
+        }
+
+        .story-body .break {
+            text-align: center;
+            margin: 2.25rem 0;
+            letter-spacing: 0.4em;
+        }
+
+        .story-body .lyrics {
+            font-style: italic;
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid #ffffff;
+        }
+
+        .story-body img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 2rem auto;
+        }
+
+        .back-to-top {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #ffffff;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            html {
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 2.5rem 1rem 4rem;
+            }
+
+            .reader-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .story h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="top">
+        <header class="reader-header">
+            <h1>Very Small Fires</h1>
+            <p>Stories by Brian Mack</p>
+            <p><a href="index.html">&larr; Story pages</a></p>
+        </header>
+
+        <nav class="contents" id="contents" aria-label="Contents" hidden>
+            <h2>Contents</h2>
+            <ol id="contentsList"></ol>
+        </nav>
+
+        <p class="status" id="status" role="status">Loading stories&hellip;</p>
+        <noscript>
+            <p class="status">This page needs JavaScript to gather the stories. They can all be read from the <a href="index.html">story pages</a>.</p>
+        </noscript>
+
+        <main id="stories"></main>
+
+        <footer>Very Small Fires</footer>
+    </div>
+
+    <script>
+        // The reader holds no story text of its own. It reads the story list
+        // off index.html and lifts each story out of its own page, so an edit
+        // to a story (or a new one added to the list) shows up here untouched.
+        (function() {
+            const SKIP = ['otherwritings.html'];   // an index of other pieces, not a story
+
+            const storiesEl = document.getElementById('stories');
+            const statusEl = document.getElementById('status');
+            const contentsEl = document.getElementById('contents');
+            const contentsList = document.getElementById('contentsList');
+
+            async function fetchDoc(url) {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP ${response.status} fetching ${url}`);
+                return new DOMParser().parseFromString(await response.text(), 'text/html');
+            }
+
+            function text(doc, selector) {
+                const el = doc.querySelector(selector);
+                return el ? el.textContent.trim() : '';
+            }
+
+            function el(tag, className, content) {
+                const node = document.createElement(tag);
+                if (className) node.className = className;
+                if (content) node.textContent = content;
+                return node;
+            }
+
+            // Two page templates are in use: the newer one (header h1, .subtitle,
+            // .metadata, .excerpt, article) and the older one (.story-title,
+            // .story-subtitle, .story-meta, .story-text).
+            function buildStory(doc, href, fallbackTitle) {
+                const source = doc.querySelector('article, .story-text');
+                if (!source) throw new Error(`no story text found in ${href}`);
+
+                const title = text(doc, 'header h1') || fallbackTitle;
+                const section = el('section', 'story');
+                section.id = href.replace(/\.html$/i, '').toLowerCase();
+
+                const head = el('header', 'story-head');
+                head.appendChild(el('h2', '', title));
+
+                const subtitle = text(doc, '.subtitle, .story-subtitle');
+                if (subtitle) head.appendChild(el('p', 'story-subtitle', subtitle));
+
+                const meta = Array.from(doc.querySelectorAll('.metadata span, .story-meta span'))
+                    .map((span) => span.textContent.trim())
+                    .filter((part) => part && part !== '•');
+                if (meta.length) head.appendChild(el('p', 'story-meta', meta.join(' · ')));
+
+                section.appendChild(head);
+
+                const excerpt = doc.querySelector('.excerpt');
+                if (excerpt) {
+                    const quote = el('blockquote', 'story-excerpt');
+                    quote.append(...Array.from(excerpt.childNodes).map((n) => document.importNode(n, true)));
+                    section.appendChild(quote);
+                }
+
+                const body = el('div', 'story-body');
+                body.append(...Array.from(source.childNodes).map((n) => document.importNode(n, true)));
+                body.querySelectorAll('script, style, nav').forEach((n) => n.remove());
+                body.querySelectorAll('[style]').forEach((n) => n.removeAttribute('style'));
+                // .break is drawn by a pseudo-element on its own page and
+                // .section-break holds '***'; give both the same mark here.
+                body.querySelectorAll('.break, .section-break').forEach((n) => {
+                    n.className = 'break';
+                    n.textContent = '• • •';
+                });
+                section.appendChild(body);
+
+                const back = el('p', 'back-to-top');
+                const backLink = el('a', '', 'Back to contents');
+                backLink.href = '#top';
+                back.appendChild(backLink);
+                section.appendChild(back);
+
+                return { section, title };
+            }
+
+            async function load() {
+                const index = await fetchDoc('index.html');
+                const links = Array.from(index.querySelectorAll('.story-list a.nav-link'))
+                    .map((a) => ({ href: a.getAttribute('href') || '', label: a.textContent.trim() }))
+                    .filter((link) => /^[^/:]+\.html$/i.test(link.href) && !SKIP.includes(link.href.toLowerCase()));
+
+                if (!links.length) throw new Error('no stories listed in index.html');
+
+                const stories = await Promise.all(links.map(async (link) => {
+                    try {
+                        return buildStory(await fetchDoc(link.href), link.href, link.label);
+                    } catch (error) {
+                        console.warn('Skipping story:', error);
+                        return null;
+                    }
+                }));
+
+                const loaded = stories.filter(Boolean);
+                if (!loaded.length) throw new Error('no stories could be loaded');
+
+                loaded.forEach(({ section, title }) => {
+                    storiesEl.appendChild(section);
+
+                    const item = document.createElement('li');
+                    const anchor = el('a', '', title);
+                    anchor.href = `#${section.id}`;
+                    item.appendChild(anchor);
+                    contentsList.appendChild(item);
+                });
+
+                contentsEl.hidden = false;
+                statusEl.remove();
+
+                // The anchor did not exist when the browser first looked for it.
+                if (location.hash.length > 1) {
+                    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+                    if (target) target.scrollIntoView();
+                }
+            }
+
+            load().catch((error) => {
+                console.error('Error loading stories:', error);
+                statusEl.innerHTML = 'The stories could not be loaded here. They can all be read from the <a href="index.html">story pages</a>.';
+            });
+        })();
+    </script>
+</body>
+</html>

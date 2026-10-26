@@ -205,6 +205,67 @@ body {
     display: block;
 }
 
+/* Company, Eternal: the flyer hangs under the social row as a card in 3D
+   (flyer.js). It is placed absolutely so the logo above it does not move, and it
+   rises off with the rest of the brand block. The flat image is the fallback for
+   when there is no WebGL, tilted in CSS instead. */
+.nav-social {
+    position: relative;
+}
+
+.flyer {
+    --flyer-h: clamp(170px, 31vh, 330px);
+    position: absolute;
+    top: calc(100% + var(--lockup-size) * 0.12);
+    left: 50%;
+    width: calc(var(--flyer-h) * 11 / 17 * 1.5);   /* room either side for it to turn */
+    height: calc(var(--flyer-h) * 1.12);
+    transform: translateX(-50%);
+    display: block;
+    perspective: 900px;
+    outline: none;
+}
+
+.flyer-3d {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.flyer-flat {
+    position: absolute;
+    left: 50%;
+    top: 4%;
+    height: 92%;
+    width: auto;
+    transform: translateX(-50%) rotateY(-14deg) rotateX(4deg);
+    border-radius: 3px;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
+    transition: transform 0.35s ease;
+    display: none;
+}
+
+.flyer.no-gl .flyer-3d {
+    display: none;
+}
+
+.flyer.no-gl .flyer-flat {
+    display: block;
+}
+
+.flyer.no-gl:hover .flyer-flat,
+.flyer.no-gl:focus-visible .flyer-flat {
+    transform: translateX(-50%) rotateY(0deg) rotateX(0deg) scale(1.04);
+}
+
+.flyer:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+    border-radius: 6px;
+}
+
 /* Interwoven HS ships an ampersand with a reserved advance but no outline at
    all, so '&' comes out as a gap. Borrow one from a geometric fallback. */
 .amp {
@@ -548,6 +609,10 @@ body {
 
     .nav-social {
         margin-left: 0;
+    }
+
+    .flyer {
+        --flyer-h: clamp(150px, 30vh, 280px);
     }
 
     .header-line {

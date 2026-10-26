@@ -48,15 +48,20 @@
                         <img src="assets/linkedin-svgrepo-com.svg" alt=""></a>
                     <a class="social-dot" href="verysmallfires/reader.html" target="_blank" rel="noopener" aria-label="Very Small Fires stories">
                         <img src="assets/book-svgrepo-com.svg" alt=""></a>
-
-                    <!-- Company, Eternal: the flyer, as a card that turns in the light (flyer.js) -->
-                    <a class="flyer" href="assets/hunting-party.html" aria-label="Company, Eternal: play the alpha demo">
-                        <canvas class="flyer-3d" aria-hidden="true"></canvas>
-                        <img class="flyer-flat" src="assets/company-eternal-flyer.webp" alt="Company, Eternal: alpha player demo">
-                    </a>
                 </span>
             </nav>
         </div>
+
+        <!-- Company, Eternal: the poster, as a card that turns in the light (flyer.js).
+             The poster opens the game; the arrow on its right slides it away; the tab brings it back. -->
+        <div class="flyer-wrap">
+            <a class="flyer" href="assets/hunting-party.html" aria-label="Company, Eternal: play the alpha demo">
+                <canvas class="flyer-3d" aria-hidden="true"></canvas>
+                <img class="flyer-flat" src="assets/company-eternal-flyer.webp" alt="Company, Eternal: alpha player demo">
+            </a>
+            <button type="button" class="flyer-hide" aria-label="Hide the poster"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <button type="button" class="flyer-show" aria-label="Show the poster"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
 
 
@@ -84,7 +89,7 @@
                 <span class="demo-shot"><img src="demos/3dbungun.png" alt=""></span>
             </a>
 
-            <a class="demo-card" style="--i:5" href="assets/hunting-party.html" aria-label="Company, Eternal">
+            <a class="demo-card demo-card-wide" style="--i:5" href="assets/hunting-party.html" aria-label="Company, Eternal">
                 <span class="demo-shot"><img src="demos/companyeternal.webp" alt=""></span>
             </a>
         </div>

@@ -1,10 +1,27 @@
-// Company, Eternal: the flyer under the social row, as a card in 3D. It turns in once when the
-// page opens (the box art is on its back), then floats and sways on its own and leans toward the
-// pointer. A click opens the game. Without WebGL the flat image stands in (index.css tilts it).
+// Company, Eternal: the poster on the right of the home page, as a card in 3D. It turns in once
+// when the page opens (the box art is on its back), then floats and sways a little on its own and
+// leans toward the pointer. A click opens the game. The arrow on its right slides it away; the tab
+// at the edge of the screen brings it back. Without WebGL the flat image stands in.
 import * as THREE from 'three';
 
 const link = document.querySelector('.flyer');
+const wrap = document.querySelector('.flyer-wrap');
 const canvas = link && link.querySelector('.flyer-3d');
+const hideBtn = document.querySelector('.flyer-hide');
+const showBtn = document.querySelector('.flyer-show');
+
+// The arrow hides the poster; the tab brings it back
+function setHidden(hidden) {
+    if (!wrap) return;
+    wrap.classList.toggle('is-hidden', hidden);
+    if (hideBtn) hideBtn.tabIndex = hidden ? -1 : 0;
+    if (showBtn) showBtn.tabIndex = hidden ? 0 : -1;
+    if (link) link.tabIndex = hidden ? -1 : 0;
+}
+if (hideBtn) hideBtn.addEventListener('click', () => { setHidden(true); if (showBtn) showBtn.focus({ preventScroll: true }); });
+if (showBtn) showBtn.addEventListener('click', () => { setHidden(false); if (hideBtn) hideBtn.focus({ preventScroll: true }); });
+setHidden(false);
+
 if (link && canvas) start();
 
 function start() {
@@ -66,7 +83,8 @@ function start() {
         const g = c.getContext('2d');
         g.fillStyle = '#0d0d10';
         g.fillRect(0, 0, c.width, c.height);
-        g.drawImage(art, 0, 160, 660, 660);
+        const ah = 660 * art.naturalHeight / art.naturalWidth;      // the cover at its own shape
+        g.drawImage(art, 0, 490 - ah / 2, 660, ah);
         g.fillStyle = '#e9e4da';
         g.font = '700 38px Arial, Helvetica, sans-serif';
         g.textAlign = 'center';
@@ -120,7 +138,7 @@ function start() {
         then = now;
         const r = link.getBoundingClientRect();
         // nothing to draw while the tab is hidden or the brand block has risen away
-        if (document.hidden || !group.visible || r.bottom < 0 || r.top > window.innerHeight || r.width === 0) return;
+        if (document.hidden || !group.visible || wrap.classList.contains('is-hidden') || r.bottom < 0 || r.top > window.innerHeight || r.width === 0) return;
         fit(r);
         const t = now / 1000;
         if (introAt === null) introAt = t;
@@ -129,11 +147,12 @@ function start() {
         px += (tx - px) * Math.min(1, dt * 8);
         py += (ty - py) * Math.min(1, dt * 8);
         const sway = still ? 0 : 1 - hover;
-        group.rotation.y = -Math.PI * 2 * (1 - ease) + sway * 0.32 * Math.sin(t * 0.55) + hover * px * 0.45 + (still ? -0.22 : 0);
-        group.rotation.x = sway * 0.08 * Math.sin(t * 0.8 + 1) + hover * py * 0.3 + (still ? 0.06 : 0);
-        group.rotation.z = sway * 0.03 * Math.sin(t * 0.4);
-        group.position.y = sway * 0.04 * Math.sin(t * 1.1);
-        group.scale.setScalar(1 + hover * 0.06);
+        // a big poster sways less than a small card would
+        group.rotation.y = -Math.PI * 2 * (1 - ease) + sway * 0.12 * Math.sin(t * 0.55) + hover * px * 0.22 + (still ? -0.12 : 0);
+        group.rotation.x = sway * 0.04 * Math.sin(t * 0.8 + 1) + hover * py * 0.14 + (still ? 0.04 : 0);
+        group.rotation.z = sway * 0.015 * Math.sin(t * 0.4);
+        group.position.y = sway * 0.025 * Math.sin(t * 1.1);
+        group.scale.setScalar(1 + hover * 0.03);
         shadow.material.opacity = 0.75 - group.position.y * 2 - hover * 0.15;
         renderer.render(scene, camera);
     }

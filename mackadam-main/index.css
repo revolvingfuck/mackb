@@ -205,24 +205,35 @@ body {
     display: block;
 }
 
-/* Company, Eternal: the flyer hangs under the social row as a card in 3D
-   (flyer.js). It is placed absolutely so the logo above it does not move, and it
-   rises off with the rest of the brand block. The flat image is the fallback for
-   when there is no WebGL, tilted in CSS instead. */
-.nav-social {
-    position: relative;
+/* Company, Eternal: the poster, big, on the right of the screen, as a card in
+   3D (flyer.js). It sits in front of the page; the arrow on its right slides it
+   away and the tab at the edge of the screen brings it back. It is inside the
+   brand block's layer, so it rises off with it when a menu opens. The flat image
+   is the fallback when there is no WebGL, tilted in CSS instead. */
+.flyer-wrap {
+    /* three times the size it was under the social row, as far as the screen allows */
+    --card-h: min(86vh, 990px, calc(92vw * 17 / 11 / 1.25));
+    position: absolute;
+    right: 2vw;
+    top: 50%;
+    width: calc(var(--card-h) * 11 / 17 * 1.25);   /* a little room either side for it to turn */
+    height: calc(var(--card-h) / 0.86);
+    transform: translateY(-50%);
+    pointer-events: auto;
+    z-index: 2;
+    transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.45s ease;
+}
+
+.flyer-wrap.is-hidden {
+    transform: translate(calc(100% + 4vw), -50%);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .flyer {
-    --flyer-h: clamp(170px, 31vh, 330px);
     position: absolute;
-    top: calc(100% + var(--lockup-size) * 0.12);
-    left: 50%;
-    width: calc(var(--flyer-h) * 11 / 17 * 1.5);   /* room either side for it to turn */
-    height: calc(var(--flyer-h) * 1.12);
-    transform: translateX(-50%);
+    inset: 0;
     display: block;
-    perspective: 900px;
     outline: none;
 }
 
@@ -237,13 +248,12 @@ body {
 .flyer-flat {
     position: absolute;
     left: 50%;
-    top: 4%;
-    height: 92%;
+    top: 7%;
+    height: 86%;
     width: auto;
-    transform: translateX(-50%) rotateY(-14deg) rotateX(4deg);
+    transform: translateX(-50%) rotateY(-8deg);
     border-radius: 3px;
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
-    transition: transform 0.35s ease;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
     display: none;
 }
 
@@ -255,15 +265,71 @@ body {
     display: block;
 }
 
-.flyer.no-gl:hover .flyer-flat,
-.flyer.no-gl:focus-visible .flyer-flat {
-    transform: translateX(-50%) rotateY(0deg) rotateX(0deg) scale(1.04);
-}
-
 .flyer:focus-visible {
     outline: 2px solid #ffffff;
-    outline-offset: 4px;
-    border-radius: 6px;
+    outline-offset: -6px;
+    border-radius: 8px;
+}
+
+/* the arrow, on the poster's right side */
+.flyer-hide,
+.flyer-show {
+    position: absolute;
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    color: #111111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    transition: transform 0.2s ease, background 0.2s ease;
+    pointer-events: auto;
+}
+
+.flyer-hide {
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.flyer-hide:hover,
+.flyer-hide:focus-visible {
+    transform: translateY(-50%) scale(1.1);
+}
+
+.flyer-hide svg,
+.flyer-show svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* the tab that brings it back: only while it is hidden */
+.flyer-show {
+    right: 0;
+    border-radius: 22px 0 0 22px;
+    width: 40px;
+    transform: translate(100%, -50%);
+    z-index: 2;
+}
+
+.flyer-wrap.is-hidden + .flyer-show {
+    transform: translate(0, -50%);
+}
+
+.flyer-show:hover,
+.flyer-show:focus-visible {
+    background: #ffffff;
+}
+
+.flyer-hide:focus-visible,
+.flyer-show:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
 }
 
 /* Interwoven HS ships an ampersand with a reserved advance but no outline at
@@ -592,6 +658,12 @@ body {
     display: block;
 }
 
+/* Company, Eternal's cover keeps its own wide shape rather than the square */
+.demo-card-wide {
+    aspect-ratio: 1080 / 785;
+    align-self: center;
+}
+
 
 /* Responsive design */
 @media (max-width: 768px) {
@@ -609,10 +681,6 @@ body {
 
     .nav-social {
         margin-left: 0;
-    }
-
-    .flyer {
-        --flyer-h: clamp(150px, 30vh, 280px);
     }
 
     .header-line {

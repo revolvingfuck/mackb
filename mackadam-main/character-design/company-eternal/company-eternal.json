@@ -1,8 +1,8 @@
 {
   "title": "Company, Eternal Concept Art",
   "project": "Company, Eternal — a frost dieselpunk western set in Freeland",
-  "credit": "Concept art for Company, Eternal, art-directed by Brian MacAdam; images produced with AI assistance.",
-  "_notes": "Names marked unconfirmed are placeholders; confirm before publishing. The White Werebear image was cropped to remove a fake AI-generated signature in the bottom-right corner.",
+  "credit": "Concept art for Company, Eternal by Brian MacAdam. Pixel art drawn by hand; other designs drawn by hand and rendered with AI assistance.",
+  "_notes": "Show each item's itemCredit on its placard. The White Werebear image was cropped to remove a fake AI-generated signature in the bottom-right corner.",
   "items": [
     {
       "id": "wendigo",
@@ -11,7 +11,8 @@
       "role": "Guardian of Antler Pass",
       "caption": "Antlered skull, black feathers, red eyes.",
       "description": "A pixel-art take on the wendigo that guards the way to Verdant Nook: a bird-skull face under antlers, a ribcage showing through matted black feathers, and trophies strung at the waist.",
-      "unconfirmed": []
+      "unconfirmed": [],
+      "itemCredit": "Pixel art by Brian MacAdam"
     },
     {
       "id": "white-werebear",
@@ -20,7 +21,8 @@
       "role": "Creature of the starting wild",
       "caption": "Scarred, hulking, and waiting in its den.",
       "description": "A white bear built like a wrestler, with old claw scars across its face and shoulder, set in a snowstorm.",
-      "unconfirmed": []
+      "unconfirmed": [],
+      "itemCredit": "Designed and drawn by Brian MacAdam; final render with AI assistance"
     },
     {
       "id": "clive-turnaround",
@@ -29,7 +31,8 @@
       "role": "The hunter — playable lead",
       "caption": "Ex-Sun Steel, masked and riding on borrowed grace.",
       "description": "Clive in turnaround: a long black coat with purple lining, a red pinstripe vest, gold buckle and a purple bandana over the face. A former hunter of the order, travelling with his son B.",
-      "unconfirmed": []
+      "unconfirmed": [],
+      "itemCredit": "Designed and drawn by Brian MacAdam; final render with AI assistance"
     },
     {
       "id": "clive-sprites",
@@ -38,7 +41,8 @@
       "role": "8-frame walk cycles in four directions",
       "caption": "Clive, translated into game sprites.",
       "description": "The turnaround carried into in-game pixel sprites, with 8-frame walk cycles facing front, side and back.",
-      "unconfirmed": []
+      "unconfirmed": [],
+      "itemCredit": "Pixel art by Brian MacAdam"
     },
     {
       "id": "cast-lineup",
@@ -89,7 +93,8 @@
           "pos": 4,
           "name": "Human Miner"
         }
-      ]
+      ],
+      "itemCredit": "Designed and drawn by Brian MacAdam; final render with AI assistance"
     }
   ]
 }

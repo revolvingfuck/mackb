@@ -45,10 +45,50 @@
       "file": "cast-lineup.jpg",
       "name": "Cast lineup",
       "role": "Townsfolk, miners and vampires",
-      "caption": "Eight figures from the frozen frontier.",
-      "description": "A lineup of chibi-proportioned characters: frontier settlers in fur-trimmed coats, a lantern-carrying vampire, and turned miners with picks, shovels and headlamps.",
-      "unconfirmed": [
-        "names of individual characters"
+      "caption": "The people and monsters of Argent Ridge.",
+      "description": "Top row, left to right: The Stalker, Dahlia, Delilah and B. Bottom row: The Foreman, Miner Type A, Miner Type B and a Human Miner.",
+      "unconfirmed": [],
+      "figures": [
+        {
+          "row": 1,
+          "pos": 1,
+          "name": "The Stalker"
+        },
+        {
+          "row": 1,
+          "pos": 2,
+          "name": "Dahlia"
+        },
+        {
+          "row": 1,
+          "pos": 3,
+          "name": "Delilah"
+        },
+        {
+          "row": 1,
+          "pos": 4,
+          "name": "B"
+        },
+        {
+          "row": 2,
+          "pos": 1,
+          "name": "The Foreman"
+        },
+        {
+          "row": 2,
+          "pos": 2,
+          "name": "Miner Type A"
+        },
+        {
+          "row": 2,
+          "pos": 3,
+          "name": "Miner Type B"
+        },
+        {
+          "row": 2,
+          "pos": 4,
+          "name": "Human Miner"
+        }
       ]
     }
   ]

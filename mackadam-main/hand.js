@@ -558,8 +558,12 @@ void main(){
   vec3  col   = tint * uKeyTint * vBright * (0.60 + core * 1.5);
 
   // lands in the HDR target with everything else, so the existing bloom chain
-  // picks the brightest droplets up for free
-  gl_FragColor = vec4(col * uSprayGain * 1.6, alpha * mix(0.5, 1.0, vKind));
+  // picks the brightest droplets up for free. A droplet whose colour came out
+  // non-finite is dropped here: the bloom blur would otherwise grow that one
+  // pixel into a solid square flashing on screen.
+  col *= uSprayGain * 1.6;
+  if (any(isnan(col)) || any(isinf(col)) || isnan(alpha)) discard;
+  gl_FragColor = vec4(min(col, vec3(32.0)), alpha * mix(0.5, 1.0, vKind));
 }`;
 
 // =====================================================================

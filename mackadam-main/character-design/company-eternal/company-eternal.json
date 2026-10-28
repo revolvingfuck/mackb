@@ -1,0 +1,60 @@
+{
+  "title": "Company, Eternal Concept Art",
+  "project": "Company, Eternal — a frost dieselpunk western set in Freeland",
+  "credit": "Concept art for Company, Eternal, art-directed by Brian MacAdam; images produced with AI assistance.",
+  "_notes": "Names marked unconfirmed are placeholders; confirm before publishing. The White Werebear image was cropped to remove a fake AI-generated signature in the bottom-right corner.",
+  "items": [
+    {
+      "id": "wendigo",
+      "file": "wendigo.jpg",
+      "name": "The Wendigo",
+      "role": "Guardian of Antler Pass",
+      "caption": "Antlered skull, black feathers, red eyes.",
+      "description": "A pixel-art take on the wendigo that guards the way to Verdant Nook: a bird-skull face under antlers, a ribcage showing through matted black feathers, and trophies strung at the waist.",
+      "unconfirmed": []
+    },
+    {
+      "id": "white-werebear",
+      "file": "white-werebear.png",
+      "name": "White Werebear",
+      "role": "Creature of the starting wild",
+      "caption": "Scarred, hulking, and waiting in its den.",
+      "description": "A white bear built like a wrestler, with old claw scars across its face and shoulder, set in a snowstorm.",
+      "unconfirmed": []
+    },
+    {
+      "id": "gunslinger-turnaround",
+      "file": "gunslinger-turnaround.png",
+      "name": "Gunslinger",
+      "role": "Character turnaround",
+      "caption": "Long coat, purple bandana, white hair.",
+      "description": "A masked rider in a long black coat with a purple lining, a red pinstripe vest and a gold buckle.",
+      "unconfirmed": [
+        "name",
+        "role"
+      ]
+    },
+    {
+      "id": "gunslinger-sprites",
+      "file": "gunslinger-sprites.png",
+      "name": "Gunslinger — sprite sheet",
+      "role": "8-frame walk cycles in four directions",
+      "caption": "The same character, translated into game sprites.",
+      "description": "The turnaround carried into in-game pixel sprites, with walk cycles facing front, side and back.",
+      "unconfirmed": [
+        "name"
+      ]
+    },
+    {
+      "id": "cast-lineup",
+      "file": "cast-lineup.jpg",
+      "name": "Cast lineup",
+      "role": "Townsfolk, miners and vampires",
+      "caption": "Eight figures from the frozen frontier.",
+      "description": "A lineup of chibi-proportioned characters: frontier settlers in fur-trimmed coats, a lantern-carrying vampire, and turned miners with picks, shovels and headlamps.",
+      "unconfirmed": [
+        "names of individual characters"
+      ]
+    }
+  ]
+}

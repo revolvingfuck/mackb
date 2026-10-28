@@ -39,5 +39,11 @@
       "description": "A creature of tangled pale tendrils wrapped around circuit-board plates. Its strength scales with the cores it absorbs.",
       "sketch": null
     }
+  ],
+  "subsections": [
+    {
+      "title": "Company, Eternal Concept Art",
+      "manifest": "company-eternal/company-eternal.json"
+    }
   ]
 }

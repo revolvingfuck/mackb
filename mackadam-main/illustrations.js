@@ -25,14 +25,23 @@ const FRAMES = {
     'matted-paper':    { mat: 13, border: 1.4 },
     'matted-colour':   { mat: 11, border: 1.8 },
     'sketchbook-tape': { mat: 0,  border: 0 },
+    'tape':            { mat: 0,  border: 0 },
+    'tape-masking':    { mat: 0,  border: 0 },
+    'tape-scotch':     { mat: 0,  border: 0 },
+    'tape-duct':       { mat: 0,  border: 0 },
+    'tack':            { mat: 0,  border: 0 },
     'none-dark':       { mat: 0,  border: 0 },
     'none-light':      { mat: 0,  border: 0 },
 };
 
 // Salon hang: pieces are not all the same size. Applied in display order.
 const SIZE_PATTERN = [1, 0.8, 0.92, 0.74, 0.97, 0.84, 0.7, 1, 0.86, 0.78, 0.9, 0.82];
+// Pinned pages hang a little crooked. Degrees, applied in display order.
+// Kept small: a busy artist pinning work up carefully, not a junk drawer.
+const TILT_PATTERN = [-0.8, 0.5, -0.3, 0.9, -0.6, 0.2, -1, 0.7, -0.4, 0.8, -0.2];
+
 // Small vertical drift so rows don't read as a grid.
-const DRIFT_PATTERN = [0, -0.05, 0.04, -0.02, 0.06, -0.04, 0.02, -0.06, 0.03, 0, -0.03, 0.05];
+const DRIFT_PATTERN = [0, 0.02, -0.015, 0.01, 0.025, -0.01, 0.015, -0.02, 0.01, 0, -0.015, 0.02];
 
 const MOBILE_QUERY = window.matchMedia('(max-width: 768px)');
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -130,6 +139,8 @@ function makeFrame(item, imgH) {
     const u = imgH / 100;
     const frame = document.createElement('div');
     frame.className = `illo-frame illo-frame--${item.frame || 'none-dark'}`;
+    // tape-masking / tape-scotch / tape-duct share the tape geometry.
+    if ((item.frame || '').startsWith('tape-')) frame.classList.add('illo-frame--tape');
     frame.style.setProperty('--u', `${u}px`);
     frame.style.padding = `${f.mat * u}px`;
     frame.style.borderWidth = `${f.border * u}px`;
@@ -216,7 +227,10 @@ function layoutWall() {
         r.forEach((p) => {
             const imgH = p.imgH * k;
             const outerH = frameOuter(p.item, imgH).h;
-            rowEl.appendChild(buildPiece(p.item, imgH, mobile ? 0 : p.drift * outerH));
+            const piece = buildPiece(p.item, imgH, mobile ? 0 : p.drift * outerH);
+            const n = state.pieces.length - 1;
+            piece.style.setProperty('--tilt', `${TILT_PATTERN[n % TILT_PATTERN.length]}deg`);
+            rowEl.appendChild(piece);
         });
         wall.appendChild(rowEl);
     });

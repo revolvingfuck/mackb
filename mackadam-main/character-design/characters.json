@@ -1,12 +1,43 @@
 {
-  "_notes": "Character designs from Heartcore. Designed and drawn by hand by Brian MacAdam, then cleaned up and rendered as turnarounds with an AI image tool (ChatGPT). Always show the credit line on the page. Add the original sketches next to each render when available.",
+  "_notes": "Character designs from Heartcore. Designed and drawn by hand by Brian MacAdam, then cleaned up and rendered as turnarounds with an AI image tool (ChatGPT). Always show the credit line on the page. Add the original sketches next to each render when available. Gannet (gannet.png) is held back until his arm is fixed; leave him out of the site until he's re-added here.",
   "credit": "Original character designs drawn by Brian MacAdam; final turnarounds rendered with AI assistance.",
   "project": "Heartcore — an action RPG in a brutalist megacity",
   "items": [
-    {"id":"luto","file":"luto.png","name":"Luto","role":"Berserker / Paladin — the playable lead","caption":"Punk lead with a paladin's streak.","description":"Spiked denim vest, cargo pants, red high-tops and a bandaged cheek. Designed to read as a scrapper first and a protector second.","sketch":null},
-    {"id":"corrine","file":"corrine.png","name":"Corrine","role":"Mechanic / Knight — playable","caption":"A mechanic who fights like a wall.","description":"Goggles, tool harness and olive work pants tied at the waist, with orange as her signal colour. She deploys turrets and shields, and her kit carries every tool on the outside.","sketch":null},
-    {"id":"gannet","file":"gannet.png","name":"Gannet","role":"Boss — the tank of the Three Sons","caption":"The first wall Luto has to break.","description":"A long black coat, steel-cuffed sleeves and a riveted mask. Built as the heavy of a boss trio alongside Cormorant and Heron.","sketch":null},
-    {"id":"eli","file":"eli.png","name":"Eli","role":"Black Mage / Blue Mage — ally","caption":"A kid who copies what hurt him.","description":"Oversized blue hoodie, red shorts and sandals, with striped markings on the legs. His shadow magic manifests enemies from his memory.","sketch":null},
-    {"id":"myc","file":"myc.png","name":"Myc","role":"Golem / HUD enhancement — ally","caption":"A golem grown from roots and circuit boards.","description":"A creature of tangled pale tendrils wrapped around circuit-board plates. Its strength scales with the cores it absorbs.","sketch":null}
+    {
+      "id": "luto",
+      "file": "luto.png",
+      "name": "Luto",
+      "role": "Berserker / Paladin — the playable lead",
+      "caption": "Punk lead with a paladin's streak.",
+      "description": "Spiked denim vest, cargo pants, red high-tops and a bandaged cheek. Designed to read as a scrapper first and a protector second.",
+      "sketch": null
+    },
+    {
+      "id": "corrine",
+      "file": "corrine.png",
+      "name": "Corrine",
+      "role": "Mechanic / Knight — playable",
+      "caption": "A mechanic who fights like a wall.",
+      "description": "Goggles, tool harness and olive work pants tied at the waist, with orange as her signal colour. She deploys turrets and shields, and her kit carries every tool on the outside.",
+      "sketch": null
+    },
+    {
+      "id": "eli",
+      "file": "eli.png",
+      "name": "Eli",
+      "role": "Black Mage / Blue Mage — ally",
+      "caption": "A kid who copies what hurt him.",
+      "description": "Oversized blue hoodie, red shorts and sandals, with striped markings on the legs. His shadow magic manifests enemies from his memory.",
+      "sketch": null
+    },
+    {
+      "id": "myc",
+      "file": "myc.png",
+      "name": "Myc",
+      "role": "Golem / HUD enhancement — ally",
+      "caption": "A golem grown from roots and circuit boards.",
+      "description": "A creature of tangled pale tendrils wrapped around circuit-board plates. Its strength scales with the cores it absorbs.",
+      "sketch": null
+    }
   ]
 }

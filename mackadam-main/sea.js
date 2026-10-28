@@ -46,6 +46,7 @@ const QUALITY = {
 const PARAMS = new URLSearchParams(location.search);
 const qnum = k => { const v = parseFloat(PARAMS.get(k)); return Number.isFinite(v) ? v : undefined; };
 const FORCE = { hour: qnum('hour'), wind: qnum('wind'), cloud: qnum('cloud'), fog: qnum('fog') };
+const FORCE_LOWFOG = qnum('lowfog');   // ?lowfog=0..1 pins the ground fog for review
 const PINNED = Object.values(FORCE).some(v => v !== undefined);
 const SHOW_STATS = PARAMS.has('stats');
 
@@ -887,6 +888,75 @@ const sea = new THREE.Mesh(seaGeo, new THREE.ShaderMaterial({
 sea.frustumCulled = false;   // the grid lives in clip space; its bounds mean nothing
 seaScene.add(sea);
 
+// --- low-lying fog ---
+// Three thin sheets of mist hovering just over the water. They ride along with
+// the camera but their noise lives in world space, so the banks stay put and
+// drift on the wind rather than sliding with the view. Depth-tested against the
+// water and the statue: mist settles in the troughs and wraps the hand's base.
+// uLowFog sets how much of it there is; frame() lets it build and burn off.
+const uLowFog = { value: 0 };
+const LOW_FOG_LAYERS = [
+  { y: 2.4, scale: 1.00, alpha: 1.00 },
+  { y: 4.6, scale: 0.82, alpha: 0.80 },
+  { y: 7.0, scale: 0.66, alpha: 0.50 }
+];
+const lowFog = LOW_FOG_LAYERS.map((L, i) => {
+  const m = new THREE.Mesh(
+    new THREE.PlaneGeometry(9000, 9000, 1, 1).rotateX(-Math.PI / 2),
+    new THREE.ShaderMaterial({
+      uniforms: { ...SEA_UNIFORMS, uLowFog,
+                  uLayer: { value: i }, uLayerScale: { value: L.scale },
+                  uLayerAlpha: { value: L.alpha } },
+      transparent: true,
+      depthWrite: false,
+      depthTest: true,
+      vertexShader: `
+        varying vec3 vW;
+        void main(){
+          vec4 w = modelMatrix * vec4(position, 1.0);
+          vW = w.xyz;
+          gl_Position = projectionMatrix * viewMatrix * w;
+        }`,
+      fragmentShader: COMMON + `
+        uniform float uLowFog;
+        uniform float uLayer;
+        uniform float uLayerScale;
+        uniform float uLayerAlpha;
+        varying vec3 vW;
+        void main(){
+          if (uLowFog <= 0.002) discard;
+          float t = uTime;
+          vec2 drift = vec2(cos(WIND_BEARING), sin(WIND_BEARING)) * t * (0.9 + uLayer * 0.35);
+          // broad banks, then finer wisps riding across them
+          float banks = fbm2((vW.xz + drift * 2.0) * 0.0042 * uLayerScale + uLayer * 5.3);
+          float wisps = vnoise((vW.xz + drift * 3.5) * 0.021 + vec2(uLayer * 2.7, 1.9));
+          float m = smoothstep(0.30, 0.70, banks * 0.80 + wisps * 0.32);
+
+          float d = length(vW.xz - cameraPosition.xz);
+          float nearFade = smoothstep(3.0, 26.0, d);              // no flat sheet at the lens
+          float farFade  = 1.0 - smoothstep(1600.0, 4200.0, d);   // distance fog takes over
+
+          // a thin layer seen edge-on holds more mist along the ray
+          vec3 v = normalize(vW - cameraPosition);
+          float graze = clamp(0.10 / max(abs(v.y), 0.025), 1.0, 3.5);
+
+          float a = m * nearFade * farFade * graze * uLowFog * uLayerAlpha * 0.70;
+          // mist is lit from above by the whole sky, so it reads paler than
+          // the water under it: brighter by day, a soft blue-grey glow at night
+          vec3 col = fogTint() * mix(1.6, 2.6, uDay) * (0.85 + 0.30 * wisps)
+                   + uKeyTint * fogTint() * 0.35 * mix(0.3, 1.0, uDay);
+          gl_FragColor = vec4(col, clamp(a, 0.0, 0.85));
+        }`
+    })
+  );
+  m.position.y = L.y;
+  m.frustumCulled = false;
+  m.renderOrder = 2 + i;
+  seaScene.add(m);
+  return m;
+});
+let lowFogClock = Math.random() * 400;   // start somewhere different each visit
+
 // --- the statue ---
 // A wet marble hand standing in the swell. It borrows this file's COMMON chunk,
 // so it reflects the same sky, keys off the same light and reads the same wave
@@ -994,21 +1064,38 @@ const FS_VERT = `
 
 const uBrightSrc = { value: null };
 const brightMat = new THREE.ShaderMaterial({
-  uniforms: { tSrc: uBrightSrc, uThreshold: { value: QUALITY.bloomThreshold } },
+  uniforms: { tSrc: uBrightSrc, uThreshold: { value: QUALITY.bloomThreshold },
+              uSrcTexel: { value: new THREE.Vector2(1, 1) } },
   vertexShader: FS_VERT,
+  // Bright pass with firefly suppression. A sun or moon glint can land on a
+  // single pixel thousands of times brighter than its neighbours, and the
+  // diagonal Kawase taps below then spread that one pixel into a square
+  // lattice of dots that flashes on and off as the water moves. Four taps
+  // averaged with Karis weights (1 / (1 + luma)) let a lone spike count for
+  // about as much as one ordinary bright pixel, and a final luminance cap
+  // keeps whatever is left from blowing up. NaN/Inf pixels are dropped first.
   fragmentShader: `
     uniform sampler2D tSrc;
     uniform float uThreshold;
+    uniform vec2 uSrcTexel;
     varying vec2 vUv;
-    // A single NaN/Inf pixel from any upstream shader would otherwise be
-    // smeared by the Kawase blur into a solid square that flashes on screen.
+    const vec3 LUMA = vec3(0.2126, 0.7152, 0.0722);
     vec3 safe(vec3 c){
       if (any(isnan(c)) || any(isinf(c))) return vec3(0.0);
-      return min(max(c, vec3(0.0)), vec3(64.0));
+      return max(c, vec3(0.0));
+    }
+    vec4 karis(vec2 o){
+      vec3 c = safe(texture2D(tSrc, vUv + o * uSrcTexel).rgb);
+      float w = 1.0 / (1.0 + dot(c, LUMA));
+      return vec4(c * w, w);
     }
     void main(){
-      vec3 c = safe(texture2D(tSrc, vUv).rgb);
-      float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
+      vec4 acc = karis(vec2(-1.0, -1.0)) + karis(vec2(1.0, -1.0))
+               + karis(vec2(-1.0,  1.0)) + karis(vec2(1.0,  1.0));
+      vec3 c = acc.rgb / max(acc.a, 1e-4);
+      float l = dot(c, LUMA);
+      c *= min(1.0, 12.0 / max(l, 1e-4));          // hard ceiling on what can bloom
+      l = dot(c, LUMA);
       gl_FragColor = vec4(c * (max(l - uThreshold, 0.0) / max(l, 1e-4)), 1.0);
     }`
 });
@@ -1094,6 +1181,7 @@ function sizeTargets() {
   rtBloomA.setSize(bw, bh);
   rtBloomB.setSize(bw, bh);
   uBlurTexel.value.set(1 / bw, 1 / bh);
+  brightMat.uniforms.uSrcTexel.value.set(1 / w, 1 / h);
   // world units per pixel, per unit of distance — the sea shader's footprint
   uPixelScale.value = 2 * Math.tan(THREE.MathUtils.degToRad(seaCam.fov) / 2) / h;
 }
@@ -1263,6 +1351,17 @@ function frame(now) {
   // their own slow, non-repeating rhythm and thicken at either end of the day
   const bank = 0.5 + 0.5 * Math.sin(st * 0.021) * Math.cos(st * 0.0091);
   uFog.value = clamp01(live.fog + 0.22 * bank + uGolden.value * 0.12);
+
+  // Low fog builds and burns off on its own slow, irregular cycle (a few
+  // minutes from clear to thick and back), and there is more of it when the
+  // real weather is murky.
+  lowFogClock += dt;
+  const lf = 0.5 + 0.5 * Math.sin(lowFogClock * 0.031 + 1.3) * Math.sin(lowFogClock * 0.0127 + 0.4);
+  const lowTarget = FORCE_LOWFOG !== undefined
+    ? clamp01(FORCE_LOWFOG)
+    : smoothstep(0.30, 0.80, lf) * (0.65 + 0.35 * live.fog);
+  uLowFog.value += (lowTarget - uLowFog.value) * Math.min(dt * 0.8, 1);
+  for (const m of lowFog) { m.position.x = seaCam.position.x; m.position.z = seaCam.position.z; }
 
   // --- camera: sits low, breathes with the swell, yaws very slowly ---
   const eyeX = Math.sin(st * 0.021) * 40;

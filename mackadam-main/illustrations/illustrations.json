@@ -61,18 +61,6 @@
       "unconfirmed": ["year", "medium"]
     },
     {
-      "id": "doom-guy",
-      "file": "doom-guy.png",
-      "title": "Doom Guy",
-      "year": null,
-      "yearNote": "recent",
-      "medium": "digital paint",
-      "caption": "Mass, twist and a helmet.",
-      "description": "A digital painting of the Doom Slayer pushing the silhouette to near-cartoon bulk, with hatched texture on the gauntlet.",
-      "frame": "none-dark",
-      "unconfirmed": ["year", "medium"]
-    },
-    {
       "id": "piccolo",
       "file": "piccolo.png",
       "title": "Piccolo",

@@ -23,27 +23,22 @@
       "unconfirmed": []
     },
     {
-      "id": "gunslinger-turnaround",
-      "file": "gunslinger-turnaround.png",
-      "name": "Gunslinger",
-      "role": "Character turnaround",
-      "caption": "Long coat, purple bandana, white hair.",
-      "description": "A masked rider in a long black coat with a purple lining, a red pinstripe vest and a gold buckle.",
-      "unconfirmed": [
-        "name",
-        "role"
-      ]
+      "id": "clive-turnaround",
+      "file": "clive-turnaround.png",
+      "name": "Clive",
+      "role": "The hunter — playable lead",
+      "caption": "Ex-Sun Steel, masked and riding on borrowed grace.",
+      "description": "Clive in turnaround: a long black coat with purple lining, a red pinstripe vest, gold buckle and a purple bandana over the face. A former hunter of the order, travelling with his son B.",
+      "unconfirmed": []
     },
     {
-      "id": "gunslinger-sprites",
-      "file": "gunslinger-sprites.png",
-      "name": "Gunslinger — sprite sheet",
+      "id": "clive-sprites",
+      "file": "clive-sprites.png",
+      "name": "Clive — sprite sheet",
       "role": "8-frame walk cycles in four directions",
-      "caption": "The same character, translated into game sprites.",
-      "description": "The turnaround carried into in-game pixel sprites, with walk cycles facing front, side and back.",
-      "unconfirmed": [
-        "name"
-      ]
+      "caption": "Clive, translated into game sprites.",
+      "description": "The turnaround carried into in-game pixel sprites, with 8-frame walk cycles facing front, side and back.",
+      "unconfirmed": []
     },
     {
       "id": "cast-lineup",

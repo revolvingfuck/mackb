@@ -9,7 +9,7 @@
       "medium": "ink and charcoal on paper",
       "caption": "Disdain in a dozen strokes.",
       "description": "A fast portrait where the face is resolved and everything below it trails off into raw line. Built on heavy blacks: the hair and collar carry the whole page.",
-      "frame": "tack",
+      "frame": "matted-colour",
       "unconfirmed": ["year", "medium"]
     },
     {
@@ -21,7 +21,7 @@
       "medium": "digital",
       "caption": "The second before the smash.",
       "description": "A figure in a scribbled cyan jacket on a black ground, winding up to throw a liquor bottle. The marks describe the fabric instead of rendering it.",
-      "frame": "tape-duct",
+      "frame": "matted-colour",
       "unconfirmed": ["year", "medium"]
     },
     {
@@ -33,7 +33,7 @@
       "medium": "pencil, sketchbook",
       "caption": "Sketchbook study of RE4 Leon after his capture.",
       "description": "A sketchbook page of Leon in the outfit he wears once he's captured with Luis: jacket gone, down to the black turtleneck and shoulder rig. Dense pencil hatching builds the harness and knife while the face carries the tired stare.",
-      "frame": "tape-masking",
+      "frame": "matted-colour",
       "unconfirmed": ["year"]
     },
     {
@@ -45,7 +45,7 @@
       "medium": "digital",
       "caption": "Guilty Gear's Baiken in three colours.",
       "description": "A limited pink, blue and black palette over loose linework, with the pipe and hand as the most finished passage.",
-      "frame": "tack",
+      "frame": "matted-colour",
       "unconfirmed": ["year", "medium"]
     },
     {
@@ -57,7 +57,7 @@
       "medium": "digital",
       "caption": "Profile in flat planes of colour.",
       "description": "A side profile built from posterized colour planes against a dark ground, with chalky strokes cutting across the shoulder.",
-      "frame": "tape-scotch",
+      "frame": "matted-colour",
       "unconfirmed": ["year", "medium"]
     },
     {
@@ -69,7 +69,7 @@
       "medium": "unknown",
       "caption": "Dragon Ball's Piccolo, mid-blast.",
       "description": "The beam is foreshortened straight at the viewer with the face framed by the blast. Documented through a heavy glow filter; the original is lost.",
-      "frame": "tack",
+      "frame": "matted-colour",
       "documentationPhoto": true,
       "unconfirmed": ["year", "medium"]
     },
@@ -82,7 +82,7 @@
       "medium": "charcoal on paper",
       "caption": "Heyerdahl's balsa raft, left unfinished.",
       "description": "The square sail and rigging are fully worked while the balsa logs are only blocked in. A seated figure gives the raft its scale and its isolation.",
-      "frame": "tack",
+      "frame": "matted-colour",
       "unconfirmed": ["year", "medium"]
     },
     {
@@ -94,7 +94,7 @@
       "medium": "graphite on paper",
       "caption": "Anatomy study: ribcage, spine and skull.",
       "description": "A careful graphite study of the skeleton's structure, the groundwork behind the looser figure drawing.",
-      "frame": "tape-masking",
+      "frame": "matted-colour",
       "unconfirmed": ["year", "medium"]
     },
     {
@@ -106,7 +106,7 @@
       "medium": "digital crayon",
       "caption": "Quick figure sketch.",
       "description": "A fast figure where the face carries the expression and the body is roughed in with heavy crayon strokes and eraser shapes.",
-      "frame": "tack",
+      "frame": "matted-colour",
       "unconfirmed": ["year", "medium"]
     },
     {
@@ -117,7 +117,7 @@
       "medium": "ink on paper",
       "caption": "First-person, drawing the drawing.",
       "description": "An ink perspective scene from the artist's own point of view, down to the hand drawing this page, the game console and the GAME OVER screen.",
-      "frame": "tape-scotch",
+      "frame": "matted-colour",
       "unconfirmed": ["medium", "year: the signature on the drawn pad appears to read 'B 2K13'"]
     },
     {
@@ -128,7 +128,7 @@
       "medium": "graphite and ink on paper",
       "caption": "The earliest piece here.",
       "description": "A high-school still life: heavy contour, shading that follows the form, and a cast shadow that grounds it. The starting point of the timeline.",
-      "frame": "tack",
+      "frame": "matted-colour",
       "unconfirmed": ["medium"]
     }
   ]

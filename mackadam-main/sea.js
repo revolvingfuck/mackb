@@ -1000,8 +1000,14 @@ const brightMat = new THREE.ShaderMaterial({
     uniform sampler2D tSrc;
     uniform float uThreshold;
     varying vec2 vUv;
+    // A single NaN/Inf pixel from any upstream shader would otherwise be
+    // smeared by the Kawase blur into a solid square that flashes on screen.
+    vec3 safe(vec3 c){
+      if (any(isnan(c)) || any(isinf(c))) return vec3(0.0);
+      return min(max(c, vec3(0.0)), vec3(64.0));
+    }
     void main(){
-      vec3 c = texture2D(tSrc, vUv).rgb;
+      vec3 c = safe(texture2D(tSrc, vUv).rgb);
       float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
       gl_FragColor = vec4(c * (max(l - uThreshold, 0.0) / max(l, 1e-4)), 1.0);
     }`
@@ -1056,8 +1062,12 @@ const compositeMat = new THREE.ShaderMaterial({
                  1.055 * pow(max(c, vec3(1e-5)), vec3(1.0 / 2.4)) - 0.055,
                  step(vec3(0.0031308), c));
     }
+    vec3 safe(vec3 c){
+      if (any(isnan(c)) || any(isinf(c))) return vec3(0.0);
+      return max(c, vec3(0.0));
+    }
     void main(){
-      vec3 col = texture2D(tScene, vUv).rgb + texture2D(tBloom, vUv).rgb * uBloom;
+      vec3 col = safe(texture2D(tScene, vUv).rgb) + safe(texture2D(tBloom, vUv).rgb) * uBloom;
       gl_FragColor = vec4(linearToSRGB(aces(col * uExposure)), 1.0);
     }`
 });

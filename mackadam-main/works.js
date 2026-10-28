@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { initIllustrationWall } from './illustrations.js';
 
 // =============================================================================
 // LOADING SCREEN
@@ -392,6 +393,7 @@ function initialize() {
     initThree();
     animate();
     WorksApp.init();
+    initIllustrationWall();
 }
 
 // Wait for DOM to be ready

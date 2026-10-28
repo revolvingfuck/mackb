@@ -612,3 +612,648 @@ nav.viewing {
         font-size: 1.5rem;
     }
 }
+
+/* =============================================================================
+   ILLUSTRATION - "Placard Wall" (prototype)
+   Everything below is scoped under .illo-* so it cannot reach the rest of the
+   Works page or the home page when index.html injects this stylesheet.
+   ========================================================================== */
+
+@font-face {
+    font-family: 'Bastliga One';
+    src: url('bastliga-one.regular.ttf') format('truetype');
+    font-display: swap;
+}
+
+.illo-entry__arrow {
+    font-size: 0.8rem;
+    background: linear-gradient(90deg, #ec4899, #a855f7, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.illo-entry:hover .dropdown-section-title {
+    color: #fff;
+}
+
+/* The room: a dark plaster wall. It holds still the whole time. */
+.illo-room {
+    --wall: #121014;
+    --wall-lit: #241f22;
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background-color: var(--wall);
+    background-image:
+        radial-gradient(120% 60% at 50% -10%, rgba(255, 236, 214, 0.07), transparent 60%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .045 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.45s ease, visibility 0s linear 0.45s;
+    color: #f2eee8;
+}
+
+.illo-room.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.45s ease, visibility 0s;
+}
+
+.illo-scroll {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 6vw 80px;
+    scrollbar-color: #3a3338 transparent;
+}
+
+.illo-head {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    padding: 28px 0 56px;
+    flex-wrap: wrap;
+}
+
+.illo-back {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.illo-head__text {
+    padding-top: 84px;
+    flex: 1 1 320px;
+}
+
+.illo-title {
+    font-family: 'Bastliga One', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(3rem, 7vw, 5.6rem);
+    line-height: 1.25;
+    padding-bottom: 0.25em; /* Bastliga's deep descender */
+    margin-bottom: -0.2em;
+    background: linear-gradient(90deg, #ec4899, #a855f7 50%, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.illo-sub {
+    color: rgba(242, 238, 232, 0.6);
+    font-size: 0.9rem;
+    font-weight: 300;
+}
+
+.illo-order {
+    display: inline-flex;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50px;
+    padding: 3px;
+    margin-bottom: 6px;
+}
+
+.illo-order button {
+    background: none;
+    border: 0;
+    color: rgba(255, 255, 255, 0.55);
+    font: 600 0.72rem/1 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 9px 16px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.illo-order button[aria-pressed="true"] {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.illo-foot {
+    margin-top: 72px;
+    text-align: center;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.illo-loading {
+    color: rgba(255, 255, 255, 0.5);
+    padding: 80px 0;
+    text-align: center;
+}
+
+/* Salon rows */
+.illo-wall {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(48px, 6vw, 88px);
+}
+
+.illo-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.illo-piece {
+    position: relative;
+    transform: translateY(var(--drift, 0));
+}
+
+/* A pool of light on the wall behind each piece. */
+.illo-piece::before {
+    content: '';
+    position: absolute;
+    left: -30%;
+    right: -30%;
+    top: -38%;
+    bottom: -18%;
+    background: radial-gradient(50% 55% at 50% 35%, rgba(255, 228, 196, 0.085), transparent 70%);
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+/* Where the piece hung: unfaded paint and the nail. Only visible when it's out. */
+.illo-piece::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 1px;
+    background:
+        radial-gradient(circle at 50% -10px, #6b625c 0 2.5px, transparent 3px) no-repeat,
+        rgba(255, 255, 255, 0.025);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.illo-piece.is-out::after {
+    opacity: 1;
+}
+
+.illo-piece.is-out .illo-piece__btn {
+    visibility: hidden;
+}
+
+.illo-piece__btn {
+    position: relative;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+    color: inherit;
+    transition: transform 0.35s cubic-bezier(.2, .8, .2, 1);
+}
+
+.illo-piece__btn:hover,
+.illo-piece__btn:focus-visible {
+    transform: translateY(-4px);
+}
+
+.illo-piece__btn:focus-visible {
+    outline: none;
+}
+
+.illo-piece__btn:focus-visible .illo-frame {
+    outline: 2px solid transparent;
+    box-shadow: 0 0 0 2px #121014, 0 0 0 4px #a855f7, 0 14px 34px rgba(0, 0, 0, 0.6);
+}
+
+/* Hover/focus wall tag: title and year, like a pencilled note under the frame */
+.illo-piece__tag {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 14px);
+    transform: translate(-50%, -4px);
+    white-space: nowrap;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(242, 238, 232, 0.75);
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+}
+
+.illo-piece__btn:hover .illo-piece__tag,
+.illo-piece__btn:focus-visible .illo-piece__tag {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* ---- Frames. Sizes come from --u (1% of image height), set in JS ---- */
+.illo-frame {
+    position: relative;
+    display: block;
+    border-style: solid;
+    border-color: transparent;
+    box-shadow: 0 calc(var(--u) * 2) calc(var(--u) * 6) rgba(0, 0, 0, 0.65);
+    line-height: 0;
+}
+
+.illo-frame img {
+    display: block;
+    user-select: none;
+    pointer-events: none;
+}
+
+.illo-frame--thin-black {
+    border-color: #0b0b0c;
+    background: #efebe3;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+        0 calc(var(--u) * 2) calc(var(--u) * 6) rgba(0, 0, 0, 0.7);
+}
+
+.illo-frame--thin-black img {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+.illo-frame--matted-paper {
+    border-color: #2a231f;
+    background: #e9e2d3;
+}
+
+.illo-frame--matted-paper img,
+.illo-frame--matted-colour img {
+    /* the bevelled cut edge of the mat */
+    box-shadow:
+        0 0 0 calc(var(--u) * 0.6) rgba(255, 255, 255, 0.55),
+        0 0 0 calc(var(--u) * 0.9) rgba(0, 0, 0, 0.18);
+}
+
+.illo-frame--matted-colour {
+    background: #1b1024;
+    border-image: linear-gradient(135deg, #ec4899, #a855f7 50%, #3b82f6) 1;
+}
+
+.illo-frame--matted-colour img {
+    box-shadow:
+        0 0 0 calc(var(--u) * 0.6) rgba(214, 170, 255, 0.35),
+        0 0 0 calc(var(--u) * 0.9) rgba(0, 0, 0, 0.5);
+}
+
+/* A sketchbook page taped straight to the wall */
+.illo-frame--sketchbook-tape {
+    transform: rotate(-1.4deg);
+    box-shadow: 0 calc(var(--u) * 1.2) calc(var(--u) * 3) rgba(0, 0, 0, 0.55);
+}
+
+.illo-frame--sketchbook-tape::before,
+.illo-frame--sketchbook-tape::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--u) * -2.4);
+    width: calc(var(--u) * 16);
+    height: calc(var(--u) * 5.5);
+    background: rgba(231, 220, 190, 0.72);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    z-index: 1;
+}
+
+.illo-frame--sketchbook-tape::before {
+    left: calc(var(--u) * -3);
+    transform: rotate(-24deg);
+}
+
+.illo-frame--sketchbook-tape::after {
+    right: calc(var(--u) * -3);
+    transform: rotate(21deg);
+}
+
+/* Unframed prints on a hidden standoff: they float off the wall */
+.illo-frame--none-dark img {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+.illo-frame--none-light img {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+/* ---- Viewing: the room dims, the piece comes forward ---- */
+.illo-dim {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(60% 70% at 35% 50%, rgba(10, 8, 10, 0.55), rgba(5, 4, 6, 0.92));
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    cursor: zoom-out;
+}
+
+.illo-room.is-viewing .illo-dim {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.illo-stage {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    perspective: 1400px;
+}
+
+.illo-clone {
+    position: fixed;
+    transform-origin: top left;
+    z-index: 2;
+    pointer-events: auto;
+    cursor: default;
+    will-change: transform;
+}
+
+/* The placard: a cream card on stand-offs, sliding in beside the piece */
+.illo-placard {
+    position: fixed;
+    top: 50%;
+    right: 5vw;
+    width: min(380px, 30vw);
+    transform: translate(48px, -50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.55s cubic-bezier(.2, .8, .2, 1), opacity 0.35s ease;
+    z-index: 3;
+}
+
+.illo-placard.is-in {
+    transform: translate(0, -50%);
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0.22s;
+}
+
+.illo-placard__card {
+    position: relative;
+    background: #efebe4;
+    color: #18161a;
+    padding: 30px 30px 26px;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.6) inset,
+        0 18px 40px rgba(0, 0, 0, 0.55),
+        0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* stand-off pins */
+.illo-placard__card::before,
+.illo-placard__card::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff, #a39c94 60%, #6d665f);
+}
+
+.illo-placard__card::before { left: 12px; }
+.illo-placard__card::after { right: 12px; }
+
+.illo-placard__rule {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ec4899, #a855f7, #3b82f6);
+}
+
+.illo-placard__count {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: #8b847c;
+    margin-bottom: 10px;
+    font-variant-numeric: tabular-nums;
+}
+
+.illo-placard__title {
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: #121014;
+}
+
+/* The artist line is a signature, so it gets the signature face */
+.illo-placard__artist {
+    margin: 2px 0 12px;
+    line-height: 1;
+}
+
+.illo-placard__sig {
+    font-family: 'Bastliga One', Georgia, serif;
+    font-size: 1.9rem;
+    line-height: 1.5;
+    color: #2a2530;
+}
+
+.illo-placard__meta {
+    display: grid;
+    gap: 6px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.14);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+    margin-bottom: 16px;
+}
+
+.illo-placard__meta > div {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    font-size: 0.82rem;
+}
+
+.illo-placard__meta dt {
+    text-transform: uppercase;
+    font-size: 0.64rem;
+    letter-spacing: 0.14em;
+    color: #8b847c;
+    padding-top: 2px;
+}
+
+.illo-placard__meta dd {
+    color: #18161a;
+    justify-self: start;
+}
+
+.illo-placard__caption {
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+.illo-placard__desc {
+    font-size: 0.86rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #3a3632;
+}
+
+.illo-placard__doc {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.2);
+    font-size: 0.74rem;
+    font-style: italic;
+    color: #6a635c;
+}
+
+.illo-placard__doc span {
+    font-style: normal;
+    margin-right: 4px;
+}
+
+/* Prototype-only marks for fields still unconfirmed in the JSON */
+.illo-placard .is-draft {
+    text-decoration: underline dotted #c0392b;
+    text-underline-offset: 3px;
+}
+
+.illo-placard__draftnote {
+    margin-top: 14px;
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c0392b;
+}
+
+.illo-placard__nav {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.illo-placard__btn {
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #fff;
+    border-radius: 50px;
+    padding: 10px 16px;
+    font: 600 0.75rem/1 'Inter', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.illo-placard__btn:hover,
+.illo-placard__btn:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.5);
+    outline: none;
+}
+
+.illo-placard__close {
+    flex: 1;
+}
+
+.illo-placard__close kbd {
+    font: inherit;
+    opacity: 0.5;
+    margin-left: 6px;
+}
+
+/* ---- Phone: one column, tap flips the piece up full-screen ---- */
+@media (max-width: 768px) {
+    .illo-scroll {
+        padding: 0 16px 64px;
+    }
+
+    .illo-head {
+        padding-bottom: 36px;
+    }
+
+    .illo-back {
+        top: 16px;
+    }
+
+    .illo-head__text {
+        padding-top: 72px;
+    }
+
+    .illo-foot {
+        display: none;
+    }
+
+    .illo-piece__tag {
+        opacity: 1;
+        transform: translate(-50%, 0);
+        font-size: 0.64rem;
+        color: rgba(242, 238, 232, 0.5);
+    }
+
+    .illo-piece__btn {
+        cursor: pointer;
+    }
+
+    .illo-stage.is-sheet {
+        pointer-events: auto;
+        overflow-y: auto;
+        background: #0b090c;
+        padding: 20px 16px 40px;
+        animation: illo-sheet-in 0.35s ease both;
+        perspective: 1000px;
+    }
+
+    .illo-room:not(.is-viewing) .illo-stage.is-sheet {
+        animation: illo-sheet-out 0.3s ease both;
+    }
+
+    .illo-sheet__piece {
+        display: flex;
+        justify-content: center;
+        padding: 12px 0 24px;
+    }
+
+    .illo-stage.is-sheet .illo-clone {
+        position: relative;
+        left: auto !important;
+        top: auto !important;
+    }
+
+    .illo-stage.is-sheet .illo-placard {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        transform: translateY(24px);
+    }
+
+    .illo-stage.is-sheet .illo-placard.is-in {
+        transform: none;
+    }
+
+    .illo-placard__title {
+        font-size: 1.5rem;
+    }
+}
+
+@keyframes illo-sheet-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes illo-sheet-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .illo-room,
+    .illo-placard,
+    .illo-piece__btn,
+    .illo-dim {
+        transition-duration: 0.01s !important;
+    }
+}

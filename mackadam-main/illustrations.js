@@ -10,8 +10,7 @@
 // and when index.html injects the Works panel and imports works.js.
 // =============================================================================
 
-const DATA_URL = new URL('./illustrations/illustrations.json', import.meta.url).href;
-const IMG_BASE = new URL('./illustrations/', import.meta.url).href;
+const HERE = (p) => new URL(p, import.meta.url).href;
 
 // Prototype switch: marks fields still listed as "unconfirmed" in the JSON
 // with a dotted underline and a note at the foot of the placard. Turn off
@@ -48,21 +47,10 @@ const MOBILE_QUERY = window.matchMedia('(max-width: 768px), (max-height: 500px)'
 const PORTRAIT_QUERY = window.matchMedia('(orientation: portrait)');
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-const state = {
-    items: [],          // JSON items + natural aspect, sorted for display
-    pieces: [],         // { item, li, btn, frame }
-    order: 'newest',
-    current: null,      // index into pieces of the piece that is out
-    clone: null,        // the pulled-forward frame
-    loaded: false,
-    roomOpen: false,
-};
 
-let els = {};
-
-// -----------------------------------------------------------------------------
-// Data
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Wall factory: one engine, one config per wall.
+// =============================================================================
 
 // Newest-first needs a number even where the year is still a range or a note.
 function sortYear(item) {
@@ -83,6 +71,23 @@ function yearLabel(item) {
     return note.replace(/(\d{4})\s*-\s*(\d{4})/, '$1–$2').replace(/^./, (c) => c.toUpperCase());
 }
 
+function createWall(cfg) {
+const state = {
+    items: [],          // JSON items + natural aspect, sorted for display
+    pieces: [],         // { item, li, btn, frame }
+    order: 'newest',
+    current: null,      // index into pieces of the piece that is out
+    clone: null,        // the pulled-forward frame
+    loaded: false,
+    roomOpen: false,
+};
+
+let els = {};
+
+// -----------------------------------------------------------------------------
+// Data
+// -----------------------------------------------------------------------------
+
 function unconfirmedFields(item) {
     return (item.unconfirmed || []).map((f) => String(f).split(':')[0].trim());
 }
@@ -102,19 +107,17 @@ function loadImage(src) {
 }
 
 async function loadData() {
-    const res = await fetch(DATA_URL);
-    if (!res.ok) throw new Error(`HTTP ${res.status} fetching illustrations.json`);
-    const json = await res.json();
-    const items = await Promise.all(json.items.map(async (item, i) => {
-        const src = IMG_BASE + item.file;
-        const img = await loadImage(src);
+    const raw = await cfg.load();
+    state.items = await Promise.all(raw.map(async (item, i) => {
+        const img = await loadImage(item.src);
         const aspect = img ? img.naturalWidth / img.naturalHeight : 0.75;
-        return { ...item, src, aspect, sourceIndex: i };
+        return { ...item, aspect, sourceIndex: i };
     }));
-    state.items = items;
 }
 
 function sortedItems() {
+    // Walls without an order toggle keep the JSON order (grouped).
+    if (!cfg.sortable) return [...state.items];
     const dir = state.order === 'newest' ? -1 : 1;
     return [...state.items].sort((a, b) =>
         (sortYear(a) - sortYear(b)) * dir || a.sourceIndex - b.sourceIndex);
@@ -151,7 +154,7 @@ function makeFrame(item, imgH) {
 
     const img = document.createElement('img');
     img.src = item.src;
-    img.alt = `${item.title}, ${yearLabel(item)}, ${item.medium}`;
+    img.alt = item.alt;
     img.draggable = false;
     img.width = Math.round(imgH * item.aspect);
     img.height = Math.round(imgH);
@@ -182,8 +185,38 @@ function layoutWall() {
     wall.innerHTML = '';
     state.pieces = [];
 
+    // Group in order of first appearance; one heading per group when there
+    // is more than one.
+    const groups = [];
+    items.forEach((item) => {
+        const key = item.group || '';
+        let g = groups.find((x) => x.key === key);
+        if (!g) { g = { key, items: [] }; groups.push(g); }
+        g.items.push(item);
+    });
+    let seq = 0;
+    groups.forEach((g) => {
+        if (groups.length > 1 && g.key) {
+            const h = document.createElement('h3');
+            h.className = 'illo-group';
+            h.textContent = g.key;
+            wall.appendChild(h);
+        }
+        layoutRows(g.items, { width, mobile, gap, startIndex: seq });
+        seq += g.items.length;
+    });
+
+    if (state.current != null) {
+        const piece = state.pieces[state.current];
+        if (piece) piece.li.classList.add('is-out');
+    }
+}
+
+function layoutRows(items, { width, mobile, gap, startIndex }) {
+    const wall = els.wall;
     // Plan sizes.
-    const planned = items.map((item, i) => {
+    const planned = items.map((item, j) => {
+        const i = startIndex + j;
         const s = SIZE_PATTERN[i % SIZE_PATTERN.length];
         let imgH;
         if (mobile) {
@@ -239,11 +272,6 @@ function layoutWall() {
         });
         wall.appendChild(rowEl);
     });
-
-    if (state.current != null) {
-        const piece = state.pieces[state.current];
-        if (piece) piece.li.classList.add('is-out');
-    }
 }
 
 function buildPiece(item, imgH, driftPx) {
@@ -256,7 +284,7 @@ function buildPiece(item, imgH, driftPx) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'illo-piece__btn';
-    btn.setAttribute('aria-label', `${item.title}, ${yearLabel(item)}. Open placard.`);
+    btn.setAttribute('aria-label', `${item.tag}. Open placard.`);
     btn.dataset.index = String(index);
 
     const frame = makeFrame(item, imgH);
@@ -264,7 +292,7 @@ function buildPiece(item, imgH, driftPx) {
 
     const tag = document.createElement('span');
     tag.className = 'illo-piece__tag';
-    tag.textContent = `${item.title} · ${yearLabel(item)}`;
+    tag.textContent = item.tag;
     btn.appendChild(tag);
 
     li.appendChild(btn);
@@ -294,16 +322,17 @@ function fillPlacard(index) {
         <div class="illo-placard__card">
             <div class="illo-placard__rule" aria-hidden="true"></div>
             <p class="illo-placard__count">${String(index + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')}</p>
-            <h3 class="illo-placard__title" id="illoPlacardTitle">${escapeHtml(item.title)}</h3>
+            <h3 class="illo-placard__title" id="${cfg.ids.placard}Title">${escapeHtml(item.title)}</h3>
             <p class="illo-placard__artist"><span class="illo-placard__sig">Brian MacAdam</span></p>
             <dl class="illo-placard__meta">
-                <div><dt>Year</dt><dd class="${draft('year')}">${escapeHtml(yearLabel(item))}</dd></div>
-                <div><dt>Medium</dt><dd class="${draft('medium')}">${escapeHtml(item.medium)}</dd></div>
+                ${item.meta.map((m) => `<div><dt>${escapeHtml(m.label)}</dt><dd class="${draft(m.field)}">${escapeHtml(m.value)}</dd></div>`).join('')}
             </dl>
             <p class="illo-placard__caption">${escapeHtml(item.caption)}</p>
             <p class="illo-placard__desc">${escapeHtml(item.description)}</p>
             ${item.documentationPhoto ? `
                 <p class="illo-placard__doc"><span aria-hidden="true">◐</span> Documentation photo, original no longer exists.</p>` : ''}
+            ${item.credit ? `
+                <p class="illo-placard__credit">${escapeHtml(item.credit)}</p>` : ''}
             ${drafts.length ? `
                 <p class="illo-placard__draftnote">Draft: ${escapeHtml(drafts.join(', '))} unconfirmed</p>` : ''}
         </div>
@@ -312,7 +341,7 @@ function fillPlacard(index) {
             <button type="button" class="illo-placard__btn illo-placard__close" data-act="close" aria-label="Put it back on the wall">Back to wall <kbd>Esc</kbd></button>
             <button type="button" class="illo-placard__btn" data-act="next" aria-label="Next piece">→</button>
         </div>`;
-    els.placard.setAttribute('aria-labelledby', 'illoPlacardTitle');
+    els.placard.setAttribute('aria-labelledby', `${cfg.ids.placard}Title`);
 }
 
 // -----------------------------------------------------------------------------
@@ -536,7 +565,7 @@ async function openRoom() {
             state.loaded = true;
         } catch (err) {
             console.error('Illustration wall:', err);
-            els.wall.innerHTML = '<p class="illo-loading">Could not load the drawings.</p>';
+            els.wall.innerHTML = '<p class="illo-loading">Could not load the pieces.</p>';
             return;
         }
     }
@@ -550,7 +579,7 @@ function closeRoom() {
     state.roomOpen = false;
     els.room.classList.remove('is-open');
     els.room.setAttribute('aria-hidden', 'true');
-    document.querySelector('[data-open="illustration"]')?.focus({ preventScroll: true });
+    document.querySelector(`[data-open="${cfg.openKey}"]`)?.focus({ preventScroll: true });
 }
 
 // -----------------------------------------------------------------------------
@@ -621,18 +650,18 @@ function debounce(fn, ms) {
     return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
 }
 
-export function initIllustrationWall() {
+function init() {
     els = {
-        room: document.getElementById('illoRoom'),
-        scroll: document.getElementById('illoScroll'),
-        wall: document.getElementById('illoWall'),
-        stage: document.getElementById('illoStage'),
-        placard: document.getElementById('illoPlacard'),
+        room: document.getElementById(cfg.ids.room),
+        scroll: document.getElementById(cfg.ids.scroll),
+        wall: document.getElementById(cfg.ids.wall),
+        stage: document.getElementById(cfg.ids.stage),
+        placard: document.getElementById(cfg.ids.placard),
     };
     if (!els.room || els.room.dataset.ready) return;
     els.room.dataset.ready = '1';
 
-    document.querySelectorAll('[data-open="illustration"]').forEach((b) =>
+    document.querySelectorAll(`[data-open="${cfg.openKey}"]`).forEach((b) =>
         b.addEventListener('click', (e) => { e.stopPropagation(); openRoom(); }));
 
     els.room.querySelector('.illo-back')?.addEventListener('click', closeRoom);
@@ -682,6 +711,79 @@ export function initIllustrationWall() {
         if (open != null && !MOBILE_QUERY.matches) openPiece(open);
     }, 180));
 
-    // Deep link for review: works.html#illustration opens the wall.
-    if (location.hash === '#illustration') openRoom();
+    // Deep link for review: works.html#<openKey> opens the wall.
+    if (location.hash === `#${cfg.openKey}`) openRoom();
+}
+
+    return { init };
+}
+
+// =============================================================================
+// Wall configs
+// =============================================================================
+
+async function fetchJson(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`);
+    return res.json();
+}
+
+const illustrationWall = createWall({
+    openKey: 'illustration',
+    sortable: true,
+    ids: { room: 'illoRoom', scroll: 'illoScroll', wall: 'illoWall', stage: 'illoStage', placard: 'illoPlacard' },
+    async load() {
+        const base = HERE('./illustrations/');
+        const json = await fetchJson(base + 'illustrations.json');
+        return json.items.map((item) => ({
+            ...item,
+            src: base + item.file,
+            tag: `${item.title} · ${yearLabel(item)}`,
+            alt: `${item.title}, ${yearLabel(item)}, ${item.medium}`,
+            meta: [
+                { label: 'Year', value: yearLabel(item), field: 'year' },
+                { label: 'Medium', value: item.medium, field: 'medium' },
+            ],
+        }));
+    },
+});
+
+// Character Design: the Heartcore cast, then each sub-section listed in
+// characters.json ("subsections"), each with its own manifest and folder.
+const characterWall = createWall({
+    openKey: 'characters',
+    sortable: false,
+    ids: { room: 'charRoom', scroll: 'charScroll', wall: 'charWall', stage: 'charStage', placard: 'charPlacard' },
+    async load() {
+        const base = HERE('./character-design/');
+        const root = await fetchJson(base + 'characters.json');
+        const toItem = (group, dir, project, credit) => (item) => ({
+            ...item,
+            title: item.name,
+            src: dir + item.file,
+            group,
+            frame: item.frame || 'none-dark',
+            credit: item.itemCredit || credit,
+            tag: item.name,
+            alt: `${item.name}, ${item.role}`,
+            meta: [
+                { label: 'Role', value: item.role, field: 'role' },
+                { label: 'Project', value: project, field: 'project' },
+            ],
+        });
+        const items = root.items.map(toItem('Heartcore', base, 'Heartcore', root.credit));
+        for (const sub of root.subsections || []) {
+            const url = base + sub.manifest;
+            const dir = url.slice(0, url.lastIndexOf('/') + 1);
+            const json = await fetchJson(url);
+            const project = (json.project || sub.title).split(' — ')[0];
+            items.push(...json.items.map(toItem(sub.title, dir, project, json.credit)));
+        }
+        return items;
+    },
+});
+
+export function initIllustrationWall() {
+    illustrationWall.init();
+    characterWall.init();
 }

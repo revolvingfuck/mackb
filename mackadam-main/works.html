@@ -93,6 +93,13 @@
                         <span class="dropdown-section-arrow illo-entry__arrow">→</span>
                     </button>
                 </div>
+                <div class="dropdown-section">
+                    <!-- Opens the Character Design wall (same Placard Wall engine). -->
+                    <button class="dropdown-section-toggle illo-entry" type="button" data-open="characters">
+                        <span class="dropdown-section-title">Character Design</span>
+                        <span class="dropdown-section-arrow illo-entry__arrow">→</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -483,6 +490,24 @@
         <div class="illo-dim" aria-hidden="true"></div>
         <div class="illo-stage" id="illoStage"></div>
         <aside class="illo-placard" id="illoPlacard" aria-live="polite"></aside>
+    </section>
+
+    <!-- Character Design: Placard Wall (filled by illustrations.js) -->
+    <section class="illo-room" id="charRoom" aria-hidden="true" aria-label="Character Design">
+        <div class="illo-scroll" id="charScroll">
+            <header class="illo-head">
+                <button class="nav-glass illo-back" type="button">← Works</button>
+                <div class="illo-head__text">
+                    <h2 class="illo-title">Character Design</h2>
+                    <p class="illo-sub">Characters drawn for my own games. Pick one off the wall.</p>
+                </div>
+            </header>
+            <div class="illo-wall" id="charWall" role="list"></div>
+            <p class="illo-foot">← → to walk the wall · Enter to take one down · Esc to put it back</p>
+        </div>
+        <div class="illo-dim" aria-hidden="true"></div>
+        <div class="illo-stage" id="charStage"></div>
+        <aside class="illo-placard" id="charPlacard" aria-live="polite"></aside>
     </section>
 
     <!-- Content Viewer -->

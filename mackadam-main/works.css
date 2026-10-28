@@ -1443,3 +1443,25 @@ nav.viewing {
         transition-duration: 0.01s !important;
     }
 }
+
+
+/* Character Design wall: group headings and per-piece credit line */
+.illo-group {
+    margin: 0 0 -1.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.illo-placard__credit {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.2);
+    font-size: 0.74rem;
+    line-height: 1.5;
+    font-style: italic;
+    color: #6a635c;
+}

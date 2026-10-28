@@ -1,0 +1,146 @@
+{
+  "_notes": "Illustration set for the Works > Illustration view (Placard Wall concept). All images are photos of the drawings, several with filters applied at the time. Fields marked in 'unconfirmed' are best guesses to check before publishing. Captions and descriptions are drafts.",
+  "items": [
+    {
+      "id": "spock",
+      "file": "spock.jpg",
+      "title": "Spock",
+      "year": null,
+      "medium": "ink and charcoal on paper",
+      "caption": "Disdain in a dozen strokes.",
+      "description": "A fast portrait where the face is resolved and everything below it trails off into raw line. Built on heavy blacks: the hair and collar carry the whole page.",
+      "frame": "thin-black",
+      "unconfirmed": ["year", "medium"]
+    },
+    {
+      "id": "bottle-throw",
+      "file": "bottle-throw.png",
+      "title": "Bottle Throw",
+      "year": null,
+      "yearNote": "recent",
+      "medium": "digital",
+      "caption": "The second before the smash.",
+      "description": "A figure in a scribbled cyan jacket on a black ground, winding up to throw a liquor bottle. The marks describe the fabric instead of rendering it.",
+      "frame": "none-dark",
+      "unconfirmed": ["year", "medium"]
+    },
+    {
+      "id": "leon",
+      "file": "leon.jpg",
+      "title": "Leon S. Kennedy",
+      "year": null,
+      "yearNote": "2021-2026",
+      "medium": "pencil, sketchbook",
+      "caption": "Sketchbook study of the RE4 jacket and stare.",
+      "description": "A sketchbook page working out Leon's tired stare and the weight of the fur-collared jacket in dense pencil hatching.",
+      "frame": "sketchbook-tape",
+      "unconfirmed": ["year"]
+    },
+    {
+      "id": "baiken",
+      "file": "baiken.png",
+      "title": "Baiken",
+      "year": null,
+      "yearNote": "2021-2026",
+      "medium": "digital",
+      "caption": "Guilty Gear's Baiken in three colours.",
+      "description": "A limited pink, blue and black palette over loose linework, with the pipe and hand as the most finished passage.",
+      "frame": "none-dark",
+      "unconfirmed": ["year", "medium"]
+    },
+    {
+      "id": "self-portrait",
+      "file": "self-portrait.jpg",
+      "title": "Self-Portrait",
+      "year": null,
+      "yearNote": "2021-2026",
+      "medium": "digital",
+      "caption": "Profile in flat planes of colour.",
+      "description": "A side profile built from posterized colour planes against a dark ground, with chalky strokes cutting across the shoulder.",
+      "frame": "none-dark",
+      "unconfirmed": ["year", "medium"]
+    },
+    {
+      "id": "doom-guy",
+      "file": "doom-guy.png",
+      "title": "Doom Guy",
+      "year": null,
+      "yearNote": "recent",
+      "medium": "digital paint",
+      "caption": "Mass, twist and a helmet.",
+      "description": "A digital painting of the Doom Slayer pushing the silhouette to near-cartoon bulk, with hatched texture on the gauntlet.",
+      "frame": "none-dark",
+      "unconfirmed": ["year", "medium"]
+    },
+    {
+      "id": "piccolo",
+      "file": "piccolo.png",
+      "title": "Piccolo",
+      "year": null,
+      "yearNote": "before 2020",
+      "medium": "unknown",
+      "caption": "Dragon Ball's Piccolo, mid-blast.",
+      "description": "The beam is foreshortened straight at the viewer with the face framed by the blast. Documented through a heavy glow filter; the original is lost.",
+      "frame": "matted-colour",
+      "unconfirmed": ["year", "medium"]
+    },
+    {
+      "id": "kon-tiki",
+      "file": "kon-tiki.png",
+      "title": "Kon-Tiki (unfinished)",
+      "year": null,
+      "yearNote": "before 2020",
+      "medium": "charcoal on paper",
+      "caption": "Heyerdahl's balsa raft, left unfinished.",
+      "description": "The square sail and rigging are fully worked while the balsa logs are only blocked in. A seated figure gives the raft its scale and its isolation.",
+      "frame": "thin-black",
+      "unconfirmed": ["year", "medium"]
+    },
+    {
+      "id": "skeleton",
+      "file": "skeleton.png",
+      "title": "Skeleton Study",
+      "year": null,
+      "yearNote": "before 2020",
+      "medium": "graphite on paper",
+      "caption": "Anatomy study: ribcage, spine and skull.",
+      "description": "A careful graphite study of the skeleton's structure, the groundwork behind the looser figure drawing.",
+      "frame": "thin-black",
+      "unconfirmed": ["year", "medium"]
+    },
+    {
+      "id": "jacket-sketch",
+      "file": "jacket-sketch.jpg",
+      "title": "Figure in a Jacket",
+      "year": null,
+      "yearNote": "before 2020",
+      "medium": "digital crayon",
+      "caption": "Quick figure sketch.",
+      "description": "A fast figure where the face carries the expression and the body is roughed in with heavy crayon strokes and eraser shapes.",
+      "frame": "none-light",
+      "unconfirmed": ["year", "medium"]
+    },
+    {
+      "id": "living-room",
+      "file": "living-room.png",
+      "title": "Living Room",
+      "year": 2011,
+      "medium": "ink on paper",
+      "caption": "First-person, drawing the drawing.",
+      "description": "An ink perspective scene from the artist's own point of view, down to the hand drawing this page, the game console and the GAME OVER screen.",
+      "frame": "thin-black",
+      "unconfirmed": ["medium", "year: the signature on the drawn pad appears to read 'B 2K13'"]
+    },
+    {
+      "id": "skull",
+      "file": "skull.png",
+      "title": "Skull",
+      "year": 2006,
+      "medium": "graphite and ink on paper",
+      "caption": "The earliest piece here.",
+      "description": "A high-school still life: heavy contour, shading that follows the form, and a cast shadow that grounds it. The starting point of the timeline.",
+      "frame": "matted-paper",
+      "unconfirmed": ["medium"]
+    }
+  ]
+}

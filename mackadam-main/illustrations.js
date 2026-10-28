@@ -362,8 +362,9 @@ function openPiece(index) {
     if (mobile) {
         // Full-screen sheet: the piece on top, the placard underneath.
         els.stage.innerHTML = '';
+        // Side by side, same as desktop: piece on the left, placard on the right.
         const vw = window.innerWidth;
-        const imgH = fitImageHeight(item, vw - 32, window.innerHeight * 0.72);
+        const imgH = fitImageHeight(item, vw * 0.52 - 18, window.innerHeight * 0.82);
         clone = makeFrame(item, imgH);
         clone.classList.add('illo-clone');
         const holder = document.createElement('div');

@@ -1197,11 +1197,15 @@ nav.viewing {
         cursor: pointer;
     }
 
+    /* Phone viewing: piece and placard side by side, like desktop */
     .illo-stage.is-sheet {
         pointer-events: auto;
-        overflow-y: auto;
         background: #0b090c;
-        padding: 20px 16px 40px;
+        padding: 12px 10px;
+        display: grid;
+        grid-template-columns: 52% 1fr;
+        gap: 10px;
+        align-items: center;
         animation: illo-sheet-in 0.35s ease both;
         perspective: 1000px;
     }
@@ -1213,7 +1217,8 @@ nav.viewing {
     .illo-sheet__piece {
         display: flex;
         justify-content: center;
-        padding: 12px 0 24px;
+        align-items: center;
+        min-width: 0;
     }
 
     .illo-stage.is-sheet .illo-clone {
@@ -1226,16 +1231,54 @@ nav.viewing {
         position: relative;
         top: auto;
         right: auto;
-        width: 100%;
-        transform: translateY(24px);
+        width: auto;
+        min-width: 0;
+        max-height: calc(100dvh - 24px);
+        overflow-y: auto;
+        transform: translateX(16px);
     }
 
     .illo-stage.is-sheet .illo-placard.is-in {
         transform: none;
     }
 
-    .illo-placard__title {
-        font-size: 1.5rem;
+    .illo-stage.is-sheet .illo-placard__card {
+        padding: 20px 14px 14px;
+    }
+
+    .illo-stage.is-sheet .illo-placard__card::before { left: 7px; top: 9px; }
+    .illo-stage.is-sheet .illo-placard__card::after { right: 7px; top: 9px; }
+
+    .illo-stage.is-sheet .illo-placard__count { font-size: 0.6rem; margin-bottom: 6px; }
+    .illo-stage.is-sheet .illo-placard__title { font-size: 1.05rem; }
+    .illo-stage.is-sheet .illo-placard__sig { font-size: 1.3rem; }
+    .illo-stage.is-sheet .illo-placard__meta { padding: 8px 0; margin-bottom: 10px; }
+    .illo-stage.is-sheet .illo-placard__meta > div { grid-template-columns: 1fr; font-size: 0.74rem; }
+    .illo-stage.is-sheet .illo-placard__meta dt { font-size: 0.56rem; padding-top: 4px; }
+    .illo-stage.is-sheet .illo-placard__caption { font-size: 0.82rem; margin-bottom: 6px; }
+    .illo-stage.is-sheet .illo-placard__desc { font-size: 0.74rem; line-height: 1.5; }
+    .illo-stage.is-sheet .illo-placard__doc,
+    .illo-stage.is-sheet .illo-placard__draftnote { font-size: 0.6rem; }
+
+    .illo-stage.is-sheet .illo-placard__nav {
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+    .illo-stage.is-sheet .illo-placard__btn {
+        padding: 9px 0;
+        flex: 1;
+    }
+
+    .illo-stage.is-sheet .illo-placard__close {
+        order: 3;
+        flex-basis: 100%;
+        font-size: 0.66rem;
+    }
+
+    .illo-stage.is-sheet .illo-placard__close kbd {
+        display: none;
     }
 }
 

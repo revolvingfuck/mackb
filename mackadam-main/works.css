@@ -1258,54 +1258,100 @@ nav.viewing {
     margin-left: 6px;
 }
 
-/* ---- Phone: one column, tap flips the piece up full-screen ---- */
-@media (max-width: 768px) {
+/* ---- Phones: upright gets one column; a tap flips the piece up full-screen.
+   Upright: piece big on top, placard under it. Sideways: side by side. ---- */
+@media (max-width: 768px), (max-height: 500px) {
     .illo-scroll {
         padding: 0 16px 64px;
     }
 
     .illo-head {
-        padding-bottom: 36px;
+        padding-bottom: 28px;
+        gap: 16px;
     }
 
     .illo-back {
-        top: 16px;
+        top: 14px;
+        padding: 9px 20px;
+        font-size: 0.78rem;
     }
 
     .illo-head__text {
-        padding-top: 72px;
+        padding-top: 62px;
+    }
+
+    .illo-title {
+        font-size: clamp(2.4rem, 11vw, 3.4rem);
+    }
+
+    .illo-sub {
+        font-size: 0.82rem;
+    }
+
+    .illo-order button {
+        padding: 8px 13px;
+        font-size: 0.66rem;
     }
 
     .illo-foot {
         display: none;
     }
 
+    .illo-wall {
+        gap: 48px;
+    }
+
     .illo-piece__tag {
         opacity: 1;
         transform: translate(-50%, 0);
-        font-size: 0.64rem;
+        font-size: 0.62rem;
         color: rgba(242, 238, 232, 0.5);
     }
 
     .illo-piece__btn {
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
     }
 
-    /* Phone viewing: piece and placard side by side, like desktop */
+    .illo-piece__btn:hover,
+    .illo-piece__btn:focus-visible {
+        transform: none;
+    }
+
+    /* The open-piece sheet, both orientations */
     .illo-stage.is-sheet {
         pointer-events: auto;
         background: #0b090c;
-        padding: 12px 10px;
-        display: grid;
-        grid-template-columns: 52% 1fr;
-        gap: 10px;
-        align-items: center;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
         animation: illo-sheet-in 0.35s ease both;
         perspective: 1000px;
+        padding:
+            calc(12px + env(safe-area-inset-top))
+            calc(12px + env(safe-area-inset-right))
+            calc(24px + env(safe-area-inset-bottom))
+            calc(12px + env(safe-area-inset-left));
     }
 
     .illo-room:not(.is-viewing) .illo-stage.is-sheet {
         animation: illo-sheet-out 0.3s ease both;
+    }
+
+    .illo-sheet__close {
+        position: fixed;
+        top: calc(10px + env(safe-area-inset-top));
+        right: calc(10px + env(safe-area-inset-right));
+        z-index: 5;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        font-size: 1.1rem;
+        line-height: 1;
+        cursor: pointer;
     }
 
     .illo-sheet__piece {
@@ -1327,53 +1373,56 @@ nav.viewing {
         right: auto;
         width: auto;
         min-width: 0;
-        max-height: calc(100dvh - 24px);
-        overflow-y: auto;
-        transform: translateX(16px);
+        transform: translateY(16px);
     }
 
     .illo-stage.is-sheet .illo-placard.is-in {
         transform: none;
     }
 
-    .illo-stage.is-sheet .illo-placard__card {
-        padding: 20px 14px 14px;
-    }
-
-    .illo-stage.is-sheet .illo-placard__card::before { left: 7px; top: 9px; }
-    .illo-stage.is-sheet .illo-placard__card::after { right: 7px; top: 9px; }
-
-    .illo-stage.is-sheet .illo-placard__count { font-size: 0.6rem; margin-bottom: 6px; }
-    .illo-stage.is-sheet .illo-placard__title { font-size: 1.05rem; }
-    .illo-stage.is-sheet .illo-placard__sig { font-size: 1.3rem; }
-    .illo-stage.is-sheet .illo-placard__meta { padding: 8px 0; margin-bottom: 10px; }
-    .illo-stage.is-sheet .illo-placard__meta > div { grid-template-columns: 1fr; font-size: 0.74rem; }
-    .illo-stage.is-sheet .illo-placard__meta dt { font-size: 0.56rem; padding-top: 4px; }
-    .illo-stage.is-sheet .illo-placard__caption { font-size: 0.82rem; margin-bottom: 6px; }
-    .illo-stage.is-sheet .illo-placard__desc { font-size: 0.74rem; line-height: 1.5; }
-    .illo-stage.is-sheet .illo-placard__doc,
-    .illo-stage.is-sheet .illo-placard__draftnote { font-size: 0.6rem; }
-
-    .illo-stage.is-sheet .illo-placard__nav {
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-top: 10px;
-    }
-
-    .illo-stage.is-sheet .illo-placard__btn {
-        padding: 9px 0;
-        flex: 1;
-    }
-
-    .illo-stage.is-sheet .illo-placard__close {
-        order: 3;
-        flex-basis: 100%;
-        font-size: 0.66rem;
-    }
-
     .illo-stage.is-sheet .illo-placard__close kbd {
         display: none;
     }
+
+    /* Upright: stacked */
+    .illo-stage.is-stacked .illo-sheet__piece {
+        padding: 44px 0 20px;
+    }
+
+    .illo-stage.is-stacked .illo-placard__card {
+        padding: 24px 20px 20px;
+    }
+
+    .illo-stage.is-stacked .illo-placard__title { font-size: 1.45rem; }
+    .illo-stage.is-stacked .illo-placard__sig { font-size: 1.6rem; }
+
+    .illo-stage.is-stacked .illo-placard__btn {
+        padding: 13px 16px;
+    }
+
+    /* Sideways: side by side, the placard scrolls on its own */
+    .illo-stage.is-side {
+        display: grid;
+        grid-template-columns: 50% 1fr;
+        gap: 14px;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .illo-stage.is-side .illo-placard {
+        max-height: calc(100dvh - 32px);
+        overflow-y: auto;
+        padding-right: 44px; /* clear of the close button */
+    }
+
+    .illo-stage.is-side .illo-placard__card { padding: 18px 16px 14px; }
+    .illo-stage.is-side .illo-placard__count { font-size: 0.6rem; margin-bottom: 6px; }
+    .illo-stage.is-side .illo-placard__title { font-size: 1.15rem; }
+    .illo-stage.is-side .illo-placard__sig { font-size: 1.35rem; }
+    .illo-stage.is-side .illo-placard__meta { padding: 8px 0; margin-bottom: 10px; }
+    .illo-stage.is-side .illo-placard__caption { font-size: 0.86rem; margin-bottom: 6px; }
+    .illo-stage.is-side .illo-placard__desc { font-size: 0.78rem; line-height: 1.5; }
+    .illo-stage.is-side .illo-placard__btn { padding: 9px 12px; }
 }
 
 @keyframes illo-sheet-in {

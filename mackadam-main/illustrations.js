@@ -43,7 +43,9 @@ const TILT_PATTERN = [-0.8, 0.5, -0.3, 0.9, -0.6, 0.2, -1, 0.7, -0.4, 0.8, -0.2]
 // Small vertical drift so rows don't read as a grid.
 const DRIFT_PATTERN = [0, 0.02, -0.015, 0.01, 0.025, -0.01, 0.015, -0.02, 0.01, 0, -0.015, 0.02];
 
-const MOBILE_QUERY = window.matchMedia('(max-width: 768px)');
+// Phones: narrow screens, plus any phone turned sideways (short screen).
+const MOBILE_QUERY = window.matchMedia('(max-width: 768px), (max-height: 500px)');
+const PORTRAIT_QUERY = window.matchMedia('(orientation: portrait)');
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 const state = {
@@ -122,8 +124,10 @@ function sortedItems() {
 // Frames
 // -----------------------------------------------------------------------------
 
+// Phones get a thinner mat so the drawing, not the mat, gets the pixels.
 function frameSpec(item) {
-    return FRAMES[item.frame] || FRAMES['none-dark'];
+    const f = FRAMES[item.frame] || FRAMES['none-dark'];
+    return MOBILE_QUERY.matches ? { mat: f.mat * 0.5, border: f.border * 0.8 } : f;
 }
 
 // Outer size of a framed piece whose image is `imgH` px tall.
@@ -171,8 +175,9 @@ function layoutWall() {
     const wall = els.wall;
     const items = sortedItems();
     const width = wall.clientWidth;
-    const mobile = MOBILE_QUERY.matches;
-    const gap = mobile ? 56 : Math.max(36, width * 0.035);
+    // One column on an upright phone; a sideways phone packs rows like desktop.
+    const mobile = MOBILE_QUERY.matches && PORTRAIT_QUERY.matches;
+    const gap = mobile ? 56 : Math.max(28, width * 0.035);
 
     wall.innerHTML = '';
     state.pieces = [];
@@ -185,7 +190,7 @@ function layoutWall() {
             const target = width * (0.8 + 0.12 * s);
             imgH = fitImageHeight(item, target, window.innerHeight * 0.7);
         } else {
-            const base = Math.min(380, Math.max(210, width / 4.4));
+            const base = Math.min(380, Math.max(MOBILE_QUERY.matches ? 150 : 210, width / 4.4));
             imgH = base * s;
         }
         return { item, imgH, outer: frameOuter(item, imgH), drift: DRIFT_PATTERN[i % DRIFT_PATTERN.length] };
@@ -370,21 +375,33 @@ function openPiece(index) {
 
     fillPlacard(index);
     els.room.classList.add('is-viewing');
+    const stacked = mobile && PORTRAIT_QUERY.matches;
     els.stage.classList.toggle('is-sheet', mobile);
+    els.stage.classList.toggle('is-stacked', stacked);
+    els.stage.classList.toggle('is-side', mobile && !stacked);
 
     let clone;
     if (mobile) {
-        // Full-screen sheet: the piece on top, the placard underneath.
+        // Upright phone: piece big on top, placard underneath.
+        // Sideways phone: side by side, same as desktop.
         els.stage.innerHTML = '';
-        // Side by side, same as desktop: piece on the left, placard on the right.
         const vw = window.innerWidth;
-        const imgH = fitImageHeight(item, vw * 0.52 - 18, window.innerHeight * 0.82);
+        const vh = window.innerHeight;
+        const imgH = stacked
+            ? fitImageHeight(item, vw - 24, vh * 0.66)
+            : fitImageHeight(item, vw * 0.5 - 24, vh - 32);
         clone = makeFrame(item, imgH);
         clone.classList.add('illo-clone');
         const holder = document.createElement('div');
         holder.className = 'illo-sheet__piece';
         holder.appendChild(clone);
-        els.stage.append(holder, els.placard);
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.className = 'illo-sheet__close';
+        x.setAttribute('aria-label', 'Back to wall');
+        x.textContent = '✕';
+        x.addEventListener('click', closePiece);
+        els.stage.append(x, holder, els.placard);
         els.stage.scrollTop = 0;
     } else {
         if (els.placard.parentElement !== els.room) els.room.appendChild(els.placard);
@@ -488,7 +505,7 @@ function closePiece() {
     els.placard.classList.remove('is-in');
     if (wasSheet) {
         setTimeout(() => {
-            els.stage.classList.remove('is-sheet');
+            els.stage.classList.remove('is-sheet', 'is-stacked', 'is-side');
             els.room.appendChild(els.placard);
         }, motion(350));
     }
@@ -642,6 +659,20 @@ export function initIllustrationWall() {
     }));
 
     document.addEventListener('keydown', onKey);
+
+    // Phones: swipe sideways on an open piece for the next / previous one.
+    let touch = null;
+    els.stage.addEventListener('touchstart', (e) => {
+        if (state.current == null || e.touches.length !== 1) return;
+        touch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: true });
+    els.stage.addEventListener('touchend', (e) => {
+        if (!touch || state.current == null) return;
+        const dx = e.changedTouches[0].clientX - touch.x;
+        const dy = e.changedTouches[0].clientY - touch.y;
+        touch = null;
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+    }, { passive: true });
 
     window.addEventListener('resize', debounce(() => {
         if (!state.roomOpen || !state.loaded) return;
